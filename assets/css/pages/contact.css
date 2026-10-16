@@ -1,0 +1,253 @@
+/* ==========================================================================
+   GJS — CONTACT
+   ========================================================================== */
+
+.contact {
+  padding-top: calc(var(--header-h) + 10vh);
+  padding-bottom: var(--section-pad);
+}
+
+.contact__head {
+  row-gap: 24px;
+}
+
+.contact__label {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+}
+
+.contact__title {
+  grid-column: 1 / -1;
+  font-size: clamp(3.6rem, 12.6vw, 15.5rem);
+}
+
+.contact__layout {
+  margin-top: clamp(56px, 10vh, 130px);
+  row-gap: 80px;
+  align-items: start;
+}
+
+.contact__form-wrap {
+  grid-column: 1 / -1;
+  position: relative;
+}
+
+.contact__aside {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 36px;
+  align-content: start;
+}
+
+@media (min-width: 1024px) {
+  .contact__form-wrap { grid-column: 1 / span 7; }
+  .contact__aside { grid-column: 9 / -1; position: sticky; top: calc(var(--header-h) + 4vh); }
+}
+
+/* ---- Formulaire multi-étapes ------------------------------------------- */
+
+.form {
+  display: grid;
+  gap: 36px;
+}
+
+.form__intro {
+  font-size: var(--fs-small);
+}
+
+.form__progress-bar {
+  position: relative;
+  height: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.form__progress-bar span {
+  position: absolute;
+  inset: 0;
+  background: var(--fg);
+  transform-origin: 0 50%;
+  transform: scaleX(0.25);
+  transition: transform 0.8s var(--ease-out-expo);
+}
+
+.form__progress-steps {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+  color: var(--fg-2);
+}
+
+.form__progress-steps li {
+  transition: color 0.4s;
+}
+
+.form__progress-steps li.is-current { color: var(--fg); }
+.form__progress-steps li.is-done { color: var(--fg); }
+
+.form__progress-steps li.is-done::before {
+  content: "● ";
+  color: var(--signal);
+}
+
+.form__errors {
+  padding: 16px 20px;
+  border: 1px solid var(--danger);
+  font-size: var(--fs-small);
+}
+
+.form__errors ul {
+  margin-top: 8px;
+  display: grid;
+  gap: 4px;
+}
+
+.form__errors a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.form__step {
+  border: 0;
+  min-width: 0;
+  display: grid;
+  gap: 20px;
+}
+
+.form__legend {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-h3);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.form__legend .t-mono {
+  color: var(--fg-2);
+}
+
+.req {
+  color: var(--signal);
+}
+
+.form__choices {
+  display: grid;
+  gap: 8px;
+}
+
+.form__sub {
+  border: 0;
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+  min-width: 0;
+}
+
+.form__fields {
+  display: grid;
+  gap: 32px 24px;
+}
+
+.form__honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form__nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.form__nav [data-form-next],
+.form__nav [data-form-submit] {
+  margin-left: auto;
+}
+
+.form.is-sending [data-form-submit] {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+@media (min-width: 600px) {
+  .form__choices--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .form__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .field--full { grid-column: 1 / -1; }
+}
+
+/* ---- Écran de succès ---------------------------------------------------- */
+
+.contact-success {
+  position: relative;
+  display: grid;
+  gap: 24px;
+  justify-items: start;
+  padding-block: 4vh 6vh;
+}
+
+.contact-success:focus {
+  outline: none;
+}
+
+.contact-success__ship {
+  width: clamp(120px, 14vw, 220px);
+  rotate: -90deg;
+  margin-block: 40px 20px;
+}
+
+.contact-success__title {
+  font-size: var(--fs-h2);
+}
+
+.contact-success__text {
+  max-width: 38ch;
+  color: var(--fg-2);
+}
+
+/* ---- Alternatives ------------------------------------------------------- */
+
+.contact__alt {
+  display: grid;
+  gap: 10px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.contact__email {
+  justify-self: start;
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.4rem, 1rem + 1.4vw, 2.4rem);
+  letter-spacing: -0.03em;
+  text-align: left;
+  word-break: break-all;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.5s var(--ease-out-expo);
+}
+
+.contact__email:hover {
+  background-size: 100% 1px;
+}
+
+.contact__copy.is-copied {
+  color: var(--signal);
+}
+
+.contact__socials {
+  display: grid;
+  gap: 2px;
+}

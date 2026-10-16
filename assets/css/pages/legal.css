@@ -1,0 +1,147 @@
+/* ==========================================================================
+   GJS — PAGES LÉGALES
+   ========================================================================== */
+
+.legal__hero {
+  padding-top: calc(var(--header-h) + 12vh);
+  padding-bottom: clamp(48px, 8vh, 96px);
+  row-gap: 20px;
+}
+
+.legal__hero > * { grid-column: 1 / -1; }
+
+.legal__title {
+  font-size: clamp(3.4rem, 10.5vw, 12.5rem);
+}
+
+.legal__layout {
+  padding-bottom: var(--section-pad);
+  row-gap: 48px;
+  align-items: start;
+}
+
+.legal__toc {
+  grid-column: 1 / -1;
+}
+
+.legal__toc ol {
+  display: grid;
+  gap: 4px;
+  margin-top: 14px;
+}
+
+.legal__toc a {
+  display: inline-flex;
+  gap: 10px;
+  min-height: 32px;
+  align-items: center;
+  font-size: var(--fs-small);
+  color: var(--fg-2);
+  transition: color var(--dur-micro);
+}
+
+.legal__toc a[aria-current],
+.legal__toc a:hover {
+  color: var(--fg);
+}
+
+.legal__toc a[aria-current] .t-mono {
+  color: var(--focus);
+}
+
+.legal__content {
+  grid-column: 1 / -1;
+  max-width: 74ch;
+}
+
+.legal__intro {
+  margin-bottom: 40px;
+}
+
+.prose h2 {
+  margin: 64px 0 18px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-h4);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  scroll-margin-top: calc(var(--header-h) + 24px);
+}
+
+.prose section:first-of-type h2 {
+  margin-top: 0;
+}
+
+.prose p,
+.prose li,
+.prose td {
+  color: var(--fg-2);
+}
+
+.prose p + p,
+.prose p + ul,
+.prose ul + p {
+  margin-top: 1em;
+}
+
+.prose ul {
+  display: grid;
+  gap: 10px;
+}
+
+.prose ul li {
+  padding-left: 1.4em;
+  text-indent: -1.4em;
+}
+
+.prose ul li::before {
+  content: "— ";
+}
+
+.prose strong {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.prose a {
+  color: var(--fg);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+.table-wrap {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.table-wrap table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+}
+
+.table-wrap th,
+.table-wrap td {
+  padding: 14px 18px 14px 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+
+.table-wrap th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: 400;
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+
+@media (min-width: 1024px) {
+  .legal__toc { grid-column: 1 / span 3; position: sticky; top: calc(var(--header-h) + 24px); }
+  .legal__content { grid-column: 5 / span 7; }
+}

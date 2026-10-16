@@ -1,0 +1,316 @@
+/* ==========================================================================
+   GJS — LAYOUT
+   Grille 12/6/4, sections, header, footer.
+   ========================================================================== */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--gutter);
+  padding-inline: var(--margin);
+}
+
+.wrap {
+  padding-inline: var(--margin);
+}
+
+.section {
+  position: relative;
+  padding-block: var(--section-pad);
+}
+
+.section__label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em 1.5em;
+  margin-bottom: clamp(32px, 6vh, 72px);
+}
+
+.section__label .label + .label::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+/* Barba : le conteneur sortant est retiré, l'entrant prend sa place */
+[data-barba="wrapper"] {
+  position: relative;
+}
+
+[data-barba="container"] {
+  position: relative;
+  min-height: 100svh;
+}
+
+main:focus {
+  outline: none;
+}
+
+/* ---- Header ------------------------------------------------------------- */
+
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: var(--z-header);
+  height: var(--header-h);
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--gutter);
+  align-items: center;
+  padding-inline: var(--margin);
+  /* Couleur pilotée par le thème du body (contraste garanti et mesurable,
+     contrairement à mix-blend-mode que les outils d'audit ne savent pas évaluer) */
+  color: var(--fg);
+  transition: transform 0.7s var(--ease-out-expo), color 0.5s;
+  pointer-events: none;
+}
+
+.header > * {
+  pointer-events: auto;
+}
+
+.header.is-hidden {
+  transform: translateY(-110%);
+}
+
+.header.is-menu-open {
+  z-index: calc(var(--z-menu) + 1);
+  color: var(--white);
+  --focus: var(--signal);
+}
+
+.header__logo {
+  grid-column: 1 / span 2;
+  justify-self: start;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 10px 0;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 1.2vw + 14px, 30px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.header__logo sup {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.header__logo-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+.header__meta {
+  display: none;
+}
+
+.header__actions {
+  grid-column: -3 / -1;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 2vw, 36px);
+}
+
+.header__btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.header__btn-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  transition: transform var(--dur-micro) var(--ease-out-expo);
+}
+
+.header__btn:hover .header__btn-dot,
+.header__btn[aria-expanded="true"] .header__btn-dot {
+  transform: scale(1.8);
+}
+
+.header__btn-text {
+  display: inline-grid;
+  overflow: clip;
+}
+
+.header__btn-text > span {
+  grid-area: 1 / 1;
+  transition: transform 0.6s var(--ease-out-expo);
+}
+
+.header__btn-text > span + span {
+  transform: translateY(110%);
+}
+
+.header__btn[aria-expanded="true"] .header__btn-text > span:first-child {
+  transform: translateY(-110%);
+}
+
+.header__btn[aria-expanded="true"] .header__btn-text > span + span {
+  transform: translateY(0);
+}
+
+@media (min-width: 1024px) {
+  .header__meta {
+    display: block;
+    grid-column: 4 / span 5;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    color: var(--fg-2);
+  }
+}
+
+@media (max-width: 479px) {
+  .header__cta-long {
+    display: none;
+  }
+}
+
+/* ---- Footer ------------------------------------------------------------- */
+
+.footer {
+  position: relative;
+  overflow: clip;
+  padding-top: clamp(96px, 14vh, 180px);
+  background: var(--night-950);
+  color: var(--white);
+  --fg: var(--white);
+  --fg-2: rgba(255, 255, 255, 0.62);
+  --line: rgba(255, 255, 255, 0.14);
+  --focus: var(--signal);
+}
+
+.footer__top {
+  row-gap: 56px;
+}
+
+.footer__col {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footer__col .label {
+  margin-bottom: 8px;
+}
+
+.footer__title {
+  grid-column: 1 / -1;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.9;
+  margin-bottom: 24px;
+}
+
+.footer__mail {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  word-break: break-all;
+}
+
+.footer a:not(.footer__mail),
+.footer button.footer__link {
+  font-size: var(--fs-small);
+  color: var(--fg-2);
+  transition: color var(--dur-micro);
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  text-align: left;
+}
+
+.footer a:hover,
+.footer button.footer__link:hover {
+  color: var(--white);
+}
+
+.footer__clock {
+  font-family: var(--font-mono);
+  font-size: var(--fs-h4);
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  color: var(--white);
+}
+
+.footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 32px;
+  margin-top: clamp(72px, 10vh, 140px);
+  padding-block: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.footer__bottom ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+}
+
+.footer__giant {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 20.5vw;
+  overflow: clip;
+  user-select: none;
+}
+
+.footer__giant-word {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 46vw;
+  line-height: 0.74;
+  letter-spacing: -0.06em;
+  white-space: nowrap;
+  cursor: default;
+  will-change: transform;
+}
+
+.footer__giant-word span {
+  display: inline-block;
+}
+
+@media (min-width: 768px) {
+  .footer__col { grid-column: span 3; }
+}
+
+@media (min-width: 1024px) {
+  .footer__title { grid-column: 1 / span 7; }
+  .footer__col--contact { grid-column: 1 / span 5; }
+  .footer__col--nav { grid-column: 7 / span 2; }
+  .footer__col--social { grid-column: 9 / span 2; }
+  .footer__col--time { grid-column: 11 / span 2; }
+}

@@ -1,0 +1,82 @@
+/* ==========================================================================
+   GJS · SERVICES
+   Intro + sommaire · 3 services phares · 6 autres services · Configurateur · CTA
+   ========================================================================== */
+
+.page-hero .toc {
+  margin-top: 40px;
+}
+
+.toc__title {
+  margin-bottom: 14px;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---- Configurateur ------------------------------------------------------- */
+
+.configurator {
+  display: grid;
+  gap: 40px;
+  padding: 32px 22px;
+  background: var(--card);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--shadow-color);
+}
+
+.configurator fieldset {
+  border: 0;
+  min-width: 0;
+}
+
+.configurator legend {
+  margin-bottom: 16px;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.configurator__result {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: 24px;
+  background: var(--lime);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+}
+
+.configurator__estimate {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.configurator__hint {
+  font-size: var(--fs-small);
+  font-weight: 500;
+}
+
+@media (min-width: 1024px) {
+  .configurator {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    column-gap: 40px;
+    padding: 44px 40px;
+  }
+
+  .configurator__fields {
+    display: grid;
+    gap: 40px;
+  }
+
+  .configurator__result {
+    align-self: start;
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+  }
+}

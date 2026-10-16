@@ -1,58 +1,51 @@
 /* ==========================================================================
-   GJS — PAGE CONTACT
-   Formulaire multi-étapes : progression, validation en direct accessible,
-   pré-remplissage depuis le configurateur (paramètres d'URL), honeypot,
-   consentement RGPD, envoi fetch vers CONFIG.FORM_ENDPOINT (Formspree, Make,
-   n8n…) ou repli « mailto » si aucun endpoint n'est configuré.
+   GJS · PAGE CONTACT
+   Formulaire en 3 étapes : progression, validation accessible, pré-remplissage
+   depuis l'URL (?besoins=site,seo&budget=…&delai=…&offre=lancement), honeypot,
+   consentement RGPD, envoi POST JSON vers CONFIG.FORM_ENDPOINT (Formspree, Make…)
+   ou repli « mailto » si aucun endpoint n'est configuré.
    ========================================================================== */
 
 import { CONFIG } from '../config.js';
-import { env, $, $$, announce, createShip } from '../core/utils.js';
+import { env, $, $$, announce } from '../core/utils.js';
 
-const { gsap } = window;
-
-const TOTAL = 4;
-const STEP_NAMES = ['vos besoins', 'votre budget', 'votre délai', 'vos coordonnées'];
-const HORIZON_TO_DELAY = { urgent: 'urgent', '1-3-mois': '1-3-mois', 'plus-tard': 'plus-tard' };
+const TOTAL = 3;
+const STEP_NAMES = ['vos besoins', 'votre budget et votre délai', 'vos coordonnées'];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^[0-9+().\s-]{6,20}$/;
+const MIN_MESSAGE = 20;
 
 const MESSAGES = {
-  besoins: () => 'Choisissez au moins un besoin (même « Autre » fait l’affaire).',
-  budget: () => 'Indiquez une fourchette de budget — « Je ne sais pas encore » est une réponse valable.',
+  besoins: () => 'Choisissez au moins un service. « Je ne sais pas encore » est une réponse valable.',
+  budget: () => 'Indiquez une fourchette de budget. « Je ne sais pas encore » est une réponse valable.',
   delai: () => 'Indiquez un délai, même approximatif.',
   nom: () => 'Indiquez votre nom (2 caractères minimum).',
-  email: (v) => (v ? 'Cette adresse semble incomplète : vérifiez le @ et le domaine (ex. nom@entreprise.fr).' : 'Indiquez votre email pour que l’on puisse vous répondre.'),
-  telephone: () => 'Ce numéro semble incorrect : chiffres, espaces, +, tirets et parenthèses uniquement.',
-  site: () => 'Cette adresse de site semble incorrecte (ex. https://votre-site.fr).',
-  message: (v) => `Décrivez votre projet en 20 caractères minimum (encore ${Math.max(0, 20 - v.trim().length)}).`,
+  email: (v) => (v ? 'Cette adresse semble incomplète. Vérifiez le @ et le domaine (ex. nom@entreprise.fr).' : 'Indiquez votre email pour que l’on puisse vous répondre.'),
+  telephone: () => 'Ce numéro semble incorrect : chiffres, espaces, +, tirets et parenthèses uniquement.',
+  message: (v) => `Décrivez votre projet en ${MIN_MESSAGE} caractères minimum (encore ${Math.max(0, MIN_MESSAGE - v.trim().length)}).`,
   consentement: () => 'Votre accord est nécessaire pour que nous puissions traiter votre demande.',
 };
 
 const FIELDS_BY_STEP = {
   1: ['besoins'],
-  2: ['budget'],
-  3: ['delai'],
-  4: ['nom', 'email', 'telephone', 'site', 'message', 'consentement'],
+  2: ['budget', 'delai'],
+  3: ['nom', 'email', 'telephone', 'message', 'consentement'],
 };
+
+const HORIZON_TO_DELAI = { urgent: 'urgent', '1-3-mois': '1-3-mois', '3-6-mois': '3-6-mois', 'plus-tard': 'plus-tard' };
 
 function validate(form, name) {
   const inputs = $$(`[name="${name}"]`, form);
   if (!inputs.length) return '';
   const first = inputs[0];
-  if (first.type === 'checkbox' && name === 'besoins') return inputs.some((i) => i.checked) ? '' : MESSAGES.besoins();
-  if (first.type === 'radio') return inputs.some((i) => i.checked) ? '' : MESSAGES[name]();
+  if (name === 'besoins' || first.type === 'radio') return inputs.some((i) => i.checked) ? '' : MESSAGES[name]();
   if (first.type === 'checkbox') return first.checked ? '' : MESSAGES[name]();
   const value = first.value.trim();
   switch (name) {
     case 'nom': return value.length >= 2 ? '' : MESSAGES.nom();
     case 'email': return EMAIL_RE.test(value) ? '' : MESSAGES.email(value);
     case 'telephone': return !value || PHONE_RE.test(value) ? '' : MESSAGES.telephone();
-    case 'site': {
-      if (!value) return '';
-      try { const u = new URL(value); return /^https?:$/.test(u.protocol) && u.hostname.includes('.') ? '' : MESSAGES.site(); } catch { return MESSAGES.site(); }
-    }
-    case 'message': return value.length >= 20 ? '' : MESSAGES.message(value);
+    case 'message': return value.length >= MIN_MESSAGE ? '' : MESSAGES.message(value);
     default: return '';
   }
 }
@@ -69,80 +62,71 @@ function showError(form, name, message) {
   if (box) box.textContent = message;
 }
 
+function check(form, selector) {
+  const input = form.querySelector(selector);
+  if (input) input.checked = true;
+  return Boolean(input);
+}
+
 function prefill(form) {
   const params = new URLSearchParams(window.location.search);
   let filled = false;
-  const needs = params.getAll('besoins').flatMap((v) => v.split(',')).map((v) => v.trim()).filter(Boolean);
-  needs.forEach((value) => {
-    const input = form.querySelector(`input[name="besoins"][value="${CSS.escape(value)}"]`);
-    if (input) { input.checked = true; filled = true; }
+  params.getAll('besoins').flatMap((v) => v.split(',')).map((v) => v.trim()).filter(Boolean).forEach((value) => {
+    filled = check(form, `input[name="besoins"][value="${CSS.escape(value)}"]`) || filled;
   });
-  const goal = params.get('objectif');
-  if (goal) {
-    const input = form.querySelector(`input[name="objectif"][value="${CSS.escape(goal)}"]`);
-    if (input) { input.checked = true; filled = true; }
-  }
-  const delay = HORIZON_TO_DELAY[params.get('horizon')] || params.get('delai');
-  if (delay) {
-    const input = form.querySelector(`input[name="delai"][value="${CSS.escape(delay)}"]`);
-    if (input) { input.checked = true; filled = true; }
-  }
-  const code = params.get('code');
-  if (code) {
-    const input = form.querySelector('input[name="code"]');
-    if (input) input.value = code.slice(0, 32);
-  }
+  const budget = params.get('budget');
+  if (budget) filled = check(form, `input[name="budget"][value="${CSS.escape(budget)}"]`) || filled;
+  const delai = HORIZON_TO_DELAI[params.get('horizon')] || params.get('delai');
+  if (delai) filled = check(form, `input[name="delai"][value="${CSS.escape(delai)}"]`) || filled;
+  if (params.get('offre') === 'lancement') filled = check(form, 'input[name="offre_lancement"]') || filled;
   return filled;
-}
-
-function collect(form) {
-  const data = new FormData(form);
-  return {
-    besoins: data.getAll('besoins'),
-    objectif: data.get('objectif') || '',
-    budget: data.get('budget') || '',
-    delai: data.get('delai') || '',
-    nom: (data.get('nom') || '').trim(),
-    email: (data.get('email') || '').trim(),
-    entreprise: (data.get('entreprise') || '').trim(),
-    telephone: (data.get('telephone') || '').trim(),
-    site: (data.get('site') || '').trim(),
-    message: (data.get('message') || '').trim(),
-    code: (data.get('code') || '').trim(),
-    consentement: data.get('consentement') === 'oui',
-    page: window.location.href,
-    date: new Date().toISOString(),
-    _subject: `Nouveau projet — ${(data.get('nom') || '').trim()}`,
-  };
 }
 
 function labelOf(form, name, value) {
   const input = form.querySelector(`input[name="${name}"][value="${CSS.escape(value)}"]`);
   const box = input && input.nextElementSibling;
-  if (!box) return value;
-  const clone = box.cloneNode(true);
-  clone.querySelectorAll('.choice__index, .choice__mark').forEach((n) => n.remove());
-  return clone.textContent.trim();
+  return box ? box.textContent.replace(/\s+/g, ' ').trim() : value;
 }
 
-function mailtoFallback(form, data) {
+function collect(form) {
+  const data = new FormData(form);
+  const besoins = data.getAll('besoins');
+  const nom = (data.get('nom') || '').trim();
+  return {
+    besoins,
+    besoins_libelles: besoins.map((v) => labelOf(form, 'besoins', v)),
+    budget: data.get('budget') || '',
+    budget_libelle: data.get('budget') ? labelOf(form, 'budget', data.get('budget')) : '',
+    delai: data.get('delai') || '',
+    delai_libelle: data.get('delai') ? labelOf(form, 'delai', data.get('delai')) : '',
+    offre_lancement: data.get('offre_lancement') === 'oui',
+    nom,
+    email: (data.get('email') || '').trim(),
+    telephone: (data.get('telephone') || '').trim(),
+    entreprise: (data.get('entreprise') || '').trim(),
+    message: (data.get('message') || '').trim(),
+    consentement: data.get('consentement') === 'oui',
+    page: window.location.href,
+    date: new Date().toISOString(),
+    _subject: `Nouvelle demande de devis : ${nom}`,
+  };
+}
+
+function mailtoFallback(data) {
   const lines = [
-    `Besoins : ${data.besoins.map((v) => labelOf(form, 'besoins', v)).join(', ')}`,
-    data.objectif ? `Objectif : ${labelOf(form, 'objectif', data.objectif)}` : '',
-    `Budget : ${labelOf(form, 'budget', data.budget)}`,
-    `Délai : ${labelOf(form, 'delai', data.delai)}`,
+    `Services : ${data.besoins_libelles.join(', ')}`,
+    `Budget : ${data.budget_libelle}`,
+    `Délai : ${data.delai_libelle}`,
+    data.offre_lancement ? 'Intéressé(e) par l’offre de lancement (-40 %)' : '',
     '',
-    `Nom : ${data.nom}`,
-    `Email : ${data.email}`,
-    data.entreprise ? `Entreprise : ${data.entreprise}` : '',
-    data.telephone ? `Téléphone : ${data.telephone}` : '',
-    data.site ? `Site : ${data.site}` : '',
-    data.code ? `Code : ${data.code}` : '',
+    `Nom : ${data.nom}`,
+    `Email : ${data.email}`,
+    data.telephone ? `Téléphone : ${data.telephone}` : '',
+    data.entreprise ? `Entreprise : ${data.entreprise}` : '',
     '',
     data.message,
   ].filter((l, i, arr) => l !== '' || arr[i - 1] !== '');
-  const href = `mailto:${CONFIG.EMAIL}?subject=${encodeURIComponent(data._subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
-  window.location.href = href;
+  window.location.href = `mailto:${CONFIG.EMAIL}?subject=${encodeURIComponent(data._subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
 }
 
 async function send(data) {
@@ -163,49 +147,39 @@ async function send(data) {
   }
 }
 
-/* ---------- Copie de l'email -------------------------------------------- */
-
-function initCopy(scope, root) {
-  const btn = $('[data-copy]', root);
-  const feedback = $('[data-copy-feedback]', root);
-  if (!btn) return;
-  let timer = 0;
-  scope.on(btn, 'click', async () => {
-    const value = btn.dataset.copy || CONFIG.EMAIL;
-    try {
-      await navigator.clipboard.writeText(value);
-      feedback.textContent = 'Copié ✓';
-      feedback.classList.add('is-copied');
-      clearTimeout(timer);
-      timer = setTimeout(() => { feedback.textContent = 'Cliquez pour copier'; feedback.classList.remove('is-copied'); }, 2200);
-    } catch {
-      window.location.href = `mailto:${value}`;
-    }
-  });
-  scope.cleanup(() => clearTimeout(timer));
+function showSuccess(form, success, viaMail) {
+  if (viaMail) {
+    $('[data-success-title]', success).textContent = 'Votre messagerie prend le relais.';
+    $('[data-success-text]', success).textContent = `Votre demande est pré-remplie dans un nouvel email : il ne reste qu’à cliquer sur « Envoyer ». Rien ne s’est ouvert ? Écrivez-nous à ${CONFIG.EMAIL}.`;
+  }
+  form.hidden = true;
+  success.hidden = false;
+  success.focus({ preventScroll: true });
+  success.scrollIntoView({ block: 'center', behavior: env.reducedMotion ? 'auto' : 'smooth' });
+  announce(viaMail ? 'Votre messagerie s’ouvre avec la demande pré-remplie.' : 'Demande envoyée. Nous vous répondons sous 24 heures.', 'assertive');
 }
 
-/* ---------- Formulaire multi-étapes ------------------------------------- */
-
-function initForm(scope, root) {
-  const form = $('[data-contact-form]', root);
+function initForm() {
+  const form = $('[data-contact-form]');
   if (!form) return;
   const steps = $$('[data-step]', form);
   const prev = $('[data-form-prev]', form);
   const next = $('[data-form-next]', form);
   const submit = $('[data-form-submit]', form);
-  const bar = $('[data-form-bar]', form);
+  const submitLabel = $('[data-submit-label]', submit);
   const labels = $$('[data-step-label]', form);
   const status = $('[data-form-status]', form);
   const errors = $('[data-form-errors]', form);
-  const success = $('[data-contact-success]', root);
+  const success = $('[data-contact-success]');
   const counter = $('[data-char-count]', form);
-  const message = $('#f-message', form);
+  const card = form.closest('.form-card') || form;
   const touched = new Set();
   let current = 1;
 
-  // Le JS prend la main : mode étapes (sans JS, tout reste visible et le formulaire part en mailto)
+  // Le JS prend la main : mode étapes (sans JS, tout reste visible et part en mailto)
+  form.noValidate = true;
   form.removeAttribute('action');
+  form.removeAttribute('enctype');
   form.classList.add('is-stepped');
   steps.forEach((s, i) => { s.hidden = i > 0; s.setAttribute('tabindex', '-1'); });
 
@@ -213,10 +187,11 @@ function initForm(scope, root) {
     prev.hidden = current === 1;
     next.hidden = current === TOTAL;
     submit.hidden = current !== TOTAL;
-    bar.style.transform = `scaleX(${current / TOTAL})`;
     labels.forEach((l, i) => {
       l.classList.toggle('is-current', i + 1 === current);
       l.classList.toggle('is-done', i + 1 < current);
+      if (i + 1 === current) l.setAttribute('aria-current', 'step');
+      else l.removeAttribute('aria-current');
     });
     status.textContent = `Étape ${current} sur ${TOTAL} : ${STEP_NAMES[current - 1]}.`;
   };
@@ -233,37 +208,25 @@ function initForm(scope, root) {
   };
 
   const showSummary = (invalid) => {
-    if (!invalid.length) { errors.hidden = true; errors.innerHTML = ''; return; }
+    if (!invalid.length) { errors.hidden = true; errors.textContent = ''; return; }
     errors.hidden = false;
-    errors.innerHTML = `<p><strong>${invalid.length > 1 ? `${invalid.length} points à corriger` : 'Un point à corriger'} :</strong></p><ul>${invalid.map(({ name, msg }) => {
-      const target = form.querySelector(`[name="${name}"]`);
-      return `<li><a href="#${target ? target.id || '' : ''}" data-fix="${name}">${msg}</a></li>`;
-    }).join('')}</ul>`;
+    errors.innerHTML = `<p><strong>${invalid.length > 1 ? `${invalid.length} points à corriger` : 'Un point à corriger'} :</strong></p><ul>${invalid.map(({ name, msg }) => `<li><a href="#" data-fix="${name}">${msg}</a></li>`).join('')}</ul>`;
   };
 
   const focusFirstInvalid = (invalid) => {
-    if (!invalid.length) return;
-    const target = form.querySelector(`[name="${invalid[0].name}"]`);
+    const target = invalid.length && form.querySelector(`[name="${invalid[0].name}"]`);
     if (target) target.focus();
   };
 
   const goTo = (n) => {
-    const from = steps[current - 1];
-    const to = steps[n - 1];
-    const dir = n > current ? 1 : -1;
+    steps[current - 1].hidden = true;
     current = n;
+    steps[current - 1].hidden = false;
     showSummary([]);
-    const swap = () => {
-      from.hidden = true;
-      to.hidden = false;
-      render();
-      to.focus({ preventScroll: true });
-      const top = form.getBoundingClientRect().top + window.scrollY - 120;
-      if (window.scrollY > top) window.scrollTo({ top, behavior: env.reducedMotion ? 'auto' : 'smooth' });
-      if (!env.reducedMotion) gsap.fromTo(to, { autoAlpha: 0, x: 40 * dir }, { autoAlpha: 1, x: 0, duration: 0.6, ease: 'expo.out' });
-    };
-    if (env.reducedMotion) swap();
-    else gsap.to(from, { autoAlpha: 0, x: -30 * dir, duration: 0.25, ease: 'power2.in', onComplete: () => { gsap.set(from, { clearProps: 'all' }); swap(); } });
+    render();
+    steps[current - 1].focus({ preventScroll: true });
+    const top = card.getBoundingClientRect().top;
+    if (top < 0) card.scrollIntoView({ block: 'start', behavior: env.reducedMotion ? 'auto' : 'smooth' });
   };
 
   const tryNext = () => {
@@ -277,30 +240,29 @@ function initForm(scope, root) {
     if (current < TOTAL) goTo(current + 1);
   };
 
-  scope.on(next, 'click', tryNext);
-  scope.on(prev, 'click', () => { if (current > 1) goTo(current - 1); });
+  next.addEventListener('click', tryNext);
+  prev.addEventListener('click', () => { if (current > 1) goTo(current - 1); });
 
   // Validation en direct : au changement pour les choix, à la frappe après un premier passage
-  scope.on(form, 'change', (e) => {
-    const { name } = e.target;
-    if (!name || name === 'website') return;
-    if (e.target.type === 'checkbox' || e.target.type === 'radio' || touched.has(name)) showError(form, name, validate(form, name));
+  form.addEventListener('change', (e) => {
+    const { name, type } = e.target;
+    if (!name || name === 'website' || name === 'offre_lancement') return;
+    if (type === 'checkbox' || type === 'radio' || touched.has(name)) showError(form, name, validate(form, name));
   });
-  scope.on(form, 'input', (e) => {
+  form.addEventListener('input', (e) => {
     const { name } = e.target;
     if (name === 'message' && counter) counter.textContent = String(e.target.value.length);
     if (touched.has(name)) showError(form, name, validate(form, name));
   });
-  scope.on(form, 'focusout', (e) => {
-    const { name, type } = e.target;
+  form.addEventListener('focusout', (e) => {
+    const { name, type, value } = e.target;
     if (!name || type === 'checkbox' || type === 'radio' || name === 'website') return;
-    if (name === 'site' && e.target.value && !/^https?:\/\//i.test(e.target.value)) e.target.value = `https://${e.target.value.trim()}`;
-    if (e.target.value || touched.has(name)) {
+    if (value || touched.has(name)) {
       touched.add(name);
       showError(form, name, validate(form, name));
     }
   });
-  scope.on(errors, 'click', (e) => {
+  errors.addEventListener('click', (e) => {
     const link = e.target.closest('[data-fix]');
     if (!link) return;
     e.preventDefault();
@@ -308,14 +270,14 @@ function initForm(scope, root) {
     if (target) target.focus();
   });
 
-  scope.on(form, 'submit', async (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (current < TOTAL) { tryNext(); return; }
     // Re-vérification complète (au cas où une étape aurait été contournée)
     for (let n = 1; n <= TOTAL; n += 1) {
       const invalid = validateStep(n);
       if (invalid.length) {
-        if (n !== current) { steps.forEach((s, i) => { s.hidden = i !== n - 1; }); current = n; render(); }
+        if (n !== current) goTo(n);
         showSummary(invalid);
         announce(invalid[0].msg, 'assertive');
         focusFirstInvalid(invalid);
@@ -327,24 +289,24 @@ function initForm(scope, root) {
     if (form.querySelector('[name="website"]').value) { showSuccess(form, success, false); return; }
 
     if (!CONFIG.FORM_ENDPOINT) {
-      mailtoFallback(form, data);
+      mailtoFallback(data);
       showSuccess(form, success, true);
       return;
     }
 
     form.classList.add('is-sending');
     submit.disabled = true;
-    submit.firstChild.textContent = 'Envoi en cours… ';
+    submitLabel.textContent = 'Envoi en cours…';
     announce('Envoi en cours.');
     const ok = await send(data);
     form.classList.remove('is-sending');
     submit.disabled = false;
-    submit.firstChild.textContent = 'Envoyer ma demande ';
+    submitLabel.textContent = 'Envoyer ma demande';
     if (ok) {
       showSuccess(form, success, false);
     } else {
       errors.hidden = false;
-      errors.innerHTML = `<p><strong>L’envoi n’a pas abouti.</strong> Votre connexion a peut-être coupé. Réessayez, ou écrivez-nous directement : <a href="mailto:${CONFIG.EMAIL}">${CONFIG.EMAIL}</a>. Vos réponses sont conservées.</p>`;
+      errors.innerHTML = `<p><strong>L’envoi n’a pas abouti.</strong> Votre connexion a peut-être coupé. Réessayez, ou écrivez-nous directement : <a href="mailto:${CONFIG.EMAIL}">${CONFIG.EMAIL}</a>. Vos réponses sont conservées.</p>`;
       announce('L’envoi n’a pas abouti. Réessayez ou écrivez-nous par email.', 'assertive');
       errors.setAttribute('tabindex', '-1');
       errors.focus();
@@ -353,40 +315,9 @@ function initForm(scope, root) {
 
   const filled = prefill(form);
   render();
-  if (filled) announce('Formulaire pré-rempli avec les choix du configurateur.');
+  if (filled) announce('Formulaire pré-rempli avec vos choix.');
 }
 
-/* ---------- Succès : le vaisseau décolle avec le message ----------------- */
-
-function showSuccess(form, success, viaMail) {
-  if (viaMail) {
-    $('[data-success-title]', success).innerHTML = 'Votre messagerie <em class="serif">prend le relais</em>.';
-    $('[data-success-text]', success).textContent = 'Votre demande est pré-remplie dans un nouvel email : il ne reste qu’à cliquer sur « Envoyer ». Rien ne s’est ouvert ? Écrivez-nous à ' + CONFIG.EMAIL + '.';
-  }
-  form.hidden = true;
-  success.hidden = false;
-  success.focus({ preventScroll: true });
-  announce(viaMail ? 'Votre client mail s’ouvre avec la demande pré-remplie.' : 'Message envoyé. Nous revenons vers vous sous 24 heures ouvrées.', 'assertive');
-  const ship = $('.contact-success__ship', success);
-  if (env.reducedMotion || !ship) return;
-  const flyer = createShip('contact-flyer');
-  const rect = ship.getBoundingClientRect();
-  Object.assign(flyer.style, { position: 'fixed', left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, zIndex: 'var(--z-egg)', pointerEvents: 'none' });
-  document.body.appendChild(flyer);
-  gsap.set(ship, { autoAlpha: 0 });
-  gsap.timeline({ onComplete: () => { flyer.remove(); gsap.to(ship, { autoAlpha: 1, y: 0, duration: 0.8, ease: 'expo.out' }); } })
-    .fromTo(flyer, { rotation: -90, y: 60, x: 0 }, { y: 0, duration: 0.6, ease: 'power2.out' })
-    .to(flyer, { y: -window.innerHeight - 200, scale: 0.6, duration: 1.1, ease: 'power3.in' })
-    .set(ship, { y: 40 });
-  gsap.from(success.children, { y: 30, autoAlpha: 0, stagger: 0.08, duration: 0.9, ease: 'expo.out', delay: 0.3 });
+export default function init() {
+  initForm();
 }
-
-/* ---------- Cycle de vie --------------------------------------------------- */
-
-export default {
-  init(scope, root) {
-    initForm(scope, root);
-    initCopy(scope, root);
-  },
-  destroy() {},
-};

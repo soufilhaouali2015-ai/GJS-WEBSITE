@@ -1,172 +1,135 @@
 /* ==========================================================================
-   GJS — CONTACT
+   GJS · CONTACT
+   Formulaire en 3 étapes · Autres moyens de contact (WhatsApp, rendez-vous)
    ========================================================================== */
 
-.contact {
-  padding-top: calc(var(--header-h) + 10vh);
-  padding-bottom: var(--section-pad);
-}
-
-.contact__head {
-  row-gap: 24px;
-}
-
-.contact__label {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 8px 24px;
-}
-
-.contact__title {
-  grid-column: 1 / -1;
-  font-size: clamp(3.6rem, 12.6vw, 15.5rem);
-}
-
 .contact__layout {
-  margin-top: clamp(56px, 10vh, 130px);
-  row-gap: 80px;
+  display: grid;
+  gap: 48px;
   align-items: start;
 }
 
-.contact__form-wrap {
-  grid-column: 1 / -1;
-  position: relative;
-}
-
-.contact__aside {
-  grid-column: 1 / -1;
-  display: grid;
-  gap: 36px;
-  align-content: start;
-}
-
 @media (min-width: 1024px) {
-  .contact__form-wrap { grid-column: 1 / span 7; }
-  .contact__aside { grid-column: 9 / -1; position: sticky; top: calc(var(--header-h) + 4vh); }
+  .contact__layout {
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 56px;
+  }
 }
 
-/* ---- Formulaire multi-étapes ------------------------------------------- */
+.form-card {
+  padding: 28px 20px;
+  background: var(--card);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--shadow-color);
+  scroll-margin-top: calc(var(--header-h) + 24px);
+}
 
-.form {
-  display: grid;
-  gap: 36px;
+@media (min-width: 720px) {
+  .form-card { padding: 40px 36px; }
+}
+
+.form > * + * {
+  margin-top: 28px;
 }
 
 .form__intro {
   font-size: var(--fs-small);
-}
-
-.form__progress-bar {
-  position: relative;
-  height: 2px;
-  background: var(--line);
-  overflow: hidden;
-}
-
-.form__progress-bar span {
-  position: absolute;
-  inset: 0;
-  background: var(--fg);
-  transform-origin: 0 50%;
-  transform: scaleX(0.25);
-  transition: transform 0.8s var(--ease-out-expo);
-}
-
-.form__progress-steps {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 14px;
   color: var(--fg-2);
 }
 
-.form__progress-steps li {
-  transition: color 0.4s;
-}
-
-.form__progress-steps li.is-current { color: var(--fg); }
-.form__progress-steps li.is-done { color: var(--fg); }
-
-.form__progress-steps li.is-done::before {
-  content: "● ";
-  color: var(--signal);
-}
-
-.form__errors {
-  padding: 16px 20px;
-  border: 1px solid var(--danger);
-  font-size: var(--fs-small);
-}
-
-.form__errors ul {
-  margin-top: 8px;
+/* Progression : 3 étapes */
+.progress {
   display: grid;
-  gap: 4px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  counter-reset: progress;
 }
 
-.form__errors a {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+.progress li {
+  counter-increment: progress;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: var(--border-thin) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--cream);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.progress li::before {
+  content: counter(progress);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.progress li.is-current {
+  background: var(--lime);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-weight: 600;
+}
+
+.progress li.is-done {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+/* Mobile : seules l'étape en cours affiche son nom, les autres leur numéro */
+@media (max-width: 479px) {
+  .progress { display: flex; }
+  .progress li { justify-content: center; min-width: 48px; }
+  .progress li.is-current { flex: 1; justify-content: flex-start; }
+  .js .progress li:not(.is-current) span { display: none; }
 }
 
 .form__step {
   border: 0;
   min-width: 0;
-  display: grid;
-  gap: 20px;
+}
+
+.form__step > * + * {
+  margin-top: 20px;
 }
 
 .form__legend {
-  display: grid;
-  gap: 12px;
-  margin-bottom: 20px;
   font-family: var(--font-display);
-  font-weight: 500;
   font-size: var(--fs-h3);
   line-height: 1;
-  letter-spacing: -0.03em;
-}
-
-.form__legend .t-mono {
-  color: var(--fg-2);
-}
-
-.req {
-  color: var(--signal);
-}
-
-.form__choices {
-  display: grid;
-  gap: 8px;
+  text-transform: uppercase;
 }
 
 .form__sub {
   border: 0;
-  display: grid;
-  gap: 14px;
-  margin-top: 20px;
   min-width: 0;
+}
+
+.form__sub legend {
+  margin-bottom: 12px;
+  font-weight: 600;
 }
 
 .form__fields {
   display: grid;
-  gap: 32px 24px;
+  gap: 20px;
 }
 
-.form__honeypot {
-  position: absolute;
-  left: -10000px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
+@media (min-width: 720px) {
+  .form__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .field--full { grid-column: 1 / -1; }
 }
 
 .form__nav {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
+  padding-top: 24px;
+  border-top: var(--border-thin) solid var(--ink);
 }
 
 .form__nav [data-form-next],
@@ -174,80 +137,102 @@
   margin-left: auto;
 }
 
-.form.is-sending [data-form-submit] {
-  opacity: 0.6;
+.form__errors {
+  padding: 16px 18px;
+  background: var(--cream);
+  border: 4px dashed var(--ink);
+  border-radius: var(--radius);
+}
+
+.form__errors ul {
+  margin-top: 8px;
+  padding-left: 20px;
+  list-style: square;
+}
+
+.form__errors a {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.form__honeypot input {
+  background: var(--cream);
+  border: 1px solid var(--ink);
+}
+
+.form__honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form.is-sending {
+  opacity: 0.7;
   pointer-events: none;
 }
 
-@media (min-width: 600px) {
-  .form__choices--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .form__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .field--full { grid-column: 1 / -1; }
+/* Sans JS : toutes les étapes visibles, la progression est inutile */
+.no-js .progress,
+.no-js .form__nav [data-form-next],
+.no-js .form__nav [data-form-prev] {
+  display: none;
 }
 
-/* ---- Écran de succès ---------------------------------------------------- */
-
-.contact-success {
-  position: relative;
-  display: grid;
-  gap: 24px;
-  justify-items: start;
-  padding-block: 4vh 6vh;
+/* Succès */
+.success {
+  padding: 48px 24px;
+  text-align: center;
 }
 
-.contact-success:focus {
-  outline: none;
+.success > * + * {
+  margin-top: 20px;
 }
 
-.contact-success__ship {
-  width: clamp(120px, 14vw, 220px);
-  rotate: -90deg;
-  margin-block: 40px 20px;
-}
-
-.contact-success__title {
+.success .sticker {
   font-size: var(--fs-h2);
+  --tilt: -4deg;
 }
 
-.contact-success__text {
-  max-width: 38ch;
-  color: var(--fg-2);
+.success p {
+  margin-inline: auto;
+  max-width: 46ch;
 }
 
-/* ---- Alternatives ------------------------------------------------------- */
-
-.contact__alt {
+/* Autres moyens de contact */
+.contact-aside {
   display: grid;
-  gap: 10px;
-  padding-top: 18px;
-  border-top: 1px solid var(--line);
+  gap: 18px;
 }
 
-.contact__email {
-  justify-self: start;
-  min-height: 44px;
+.contact-block {
+  padding: 22px 20px;
+  border: var(--border-thin) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--cream);
+}
+
+.contact-block > * + * {
+  margin-top: 10px;
+}
+
+.contact-block__title {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(1.4rem, 1rem + 1.4vw, 2.4rem);
-  letter-spacing: -0.03em;
-  text-align: left;
-  word-break: break-all;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0% 1px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  transition: background-size 0.5s var(--ease-out-expo);
+  font-size: var(--fs-h3);
+  line-height: 1;
+  text-transform: uppercase;
 }
 
-.contact__email:hover {
-  background-size: 100% 1px;
+.contact-block .btn {
+  width: 100%;
 }
 
-.contact__copy.is-copied {
-  color: var(--signal);
+.contact-block a:not(.btn) {
+  font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
-.contact__socials {
-  display: grid;
-  gap: 2px;
+.page-hero__inner + .contact__layout {
+  margin-top: var(--s-block);
 }

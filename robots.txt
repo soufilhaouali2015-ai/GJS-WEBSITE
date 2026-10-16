@@ -1,6 +1,7 @@
-# GJS — robots.txt
+# GJS · robots.txt
 User-agent: *
 Allow: /
 Disallow: /404.html
+Disallow: /scripts/
 
 Sitemap: https://www.gjs-agence.fr/sitemap.xml

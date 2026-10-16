@@ -1,144 +1,144 @@
 /* ==========================================================================
-   GJS — TOKENS
-   Couleurs, typographies, échelles fluides, easings, durées, z-index.
-   Toute valeur de design passe par ces variables : aucune couleur en dur ailleurs.
+   GJS · TOKENS
+   Toute valeur de design passe par ces variables. Aucune couleur en dur ailleurs.
+
+   Palette (stricte) : crème #F4F0E8, noir doux #141414, vert citron #D4FF3A
+   + 2 nuances dérivées (crème foncé pour les cartes, gris chaud pour le texte secondaire).
+
+   Contrastes WCAG vérifiés (texte normal, seuil AA = 4,5:1) :
+     noir   sur crème        16,2:1   noir   sur crème foncé  14,2:1
+     noir   sur citron       15,9:1   crème  sur noir         16,2:1
+     citron sur noir         15,9:1   crème foncé sur noir    14,2:1
+     gris chaud sur crème     6,8:1   gris chaud sur crème foncé 6,0:1
+     gris chaud sur citron    6,7:1
+   INTERDIT : texte citron sur crème (1,02:1). Le citron sert de FOND, texte noir dessus.
    ========================================================================== */
 
-/* Polices auto-hébergées (licence SIL OFL 1.1 — voir /assets/fonts/OFL-*.txt).
-   Clash Display & General Sans sont servies par Fontshare (cf. <head>) ;
-   le README explique comment les auto-héberger elles aussi. */
+/* Polices auto-hébergées (licence SIL OFL 1.1, voir /assets/fonts/OFL-*.txt). Aucun appel à un tiers. */
 @font-face {
-  font-family: "Instrument Serif";
-  src: url("../fonts/InstrumentSerif-Italic.woff2") format("woff2");
-  font-style: italic;
+  font-family: "Bebas Neue";
+  src: url("../fonts/BebasNeue-Regular.woff2") format("woff2");
   font-weight: 400;
+  font-style: normal;
   font-display: swap;
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: "JetBrains Mono";
-  src: url("../fonts/JetBrainsMono-Variable.woff2") format("woff2");
+  font-family: "Poppins";
+  src: url("../fonts/Poppins-Regular.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
-  font-weight: 100 800;
   font-display: swap;
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* Fallbacks métriquement proches pour limiter le CLS pendant le swap. */
+@font-face {
+  font-family: "Poppins";
+  src: url("../fonts/Poppins-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("../fonts/Poppins-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Repli métriquement proche pendant le chargement (limite le décalage de mise en page). */
 @font-face {
   font-family: "GJS Display Fallback";
-  src: local("Arial Narrow Bold"), local("ArialNarrow-Bold"), local("Helvetica Neue Condensed Bold"), local("Arial Bold"), local("Arial");
-  size-adjust: 96%;
-  ascent-override: 92%;
-  descent-override: 22%;
-  line-gap-override: 0%;
+  src: local("Arial Narrow Bold"), local("ArialNarrow-Bold"), local("Impact"), local("Arial Bold");
+  size-adjust: 88%;
+  ascent-override: 100%;
+  descent-override: 30%;
 }
 
 @font-face {
   font-family: "GJS Text Fallback";
-  src: local("Helvetica Neue"), local("Arial"), local("Roboto");
-  size-adjust: 101%;
-  ascent-override: 96%;
-  descent-override: 24%;
-  line-gap-override: 0%;
+  src: local("Arial"), local("Helvetica Neue"), local("Roboto");
+  size-adjust: 112%;
+  ascent-override: 93%;
+  descent-override: 31%;
+  line-gap-override: 9%;
 }
 
 :root {
-  /* ---- Palette ------------------------------------------------------- */
-  --night-950: #03060F;
-  --night-900: #060B1E;
-  --night-800: #0B1433;
-  --night-700: #13204D;
-  --night-500: #24387A;
-  --black: #000000;
-  --paper: #F2F1EC;
-  --white: #FFFFFF;
-  --signal: #5B85FF;              /* glow, focus, états actifs — < 5 % de la surface */
-  --signal-soft: rgba(91, 133, 255, 0.28);
-  --danger: #FF6B5B;              /* uniquement messages d'erreur de formulaire */
+  /* ---- Couleurs ------------------------------------------------------ */
+  --cream: #F4F0E8;          /* fond */
+  --cream-2: #E8E1D2;        /* dérivé : cartes, footer, ruban adhésif */
+  --ink: #141414;            /* texte, bordures, ombres */
+  --ink-2: #57524A;          /* dérivé : gris chaud, textes secondaires */
+  --lime: #D4FF3A;           /* accent : fonds de boutons, badges, surlignage */
 
-  /* ---- Thème courant (piloté au scroll par JS sur <body>) ------------- */
-  --bg: var(--night-900);
-  --fg: var(--white);
-  --fg-2: rgba(255, 255, 255, 0.64);
-  --line: rgba(255, 255, 255, 0.14);
-  --focus: var(--signal);
+  /* Rôles (redéfinis par .is-dark pour les sections noires) */
+  --bg: var(--cream);
+  --fg: var(--ink);
+  --fg-2: var(--ink-2);
+  --line: var(--ink);
+  --card: var(--cream-2);
+  --shadow-color: var(--ink);
+  --focus: var(--ink);
 
-  /* ---- Typographies --------------------------------------------------- */
-  --font-display: "Clash Display", "GJS Display Fallback", "Arial Narrow", Arial, sans-serif;
-  --font-text: "General Sans", "GJS Text Fallback", "Helvetica Neue", Arial, sans-serif;
-  --font-serif: "Instrument Serif", "Iowan Old Style", "Times New Roman", serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  /* ---- Typographie : 2 polices, 5 tailles ----------------------------- */
+  --font-display: "Bebas Neue", "GJS Display Fallback", Impact, "Arial Narrow", sans-serif;
+  --font-text: "Poppins", "GJS Text Fallback", Arial, sans-serif;
 
-  --tracking-display: -0.04em;
-  --tracking-mono: 0.08em;
-  --leading-display: 0.85;
+  --fs-h1: clamp(3.5rem, 2.4rem + 5.6vw, 8rem);        /* 56 → 128 px */
+  --fs-h2: clamp(2.75rem, 2.1rem + 3.2vw, 5rem);       /* 44 → 80 px */
+  --fs-h3: clamp(1.75rem, 1.55rem + 0.9vw, 2.25rem);   /* 28 → 36 px */
+  --fs-body: clamp(1.0625rem, 1.03rem + 0.15vw, 1.125rem); /* 17 → 18 px */
+  --fs-small: 0.9375rem;                               /* 15 px */
 
-  /* Échelle fluide (360 px → 1920 px) */
-  --fs-mono: clamp(0.6875rem, 0.66rem + 0.08vw, 0.75rem);           /* 11 → 12 px */
-  --fs-small: clamp(0.8125rem, 0.78rem + 0.15vw, 0.9375rem);
-  --fs-body: clamp(1rem, 0.94rem + 0.3vw, 1.1875rem);               /* 16 → 19 px */
-  --fs-lead: clamp(1.25rem, 1.05rem + 0.9vw, 1.875rem);
-  --fs-h4: clamp(1.5rem, 1.2rem + 1.4vw, 2.5rem);
-  --fs-h3: clamp(2rem, 1.4rem + 2.8vw, 4.25rem);
-  --fs-h2: clamp(3rem, 1.6rem + 6.4vw, 9.5rem);
-  --fs-h1: clamp(3.4rem, 1.4rem + 9vw, 13rem);
-  --fs-manifesto: clamp(2.1rem, 1rem + 5.2vw, 7.2rem);              /* 5 → 7 vw */
-  --fs-giant: clamp(6rem, 20vw, 22vw);                                /* 18 → 22 vw */
+  --lh-display: 0.92;
+  --lh-body: 1.6;
+  --measure: 65ch;
 
-  /* ---- Grille --------------------------------------------------------- */
-  --cols: 4;
-  --margin: clamp(16px, 4vw, 72px);
-  --gutter: clamp(12px, 1.6vw, 28px);
-  --header-h: clamp(64px, 5vw + 40px, 96px);
-  --radius-card: 24px;
-  --section-pad: clamp(96px, 16vh, 220px);
+  /* ---- Espacements ----------------------------------------------------- */
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1240px;
+  --s-section: clamp(80px, 2.5rem + 6vw, 144px);       /* ≥ 120 px desktop, ≥ 72 px mobile */
+  --s-block: clamp(32px, 1.5rem + 2vw, 56px);
+  --header-h: 72px;
 
-  /* ---- Motion --------------------------------------------------------- */
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --dur-micro: 0.25s;
-  --dur-reveal: 1s;
-  --dur-page: 1.25s;
+  /* ---- Matière street -------------------------------------------------- */
+  --border: 3px;
+  --border-thin: 2px;
+  --radius: 4px;
+  /* Ombres dures : toujours écrites « Npx Npx 0 var(--shadow-color) » dans les composants,
+     pour que la couleur suive le thème local (noir sur crème, citron ou crème sur noir). */
+  --tilt-left: -3deg;
+  --tilt-right: 2.5deg;
 
-  /* ---- Profondeurs ---------------------------------------------------- */
-  --z-content: 1;
-  --z-sticky: 10;
+  /* ---- Motion (une seule animation : fondu + léger glissement, 0,4 s) --- */
+  --dur: 0.4s;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ---- Profondeurs ----------------------------------------------------- */
   --z-header: 100;
-  --z-menu: 200;
-  --z-modal: 300;
-  --z-cookies: 350;
-  --z-transition: 400;
-  --z-loader: 500;
-  --z-egg: 600;
-  --z-cursor: 900;
-  --z-grain: 1000;
-}
-
-@media (min-width: 768px) {
-  :root { --cols: 6; }
+  --z-menu: 90;
+  --z-cookies: 300;
 }
 
 @media (min-width: 1024px) {
-  :root { --cols: 12; }
+  :root { --header-h: 84px; }
 }
 
-/* Thèmes locaux : un composant peut forcer sa palette quel que soit le fond du body. */
-.theme-night,
-[data-theme-local="night"] {
-  --fg: var(--white);
-  --fg-2: rgba(255, 255, 255, 0.64);
-  --line: rgba(255, 255, 255, 0.14);
-  --focus: var(--signal);
-}
-
-.theme-paper,
-[data-theme-local="paper"] {
-  --fg: var(--night-950);
-  --fg-2: rgba(3, 6, 15, 0.68);
-  --line: rgba(3, 6, 15, 0.16);
-  --focus: var(--night-500);
-  --danger: #B3261E;
+/* Sections noires (2 maximum par page) : crème sur noir, accents citron. */
+.is-dark {
+  --bg: var(--ink);
+  --fg: var(--cream);
+  --fg-2: var(--cream-2);
+  --line: var(--cream);
+  --card: var(--ink);
+  --shadow-color: var(--lime);
+  --focus: var(--lime);
+  background-color: var(--bg);
+  color: var(--fg);
 }

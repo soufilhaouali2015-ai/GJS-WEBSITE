@@ -1,6 +1,6 @@
 /* ==========================================================================
-   GJS — BASE
-   Reset, typographie de base, accessibilité, grain, overlay de grille, Lenis.
+   GJS · BASE
+   Reset, typographie (échelle unique), accessibilité, animation d'apparition.
    ========================================================================== */
 
 *,
@@ -17,38 +17,33 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  scrollbar-gutter: stable;
-  color-scheme: dark;
-  background: var(--night-950);
+  color-scheme: light;
+  background: var(--cream);
+  scroll-padding-top: calc(var(--header-h) + 24px);
+  interpolate-size: allow-keywords;
 }
 
 body {
   min-height: 100svh;
-  background-color: var(--bg);
+  background: var(--bg);
   color: var(--fg);
   font-family: var(--font-text);
   font-size: var(--fs-body);
   font-weight: 400;
-  line-height: 1.55;
-  font-kerning: normal;
-  font-feature-settings: "kern", "liga", "ss01";
+  line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
   overflow-x: clip;
 }
 
 img,
 picture,
-video,
-canvas,
 svg {
   display: block;
   max-width: 100%;
 }
 
-img,
-video {
+img {
   height: auto;
 }
 
@@ -68,7 +63,6 @@ button {
 
 a {
   color: inherit;
-  text-decoration: none;
 }
 
 ul,
@@ -87,97 +81,107 @@ h4 {
 
 p,
 li,
-dd {
+dd,
+summary {
   text-wrap: pretty;
 }
 
-em {
-  font-style: normal;
+strong {
+  font-weight: 600;
 }
 
 ::selection {
-  background: var(--signal);
-  color: var(--night-950);
+  background: var(--lime);
+  color: var(--ink);
 }
 
 [hidden] {
   display: none !important;
 }
 
-/* ---- Typographie -------------------------------------------------------- */
+/* ---- Échelle typographique (H1, H2, H3, texte, petit texte) ------------ */
 
-.t-display {
+.t-h1,
+.t-h2,
+.t-h3 {
   font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: var(--tracking-display);
-  line-height: var(--leading-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  line-height: var(--lh-display);
   text-wrap: balance;
 }
 
-.t-giant {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: var(--fs-giant);
-  letter-spacing: -0.05em;
-  line-height: 0.8;
-}
-
-.t-h1 { font-size: var(--fs-h1); }
+.t-h1 { font-size: var(--fs-h1); line-height: 0.88; }
 .t-h2 { font-size: var(--fs-h2); }
-.t-h3 { font-size: var(--fs-h3); }
-.t-h4 { font-size: var(--fs-h4); line-height: 1; letter-spacing: -0.02em; }
+.t-h3 { font-size: var(--fs-h3); line-height: 1; }
 
-/* Accent éditorial : 1 ou 2 mots par titre */
-.serif {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.015em;
-  font-size: 1.04em;
-}
+.t-body { font-size: var(--fs-body); }
 
-.t-lead {
-  font-size: var(--fs-lead);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  font-weight: 500;
-}
-
-.t-mono,
-.label {
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono);
-  font-weight: 400;
+.t-small {
+  font-size: var(--fs-small);
   line-height: 1.5;
-  letter-spacing: var(--tracking-mono);
-  text-transform: uppercase;
 }
-
-.label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75em;
-  color: var(--fg-2);
-}
-
-.label--signal { color: var(--signal); }
 
 .t-muted { color: var(--fg-2); }
 
-/* Contour typographique (numéros géants) */
-.t-outline {
-  color: transparent;
-  -webkit-text-stroke: 1px var(--fg);
-  paint-order: stroke fill;
+/* Paragraphe d'introduction : même taille que le texte, graisse 500 */
+.t-intro {
+  font-weight: 500;
+  max-width: var(--measure);
 }
 
-/* Marqueur de contenu à remplacer — volontairement visible */
-.placeholder-tag {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+.prose > * + * { margin-top: 1em; }
+.prose p,
+.prose li { max-width: var(--measure); }
+
+/* Coup de marqueur citron sous UN mot clé par titre important */
+.hl {
+  position: relative;
+  z-index: 0;
+  white-space: nowrap;
+}
+
+.hl::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: -0.08em;
+  right: -0.1em;
+  bottom: 0.16em;
+  height: 0.42em;
+  background: var(--lime);
+  border-radius: 0.06em 0.3em 0.1em 0.25em;
+  transform: rotate(-1.5deg);
+}
+
+/* Sur fond noir, le texte passe en noir sur un aplat citron complet (lisible). */
+.is-dark .hl {
+  color: var(--ink);
+  padding-inline: 0.12em;
+}
+
+.is-dark .hl::before {
+  left: 0;
+  right: 0;
+  top: 0.04em;
+  bottom: 0.08em;
+  height: auto;
+  border-radius: 0.04em 0.12em 0.06em 0.1em;
+}
+
+/* Marqueur de contenu à remplacer : volontairement visible */
+.todo {
+  display: inline-block;
+  padding: 0 6px;
+  border: 2px dashed currentColor;
+  font-family: var(--font-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: var(--focus);
+  vertical-align: middle;
   white-space: nowrap;
 }
 
@@ -200,20 +204,18 @@ em {
   position: fixed;
   top: 12px;
   left: 12px;
-  z-index: calc(var(--z-loader) + 1);
-  padding: 14px 20px;
-  background: var(--white);
-  color: var(--night-950);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: var(--tracking-mono);
-  text-transform: uppercase;
+  z-index: calc(var(--z-cookies) + 1);
+  padding: 12px 18px;
+  background: var(--lime);
+  color: var(--ink);
+  border: var(--border) solid var(--ink);
+  font-weight: 600;
+  text-decoration: none;
   transform: translateY(-200%);
-  transition: transform var(--dur-micro) var(--ease-out-expo);
 }
 
 .skip-link:focus-visible {
-  transform: translateY(0);
+  transform: none;
 }
 
 :focus {
@@ -221,153 +223,44 @@ em {
 }
 
 :focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 4px;
-  box-shadow: 0 0 0 6px var(--signal-soft);
-  border-radius: 2px;
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
 }
 
-/* Le texte splitté reste lisible par les lecteurs d'écran (copie .sr-only) */
-.split-target {
-  display: block;
+main:focus {
+  outline: none;
 }
 
-.line-mask,
-.word-mask,
-.char-mask {
-  padding-block: 0.12em;
-  margin-block: -0.12em;
+/* ---- Apparition des blocs : fondu + léger glissement, 0,4 s, une fois ---- */
+/* La classe .has-reveal n'est posée que si JS est actif ET le mouvement autorisé. */
+
+.has-reveal [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 
-.char-mask,
-.word-mask {
-  display: inline-block;
+.has-reveal [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
 }
 
-/* ---- Grain (bruit SVG animé à 8 fps) ----------------------------------- */
+/* ---- Navigation entre pages : fondu natif très court (navigateurs compatibles) */
 
-.grain {
-  position: fixed;
-  inset: -180px;
-  z-index: var(--z-grain);
-  pointer-events: none;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
-  animation: grain 1s steps(1) infinite;
-  will-change: transform;
+@view-transition {
+  navigation: auto;
 }
 
-@keyframes grain {
-  0% { transform: translate3d(0, 0, 0); }
-  12.5% { transform: translate3d(-63px, 41px, 0); }
-  25% { transform: translate3d(37px, -88px, 0); }
-  37.5% { transform: translate3d(-112px, -17px, 0); }
-  50% { transform: translate3d(91px, 66px, 0); }
-  62.5% { transform: translate3d(-24px, 129px, 0); }
-  75% { transform: translate3d(140px, -52px, 0); }
-  87.5% { transform: translate3d(-150px, 98px, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
 }
 
-/* ---- Overlay de grille (touche G) -------------------------------------- */
-
-.grid-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: calc(var(--z-cursor) - 1);
-  pointer-events: none;
-  display: grid;
-  grid-template-columns: repeat(var(--cols), 1fr);
-  column-gap: var(--gutter);
-  padding-inline: var(--margin);
-}
-
-.grid-overlay span {
-  position: relative;
-  background: rgba(91, 133, 255, 0.07);
-  border-inline: 1px solid rgba(91, 133, 255, 0.28);
-}
-
-.grid-overlay span::before {
-  content: attr(data-col);
-  position: absolute;
-  top: calc(var(--header-h) + 8px);
-  left: 6px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: var(--signal);
-}
-
-.grid-overlay__info {
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  translate: -50% 0;
-  padding: 6px 10px;
-  background: var(--night-950);
-  border: 1px solid var(--signal);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--signal);
-}
-
-/* ---- Lenis -------------------------------------------------------------- */
-
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis:not(.lenis-autoToggle).lenis-stopped {
-  overflow: clip;
-}
-
-.lenis [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
-}
-
-html.is-scroll-locked,
-html.is-scroll-locked body {
-  overflow: hidden;
-}
-
-/* ---- Sans JS : on garde un site lisible -------------------------------- */
-
-.no-js .loader,
-.no-js .page-transition,
-.no-js .cursor {
-  display: none !important;
-}
-
-.no-js [data-theme="paper"] {
-  background: var(--paper);
-  --fg: var(--night-950);
-  --fg-2: rgba(3, 6, 15, 0.68);
-  --line: rgba(3, 6, 15, 0.16);
-  color: var(--fg);
-}
-
-.no-js [data-theme="black"] {
-  background: var(--black);
-}
-
-/* ---- Mouvement réduit -------------------------------------------------- */
+/* ---- Mouvement réduit ---------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  .grain {
-    animation: none;
+  @view-transition {
+    navigation: none;
   }
 
   *,

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GJS — CONSENTEMENT COOKIES (RGPD / lignes directrices CNIL)
+   GJS · CONSENTEMENT COOKIES (RGPD / lignes directrices CNIL)
    • Aucun script de mesure avant consentement explicite.
    • « Tout refuser » aussi simple et visible que « Tout accepter ».
    • Choix mémorisé 6 mois puis redemandé ; versionné (CONFIG.CONSENT_VERSION).
@@ -7,16 +7,16 @@
    ========================================================================== */
 
 import { CONFIG } from '../config.js';
-import { store, announce } from './utils.js';
+import { store, announce, env } from './utils.js';
 
-const { gsap } = window;
 const KEY = 'gjs-consent';
 const CATEGORIES = ['analytics', 'marketing'];
 
 let banner;
 let prefs;
 let consent = null;
-const subscribers = new Map(); // catégorie → Set de callbacks
+let lastFocus = null;
+const subscribers = new Map();
 const loaded = new Set();
 
 function readConsent() {
@@ -27,7 +27,6 @@ function readConsent() {
   return saved;
 }
 
-export const getConsent = () => consent;
 export const hasConsent = (category) => Boolean(consent && consent[category]);
 
 /** Exécute cb dès que (et seulement si) la catégorie est acceptée. */
@@ -61,30 +60,9 @@ function apply(next) {
 }
 
 function syncPrefsForm() {
-  if (!prefs) return;
   CATEGORIES.forEach((cat) => {
-    const input = prefs.querySelector(`input[name="${cat}"]`);
+    const input = prefs && prefs.querySelector(`input[name="${cat}"]`);
     if (input) input.checked = hasConsent(cat);
-  });
-}
-
-function show({ customize = false, focus = false } = {}) {
-  if (!banner) return;
-  banner.hidden = false;
-  syncPrefsForm();
-  togglePrefs(customize);
-  gsap.fromTo(banner, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: 'expo.out' });
-  if (focus) {
-    const target = customize ? prefs.querySelector('input:not([disabled])') : banner.querySelector('[data-consent="reject"]');
-    requestAnimationFrame(() => target && target.focus());
-  }
-}
-
-function hide() {
-  if (!banner) return;
-  gsap.to(banner, {
-    autoAlpha: 0, y: 24, duration: 0.4, ease: 'power2.in',
-    onComplete: () => { banner.hidden = true; },
   });
 }
 
@@ -95,7 +73,30 @@ function togglePrefs(open) {
   if (btn) btn.setAttribute('aria-expanded', String(open));
 }
 
-export function initCookies({ showBanner = true } = {}) {
+function show({ customize = false, focus = false } = {}) {
+  if (!banner) return;
+  lastFocus = focus ? document.activeElement : null;
+  syncPrefsForm();
+  togglePrefs(customize);
+  banner.hidden = false;
+  if (!env.reducedMotion) {
+    banner.classList.add('is-entering');
+    requestAnimationFrame(() => requestAnimationFrame(() => banner.classList.remove('is-entering')));
+  }
+  if (focus) {
+    const target = customize ? prefs.querySelector('input:not([disabled])') : banner.querySelector('[data-consent="reject"]');
+    requestAnimationFrame(() => target && target.focus());
+  }
+}
+
+function hide() {
+  if (!banner) return;
+  banner.hidden = true;
+  if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
+  lastFocus = null;
+}
+
+export function initCookies() {
   banner = document.getElementById('cookies');
   prefs = document.getElementById('cookies-prefs');
   // Choix existant : on ne le réécrit pas (sa date d'origine fait foi pour l'expiration)
@@ -131,7 +132,7 @@ export function initCookies({ showBanner = true } = {}) {
     });
   }
 
-  // « Gérer les cookies » (footer, page confidentialité) — délégation globale
+  // « Gérer les cookies » (footer, page confidentialité)
   document.addEventListener('click', (e) => {
     if (e.target.closest('[data-cookie-manage]')) {
       e.preventDefault();
@@ -139,10 +140,10 @@ export function initCookies({ showBanner = true } = {}) {
     }
   });
 
-  if (!consent && showBanner) show();
-}
+  // Échap ferme le panneau de préférences ouvert depuis « Gérer les cookies »
+  banner.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && consent) hide();
+  });
 
-/** Affiche le bandeau si aucun choix n'a encore été fait (appelé après le loader). */
-export function maybeShowBanner() {
-  if (!consent && banner && banner.hidden) show();
+  if (!consent) show();
 }

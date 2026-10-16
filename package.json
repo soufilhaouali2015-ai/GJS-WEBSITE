@@ -1,0 +1,10 @@
+{
+  "name": "gjs-website",
+  "private": true,
+  "type": "module",
+  "description": "Site de l'agence GJS (HTML statique, aucune étape de build obligatoire).",
+  "scripts": {
+    "start": "npx serve .",
+    "services": "node scripts/sync-services.mjs"
+  }
+}

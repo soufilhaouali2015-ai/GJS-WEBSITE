@@ -1,0 +1,303 @@
+/* ==========================================================================
+   GJS · MOUVEMENT
+   Un seul langage : expo.out, 0,6 à 1,2 s. Tout est animé en transform et
+   opacity. Trois profils posés sur <html data-motion="desktop|mobile|reduced">.
+   Sans JavaScript (ou si le JS échoue : .has-motion est retirée après 3 s),
+   tout reste visible et statique.
+   ========================================================================== */
+
+/* ---- Lenis (défilement fluide) ------------------------------------------ */
+
+html.lenis,
+html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+
+/* ---- États initiaux (avant que motion.js ne prenne la main) ------------- */
+
+.has-motion [data-anim]:not(.is-anim-ready) { visibility: hidden; }
+
+/* Masques des lignes (SplitText) : un peu de marge pour les accents et le marqueur */
+.anim-line-mask {
+  padding: 0.14em 0.16em 0.06em;
+  margin: -0.14em -0.16em -0.06em;
+}
+
+.anim-line { will-change: transform; }
+
+/* ---- Barre de progression de lecture ------------------------------------ */
+
+.read-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: calc(var(--z-header) + 2);
+  height: 4px;
+  pointer-events: none;
+}
+
+.read-progress span {
+  display: block;
+  height: 100%;
+  background: var(--lime);
+  border-bottom: 1px solid var(--ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* ---- Header : se cache en descendant, revient en remontant -------------- */
+
+.header {
+  background: color-mix(in srgb, var(--cream) 86%, transparent);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  backdrop-filter: blur(12px) saturate(1.1);
+  transition: transform 0.8s var(--ease-expo);
+}
+
+.header.is-hidden { transform: translateY(calc(-100% - 6px)); }
+.is-menu-open .header { transform: none; background: var(--cream); }
+
+/* ---- Liens : trait de marqueur qui se dessine au survol ----------------- */
+
+.link,
+.footer__col a,
+.footer__link,
+.legal__toc a {
+  position: relative;
+  text-decoration-color: transparent !important;
+}
+
+.link::after,
+.footer__col a::after,
+.footer__link::after,
+.legal__toc a::after {
+  content: "";
+  position: absolute;
+  left: -0.08em;
+  right: -0.08em;
+  bottom: calc(50% - 0.75em);
+  z-index: -1;
+  height: 0.5em;
+  background: var(--lime);
+  border-radius: 0.06em 0.3em 0.1em 0.25em;
+  transform: scaleX(0) rotate(-1.5deg);
+  transform-origin: right center;
+  transition: transform 0.6s var(--ease-expo);
+  pointer-events: none;
+}
+
+.link { text-decoration-color: currentColor !important; }
+.link:hover { text-decoration-color: transparent !important; }
+
+.link:hover::after,
+.footer__col a:hover::after,
+.footer__link:hover::after,
+.legal__toc a:hover::after,
+.link:focus-visible::after {
+  transform: scaleX(1) rotate(-1.5deg);
+  transform-origin: left center;
+}
+
+.link,
+.link-arrow,
+.footer__col a,
+.footer__link,
+.legal__toc a { isolation: isolate; }
+
+.is-dark .link:hover { color: var(--ink); }
+.is-dark .link::after { bottom: calc(50% - 0.7em); height: 1.3em; border-radius: 3px; }
+
+/* ---- Rideau de transition entre pages ------------------------------------ */
+
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: var(--lime);
+  border-top: var(--border) solid var(--ink);
+  transform: translateY(101%);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.curtain__logo {
+  display: inline-block;
+  padding: 14px 22px 6px;
+  background: var(--ink);
+  color: var(--lime);
+  border-radius: var(--radius);
+  box-shadow: 8px 8px 0 var(--cream);
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 2rem + 4vw, 6rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  transform: rotate(-4deg);
+}
+
+.is-leaving .curtain,
+.is-curtain-in .curtain {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Arrivée par transition : le rideau couvre dès le premier affichage.
+   Filet de sécurité : il s'efface seul si le JavaScript ne répond pas. */
+.is-curtain-in .curtain {
+  transform: none;
+  animation: curtain-safety 0.5s var(--ease-expo) 1.4s forwards;
+}
+
+@keyframes curtain-safety {
+  to { transform: translateY(-101%); visibility: hidden; }
+}
+
+/* ---- Double bandeau ------------------------------------------------------ */
+
+.bands {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  padding-block: clamp(56px, 6vw, 96px);
+  overflow: clip;
+}
+
+.band {
+  grid-area: 1 / 1;
+  width: 112%;
+  margin-left: -6%;
+  border-block: var(--border) solid var(--ink);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.band--lime {
+  background: var(--lime);
+  color: var(--ink);
+  transform: rotate(2deg);
+  z-index: 2;
+}
+
+.band--ink {
+  background: var(--ink);
+  color: var(--cream);
+  transform: rotate(-2deg);
+  z-index: 1;
+}
+
+.band__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.band__group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.band__item {
+  padding: 0.3em 0.45em 0.12em;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 1.6rem + 2.6vw, 4.5rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.band__star {
+  width: clamp(22px, 1rem + 1vw, 40px);
+  height: auto;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.band--ink .band__star { fill: var(--lime); }
+
+/* ---- Cartes 3D (inclinaison, relief, reflet, ombre opposée) ------------- */
+
+.svc-card[data-tilt],
+[data-tilt]:not(html) { perspective: 1000px; }
+
+[data-tilt-body] {
+  position: relative;
+  z-index: 1;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.tilt-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: var(--radius);
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateZ(2px);
+}
+
+.tilt-glare::before {
+  content: "";
+  position: absolute;
+  left: -50%;
+  top: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--cream) 46%, transparent) 0%, color-mix(in srgb, var(--cream) 14%, transparent) 28%, transparent 54%);
+  transform: translate(var(--gx, 0%), var(--gy, 0%));
+}
+
+/* ---- Bouton pause des animations (WCAG 2.2.2) ---------------------------- */
+
+.hero__pause {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 8px 16px 8px 12px;
+  background: var(--cream);
+  color: var(--ink);
+  border: var(--border-thin) solid var(--ink);
+  border-radius: 999px;
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+.hero__pause-icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+}
+
+.hero__pause-icon::before,
+.hero__pause-icon::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 4px;
+  height: 14px;
+  background: var(--ink);
+  border-radius: 1px;
+}
+
+.hero__pause-icon::before { left: 1px; }
+.hero__pause-icon::after { right: 1px; }
+
+.hero__pause[aria-pressed="true"] .hero__pause-icon::before {
+  left: 2px;
+  width: 0;
+  height: 0;
+  background: none;
+  border-style: solid;
+  border-width: 7px 0 7px 12px;
+  border-color: transparent transparent transparent var(--ink);
+}
+
+.hero__pause[aria-pressed="true"] .hero__pause-icon::after { display: none; }
+
+/* ---- Mouvement réduit ---------------------------------------------------- */
+
+[data-motion="reduced"] .band__track { transform: none !important; }
+[data-motion="reduced"] .header { transition: none; }

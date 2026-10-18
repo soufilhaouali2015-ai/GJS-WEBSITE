@@ -28,15 +28,17 @@
   <link rel="icon" href="assets/img/icons/icon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/icons/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <script>(function(h){h.classList.replace('no-js','js');if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){h.classList.add('has-reveal');setTimeout(function(){if(!window.__gjsReady)h.classList.remove('has-reveal')},2500)}})(document.documentElement);</script>
+  <script>(function(h){h.classList.replace('no-js','js');var m=function(q){return matchMedia(q).matches};var p=m('(prefers-reduced-motion: reduce)')?'reduced':(m('(min-width: 1024px) and (hover: hover) and (pointer: fine)')?'desktop':'mobile');h.setAttribute('data-motion',p);h.classList.add('has-motion');try{if(sessionStorage.getItem('gjs-curtain')){sessionStorage.removeItem('gjs-curtain');if(p!=='reduced')h.classList.add('is-curtain-in')}}catch(e){}setTimeout(function(){if(!window.__gjsMotion)h.classList.remove('has-motion','is-curtain-in')},3000)})(document.documentElement);</script>
   <link rel="preload" href="assets/fonts/BebasNeue-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Medium.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/video/hero-poster.jpg" as="image" fetchpriority="high">
   <link rel="stylesheet" href="assets/css/tokens.css">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/layout.css">
   <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/motion.css">
   <link rel="stylesheet" href="assets/css/pages/home.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"GJS","url":"https://www.gjs-agence.fr/","inLanguage":"fr-FR"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":["Organization","ProfessionalService"],"@id":"https://www.gjs-agence.fr/#organization","name":"GJS","alternateName":"GJS, agence marketing digital","url":"https://www.gjs-agence.fr/","logo":"https://www.gjs-agence.fr/assets/img/icons/icon-512.png","image":"https://www.gjs-agence.fr/assets/img/og-image.jpg","email":"bonjour@gjs-agence.fr","telephone":"+33100000000","description":"Agence marketing digital créée par 3 associés en Île-de-France : création de site internet, application mobile, acquisition de nouveaux clients, réseaux sociaux, automatisations IA, agent IA, SEO, SEA et CRM.","address":{"@type":"PostalAddress","addressRegion":"Île-de-France","addressCountry":"FR"},"areaServed":[{"@type":"AdministrativeArea","name":"Île-de-France"},{"@type":"Country","name":"France"}],"priceRange":"€€","hasOfferCatalog":{"@id":"https://www.gjs-agence.fr/#catalogue"}}</script>
@@ -44,11 +46,16 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"OfferCatalog","@id":"https://www.gjs-agence.fr/#catalogue","name":"Services de l’agence GJS","itemListElement":[{"@type":"Offer","priceCurrency":"EUR","price":800,"priceSpecification":[{"@type":"PriceSpecification","minPrice":800,"priceCurrency":"EUR","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=site#formulaire","itemOffered":{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#site","name":"Création de site internet","url":"https://www.gjs-agence.fr/services.html#site"}},{"@type":"Offer","priceCurrency":"EUR","price":4000,"priceSpecification":[{"@type":"PriceSpecification","minPrice":4000,"priceCurrency":"EUR","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=app#formulaire","itemOffered":{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#app","name":"Application mobile","url":"https://www.gjs-agence.fr/services.html#app"}},{"@type":"Offer","priceCurrency":"EUR","price":650,"priceSpecification":[{"@type":"PriceSpecification","minPrice":650,"priceCurrency":"EUR","valueAddedTaxIncluded":false},{"@type":"UnitPriceSpecification","minPrice":500,"priceCurrency":"EUR","unitText":"mois","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=acquisition#formulaire","itemOffered":{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#acquisition","name":"Acquisition de nouveaux clients","url":"https://www.gjs-agence.fr/services.html#acquisition"}},{"@type":"Offer","priceCurrency":"EUR","price":350,"priceSpecification":[{"@type":"UnitPriceSpecification","minPrice":350,"priceCurrency":"EUR","unitText":"mois","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=social#formulaire","itemOffered":{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#social","name":"Gestion et optimisation des réseaux sociaux","url":"https://www.gjs-agence.fr/services.html#social"}},{"@type":"Offer","priceCurrency":"EUR","price":500,"priceSpecification":[{"@type":"PriceSpecification","minPrice":500,"priceCurrency":"EUR","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=automatisation#formulaire","itemOffered":{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#automatisation","name":"Automatisations IA","url":"https://www.gjs-agence.fr/services.html#automatisation"}},{"@type":"Offer","priceCurrency":"EUR","price":1000,"priceSpecification":[{"@type":"PriceSpecification","minPrice":1000,"priceCurrency":"EUR","valueAddedTaxIncluded":false},{"@type":"UnitPriceSpecification","minPrice":100,"priceCurrency":"EUR","unitText":"mois","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=agent-ia#formulaire","itemOffered":{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#agent-ia","name":"Agent IA","url":"https://www.gjs-agence.fr/services.html#agent-ia"}},{"@type":"Offer","priceCurrency":"EUR","price":200,"priceSpecification":[{"@type":"UnitPriceSpecification","minPrice":200,"priceCurrency":"EUR","unitText":"mois","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=seo#formulaire","itemOffered":{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#seo","name":"SEO (référencement naturel)","url":"https://www.gjs-agence.fr/services.html#seo"}},{"@type":"Offer","priceCurrency":"EUR","price":150,"priceSpecification":[{"@type":"UnitPriceSpecification","minPrice":150,"priceCurrency":"EUR","unitText":"mois","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=sea#formulaire","itemOffered":{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#sea","name":"SEA (Google Ads, Meta Ads)","url":"https://www.gjs-agence.fr/services.html#sea"}},{"@type":"Offer","priceCurrency":"EUR","price":800,"priceSpecification":[{"@type":"PriceSpecification","minPrice":800,"priceCurrency":"EUR","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=crm#formulaire","itemOffered":{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#crm","name":"CRM (suivi clients)","url":"https://www.gjs-agence.fr/services.html#crm"}}]}</script>
   <!-- /@services:jsonld-catalog -->
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Combien coûte un projet ?","acceptedAnswer":{"@type":"Answer","text":"Chaque service a un prix de départ affiché sur ce site, hors taxes. Après un premier échange gratuit, on vous envoie un devis précis sous 48 h. Vous savez exactement ce que vous payez avant de commencer."}},{"@type":"Question","name":"Combien de temps faut-il ?","acceptedAnswer":{"@type":"Answer","text":"Comptez 2 à 4 semaines pour un site vitrine, 4 à 8 semaines pour un e-commerce et 8 à 12 semaines pour une application mobile. Le délai exact est écrit noir sur blanc dans votre devis."}},{"@type":"Question","name":"Comment marche l’offre de lancement ?","acceptedAnswer":{"@type":"Answer","text":"-40 % pour nos 5 premiers clients. En échange, vous laissez un avis sur notre travail et vous nous autorisez à présenter votre projet sur notre site. Quand les 5 places sont prises, l’offre s’arrête."}},{"@type":"Question","name":"Vous êtes une nouvelle agence. Pourquoi vous faire confiance ?","acceptedAnswer":{"@type":"Answer","text":"C’est vrai, GJS vient de naître, et on préfère vous le dire. Ce qu’on vous promet : un devis clair, un interlocuteur unique du début à la fin, et un projet qui vous appartient à 100 %. Le premier échange est gratuit : jugez sur pièce."}},{"@type":"Question","name":"À qui appartiennent le site et les comptes ?","acceptedAnswer":{"@type":"Answer","text":"À vous. Le site, le nom de domaine, les comptes publicitaires et les données sont à votre nom. Vous n’êtes jamais bloqué chez nous."}}]}</script>
+  <script defer src="assets/vendor/gsap/gsap.min.js"></script>
+  <script defer src="assets/vendor/gsap/ScrollTrigger.min.js"></script>
+  <script defer src="assets/vendor/gsap/SplitText.min.js"></script>
+  <script defer src="assets/vendor/lenis/lenis.min.js"></script>
   <script type="module" src="assets/js/main.js"></script>
 </head>
 <body data-page="home">
 
   <a class="skip-link" href="#main">Aller au contenu</a>
+  <div class="read-progress" aria-hidden="true"><span data-read-progress></span></div>
 
   <header class="header">
     <div class="wrap header__inner">
@@ -88,152 +95,238 @@
 
   <main id="main" tabindex="-1">
 
-        <section class="section hero" aria-labelledby="hero-title">
-          <div class="wrap hero__grid">
-            <div class="hero__content">
-              <p><span class="sticker">Agence marketing digital · Île-de-France</span></p>
-              <h1 class="t-h1 hero__title" id="hero-title">Plus de <span class="hl">clients</span>, moins de prise de tête.</h1>
-              <p class="t-intro hero__text">Site internet, application mobile, prospection&nbsp;: on construit votre présence en ligne pour que les clients viennent à vous. Trois associés, un seul interlocuteur, des prix clairs.</p>
+        <section class="hero" data-hero aria-labelledby="hero-title">
+          <div class="hero__stage" data-hero-stage>
+            <h1 class="hero__title hero__title--ink" id="hero-title" data-hero-title>
+                <span class="hero__line"><span class="hero__line-in">Plus de <span class="hl">clients</span>,</span></span>
+                <span class="hero__line"><span class="hero__line-in">moins de</span></span>
+                <span class="hero__line"><span class="hero__line-in">prise de tête.</span></span>
+            </h1>
+            <div class="hero__shadow" aria-hidden="true" data-hero-shadow></div>
+            <div class="hero__card" data-hero-card>
+              <div class="hero__media">
+                <video class="hero__video" data-hero-video muted loop playsinline preload="metadata" poster="assets/video/hero-poster.jpg" width="1280" height="720" aria-hidden="true" tabindex="-1">
+                  <source src="assets/video/hero-mobile.webm" type="video/webm" media="(max-width: 767px)">
+                  <source src="assets/video/hero-mobile.mp4" type="video/mp4" media="(max-width: 767px)">
+                  <source src="assets/video/hero.webm" type="video/webm">
+                  <source src="assets/video/hero.mp4" type="video/mp4">
+                </video>
+                <div class="hero__veil"></div>
+              </div>
+              <div class="hero__counter" data-hero-counter aria-hidden="true">
+                <p class="hero__title hero__title--cream" data-hero-title-cream>
+                <span class="hero__line"><span class="hero__line-in">Plus de <span class="hl">clients</span>,</span></span>
+                <span class="hero__line"><span class="hero__line-in">moins de</span></span>
+                <span class="hero__line"><span class="hero__line-in">prise de tête.</span></span>
+                </p>
+              </div>
+              <span class="hero__border" aria-hidden="true" data-hero-border></span>
+            </div>
+            <canvas class="hero__gl" data-hero-gl aria-hidden="true"></canvas>
+            <div class="hero__label" data-hero-label>
+              <p class="hero__kicker"><span class="sticker">Agence marketing digital · Île-de-France</span></p>
+              <p class="hero__text">Site internet, application mobile, prospection&nbsp;: on construit votre présence en ligne pour que les clients viennent à vous. Trois associés, un seul interlocuteur, des prix clairs.</p>
               <div class="btn-row">
                 <a class="btn btn--lime" href="contact.html#formulaire">Devis gratuit</a>
                 <a class="btn" href="#services">Voir nos services</a>
               </div>
               <p class="hero__reassure"><span>Réponse sous 24&nbsp;h.</span> <span>Premier échange gratuit.</span></p>
             </div>
-            <aside class="flyer taped" aria-labelledby="flyer-title">
-              <p><span class="sticker sticker--ink">Au menu</span></p>
-              <h2 class="t-h3 flyer__title" id="flyer-title">Nos 3 services phares</h2>
-              <!-- @services:flyer -->
-              <ul class="flyer__list">
-                <li><a href="services.html#site">Site internet</a><span class="flyer__price"><small>dès</small><span data-price="site">800 €</span></span></li>
-                <li><a href="services.html#app">Appli mobile</a><span class="flyer__price"><small>dès</small><span data-price="app">4 000 €</span></span></li>
-                <li><a href="services.html#acquisition">Nouveaux clients</a><span class="flyer__price"><small>dès</small><span data-price="acquisition">650 € + 500 €/mois</span></span></li>
-              </ul>
-              <!-- /@services:flyer -->
-              <p class="flyer__note t-small">Prix de départ, hors taxes.</p>
-              <a class="sticker-round" href="#offre"><span><strong>-40&nbsp;%</strong>pour les 5 premiers</span></a>
-            </aside>
+            <button class="hero__pause" type="button" data-motion-pause aria-pressed="false"><span class="hero__pause-icon" aria-hidden="true"></span><span data-pause-label>Mettre en pause</span></button>
           </div>
         </section>
+
+        <div class="bands" aria-hidden="true" data-bands>
+          <!-- @services:bands -->
+          <div class="band band--lime" data-band data-speed="60" data-dir="-1"><div class="band__track" data-band-track><div class="band__group"><span class="band__item">Site internet</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">Appli mobile</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">Nouveaux clients</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">Réseaux sociaux</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">Automatisations IA</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">Agent IA</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">SEO</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">SEA</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">CRM</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg></div></div></div>
+          <div class="band band--ink" data-band data-speed="48" data-dir="1"><div class="band__track" data-band-track><div class="band__group"><span class="band__item">CRM</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">SEA</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">SEO</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">Agent IA</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">Automatisations IA</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">Réseaux sociaux</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">Acquisition de nouveaux clients</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">Application mobile</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg><span class="band__item">Création de site internet</span><svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg></div></div></div>
+          <!-- /@services:bands -->
+        </div>
 
         <section class="section" id="services" aria-labelledby="services-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" id="services-title">Nos <span class="hl">services</span></h2>
+              <h2 class="t-h2" data-anim="lines" id="services-title">Nos <span class="hl">services</span></h2>
               <p class="t-intro">Neuf façons de faire grandir votre activité. Le prix de départ est affiché, le devis précis arrive après un premier échange gratuit.</p>
             </div>
             <!-- @services:cards -->
-            <div class="svc-grid">
-            <article class="svc-card svc-card--featured taped taped--one" aria-labelledby="carte-site" data-reveal>
-              <span class="sticker sticker--ink svc-card__badge" data-badge="site">Best-seller</span>
-              <div class="svc-card__head"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-site"></use></svg></div>
-              <h3 class="t-h3 svc-card__title" id="carte-site">Création de site internet</h3>
-              <p class="t-small svc-card__tagline">Vitrine ou e-commerce, on s’occupe de tout</p>
-              <p>Un site qui inspire confiance et transforme vos visiteurs en clients. Vous nous donnez vos idées, on s’occupe du reste.</p>
-              <ul class="checklist"><li>Design sur-mesure, parfait sur mobile</li><li>Textes, photos et référencement de base</li><li>Mise en ligne, nom de domaine et hébergement configurés</li></ul>
-              <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="site">800 €</strong> <span class="price__tax">HT</span></p>
-              <div class="svc-card__actions">
-                <a class="btn" href="contact.html?besoins=site#formulaire">Je veux ça<span class="sr-only"> : Création de site internet</span></a>
-                <a class="link link-arrow" href="services.html#site">Voir le détail<span class="sr-only"> : Création de site internet</span></a>
+            <div class="svc-grid" data-anim="svc-grid">
+            <article class="svc-card svc-card--featured" aria-labelledby="carte-site" data-tilt="12" data-flip>
+              <span class="svc-card__shadow" aria-hidden="true"></span>
+              <div class="svc-card__body" data-tilt-body>
+                <div class="svc-card__inner" data-flip-inner>
+                  <div class="svc-card__face svc-card__face--front">
+                    <span class="sticker sticker--ink svc-card__badge" data-badge="site" data-depth="70">Best-seller</span>
+                    <div class="svc-card__head" data-depth="44"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-site"></use></svg></div>
+                    <h3 class="t-h3 svc-card__title" id="carte-site" data-depth="30">Création de site internet</h3>
+                    <p class="t-small svc-card__tagline">Vitrine ou e-commerce, on s’occupe de tout</p>
+                    <p class="svc-card__benefit">Un site qui inspire confiance et transforme vos visiteurs en clients. Vous nous donnez vos idées, on s’occupe du reste.</p>
+                    <p class="price" data-depth="52"><span class="price__from">À partir de</span> <strong class="price__value" data-price="site">800 €</strong> <span class="price__tax">HT</span></p>
+                    <button class="svc-card__flip-btn" type="button" data-flip-toggle aria-expanded="false" aria-controls="verso-site">Ce qui est inclus<span class="sr-only"> : Création de site internet</span></button>
+                  </div>
+                  <div class="svc-card__face svc-card__face--back" id="verso-site">
+                    <p class="svc-card__back-title" data-depth="30">Ce qui est inclus<span class="sr-only"> : Création de site internet</span></p>
+                    <ul class="checklist" data-depth="22"><li>Design sur-mesure, parfait sur mobile</li><li>Textes, photos et référencement de base</li><li>Mise en ligne, nom de domaine et hébergement configurés</li></ul>
+                    <p class="price" data-depth="44"><span class="price__from">À partir de</span> <strong class="price__value" data-price="site">800 €</strong> <span class="price__tax">HT</span></p>
+                    <div class="svc-card__actions" data-depth="26">
+                      <a class="btn" href="contact.html?besoins=site#formulaire">Je veux ça<span class="sr-only"> : Création de site internet</span></a>
+                      <a class="link link-arrow" href="services.html#site">Voir le détail<span class="sr-only"> : Création de site internet</span></a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </article>
-            <article class="svc-card svc-card--featured taped taped--one" aria-labelledby="carte-app" data-reveal>
-              <span class="sticker sticker--ink svc-card__badge" data-badge="app">Coup de cœur</span>
-              <div class="svc-card__head"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-app"></use></svg></div>
-              <h3 class="t-h3 svc-card__title" id="carte-app">Application mobile</h3>
-              <p class="t-small svc-card__tagline">Sur iPhone et Android</p>
-              <p>Votre application dans la poche de vos clients. Pour les fidéliser et leur simplifier la vie.</p>
-              <ul class="checklist"><li>Maquettes et parcours pensés pour vos clients</li><li>Application iPhone et Android</li><li>Publication sur l’App Store et Google Play</li></ul>
-              <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="app">4 000 €</strong> <span class="price__tax">HT</span></p>
-              <div class="svc-card__actions">
-                <a class="btn" href="contact.html?besoins=app#formulaire">Je veux ça<span class="sr-only"> : Application mobile</span></a>
-                <a class="link link-arrow" href="services.html#app">Voir le détail<span class="sr-only"> : Application mobile</span></a>
+            <article class="svc-card svc-card--featured" aria-labelledby="carte-app" data-tilt="12" data-flip>
+              <span class="svc-card__shadow" aria-hidden="true"></span>
+              <div class="svc-card__body" data-tilt-body>
+                <div class="svc-card__inner" data-flip-inner>
+                  <div class="svc-card__face svc-card__face--front">
+                    <span class="sticker sticker--ink svc-card__badge" data-badge="app" data-depth="70">Coup de cœur</span>
+                    <div class="svc-card__head" data-depth="44"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-app"></use></svg></div>
+                    <h3 class="t-h3 svc-card__title" id="carte-app" data-depth="30">Application mobile</h3>
+                    <p class="t-small svc-card__tagline">Sur iPhone et Android</p>
+                    <p class="svc-card__benefit">Votre application dans la poche de vos clients. Pour les fidéliser et leur simplifier la vie.</p>
+                    <p class="price" data-depth="52"><span class="price__from">À partir de</span> <strong class="price__value" data-price="app">4 000 €</strong> <span class="price__tax">HT</span></p>
+                    <button class="svc-card__flip-btn" type="button" data-flip-toggle aria-expanded="false" aria-controls="verso-app">Ce qui est inclus<span class="sr-only"> : Application mobile</span></button>
+                  </div>
+                  <div class="svc-card__face svc-card__face--back" id="verso-app">
+                    <p class="svc-card__back-title" data-depth="30">Ce qui est inclus<span class="sr-only"> : Application mobile</span></p>
+                    <ul class="checklist" data-depth="22"><li>Maquettes et parcours pensés pour vos clients</li><li>Application iPhone et Android</li><li>Publication sur l’App Store et Google Play</li></ul>
+                    <p class="price" data-depth="44"><span class="price__from">À partir de</span> <strong class="price__value" data-price="app">4 000 €</strong> <span class="price__tax">HT</span></p>
+                    <div class="svc-card__actions" data-depth="26">
+                      <a class="btn" href="contact.html?besoins=app#formulaire">Je veux ça<span class="sr-only"> : Application mobile</span></a>
+                      <a class="link link-arrow" href="services.html#app">Voir le détail<span class="sr-only"> : Application mobile</span></a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </article>
-            <article class="svc-card svc-card--featured taped taped--one" aria-labelledby="carte-acquisition" data-reveal>
-              <span class="sticker sticker--ink svc-card__badge" data-badge="acquisition">Le plus demandé</span>
-              <div class="svc-card__head"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-acquisition"></use></svg></div>
-              <h3 class="t-h3 svc-card__title" id="carte-acquisition">Acquisition de nouveaux clients</h3>
-              <p class="t-small svc-card__tagline">Prospects, prospection automatisée, growth hacking</p>
-              <p>Des prospects qualifiés contactés chaque mois, sans passer vos soirées à prospecter.</p>
-              <ul class="checklist"><li>Base de données de prospects ciblés</li><li>Prospection automatisée par email et LinkedIn</li><li>Techniques de growth hacking testées chaque mois</li></ul>
-              <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="acquisition">650 € + 500 €/mois</strong> <span class="price__tax">HT</span></p>
-              <div class="svc-card__actions">
-                <a class="btn" href="contact.html?besoins=acquisition#formulaire">Je veux ça<span class="sr-only"> : Acquisition de nouveaux clients</span></a>
-                <a class="link link-arrow" href="services.html#acquisition">Voir le détail<span class="sr-only"> : Acquisition de nouveaux clients</span></a>
+            <article class="svc-card svc-card--featured" aria-labelledby="carte-acquisition" data-tilt="12" data-flip>
+              <span class="svc-card__shadow" aria-hidden="true"></span>
+              <div class="svc-card__body" data-tilt-body>
+                <div class="svc-card__inner" data-flip-inner>
+                  <div class="svc-card__face svc-card__face--front">
+                    <span class="sticker sticker--ink svc-card__badge" data-badge="acquisition" data-depth="70">Le plus demandé</span>
+                    <div class="svc-card__head" data-depth="44"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-acquisition"></use></svg></div>
+                    <h3 class="t-h3 svc-card__title" id="carte-acquisition" data-depth="30">Acquisition de nouveaux clients</h3>
+                    <p class="t-small svc-card__tagline">Prospects, prospection automatisée, growth hacking</p>
+                    <p class="svc-card__benefit">Des prospects qualifiés contactés chaque mois, sans passer vos soirées à prospecter.</p>
+                    <p class="price" data-depth="52"><span class="price__from">À partir de</span> <strong class="price__value" data-price="acquisition">650 € + 500 €/mois</strong> <span class="price__tax">HT</span></p>
+                    <button class="svc-card__flip-btn" type="button" data-flip-toggle aria-expanded="false" aria-controls="verso-acquisition">Ce qui est inclus<span class="sr-only"> : Acquisition de nouveaux clients</span></button>
+                  </div>
+                  <div class="svc-card__face svc-card__face--back" id="verso-acquisition">
+                    <p class="svc-card__back-title" data-depth="30">Ce qui est inclus<span class="sr-only"> : Acquisition de nouveaux clients</span></p>
+                    <ul class="checklist" data-depth="22"><li>Base de données de prospects ciblés</li><li>Prospection automatisée par email et LinkedIn</li><li>Techniques de growth hacking testées chaque mois</li></ul>
+                    <p class="price" data-depth="44"><span class="price__from">À partir de</span> <strong class="price__value" data-price="acquisition">650 € + 500 €/mois</strong> <span class="price__tax">HT</span></p>
+                    <div class="svc-card__actions" data-depth="26">
+                      <a class="btn" href="contact.html?besoins=acquisition#formulaire">Je veux ça<span class="sr-only"> : Acquisition de nouveaux clients</span></a>
+                      <a class="link link-arrow" href="services.html#acquisition">Voir le détail<span class="sr-only"> : Acquisition de nouveaux clients</span></a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </article>
             <p class="svc-grid__label">Et aussi</p>
-            <article class="svc-card" aria-labelledby="carte-social" data-reveal>
-              <div class="svc-card__head"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-social"></use></svg></div>
-              <h3 class="t-h3 svc-card__title" id="carte-social">Réseaux sociaux</h3>
-              <p class="t-small svc-card__tagline">Instagram, Facebook, LinkedIn, TikTok</p>
-              <p>Des comptes actifs et soignés qui donnent envie de vous suivre. Sans y passer vos journées.</p>
-              <ul class="checklist"><li>Calendrier de publications chaque mois</li><li>Création des visuels et des textes</li><li>Optimisation de vos profils</li></ul>
-              <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="social">350 €/mois</strong> <span class="price__tax">HT</span></p>
-              <div class="svc-card__actions">
-                <a class="btn btn--lime" href="contact.html?besoins=social#formulaire">Je veux ça<span class="sr-only"> : Gestion et optimisation des réseaux sociaux</span></a>
-                <a class="link link-arrow" href="services.html#social">Voir le détail<span class="sr-only"> : Gestion et optimisation des réseaux sociaux</span></a>
+            <article class="svc-card" aria-labelledby="carte-social" data-tilt="12">
+              <span class="svc-card__shadow" aria-hidden="true"></span>
+              <div class="svc-card__body" data-tilt-body>
+                <div class="svc-card__face">
+                  <div class="svc-card__head" data-depth="44"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-social"></use></svg></div>
+                  <h3 class="t-h3 svc-card__title" id="carte-social" data-depth="30">Réseaux sociaux</h3>
+                  <p class="t-small svc-card__tagline">Instagram, Facebook, LinkedIn, TikTok</p>
+                  <p>Des comptes actifs et soignés qui donnent envie de vous suivre. Sans y passer vos journées.</p>
+                  <ul class="checklist"><li>Calendrier de publications chaque mois</li><li>Création des visuels et des textes</li><li>Optimisation de vos profils</li></ul>
+                  <p class="price" data-depth="48"><span class="price__from">À partir de</span> <strong class="price__value" data-price="social">350 €/mois</strong> <span class="price__tax">HT</span></p>
+                  <div class="svc-card__actions" data-depth="26">
+                    <a class="btn btn--lime" href="contact.html?besoins=social#formulaire">Je veux ça<span class="sr-only"> : Gestion et optimisation des réseaux sociaux</span></a>
+                    <a class="link link-arrow" href="services.html#social">Voir le détail<span class="sr-only"> : Gestion et optimisation des réseaux sociaux</span></a>
+                  </div>
+                </div>
               </div>
             </article>
-            <article class="svc-card" aria-labelledby="carte-automatisation" data-reveal>
-              <div class="svc-card__head"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-automatisation"></use></svg></div>
-              <h3 class="t-h3 svc-card__title" id="carte-automatisation">Automatisations IA</h3>
-              <p class="t-small svc-card__tagline">Les tâches répétitives en pilote automatique</p>
-              <p>Les tâches répétitives se font toutes seules. Vous récupérez des heures chaque semaine.</p>
-              <ul class="checklist"><li>Repérage des tâches qui vous font perdre du temps</li><li>Connexion de vos outils entre eux</li><li>IA pour trier, rédiger et relancer</li></ul>
-              <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="automatisation">500 €</strong> <span class="price__tax">HT</span></p>
-              <div class="svc-card__actions">
-                <a class="btn btn--lime" href="contact.html?besoins=automatisation#formulaire">Je veux ça<span class="sr-only"> : Automatisations IA</span></a>
-                <a class="link link-arrow" href="services.html#automatisation">Voir le détail<span class="sr-only"> : Automatisations IA</span></a>
+            <article class="svc-card" aria-labelledby="carte-automatisation" data-tilt="12">
+              <span class="svc-card__shadow" aria-hidden="true"></span>
+              <div class="svc-card__body" data-tilt-body>
+                <div class="svc-card__face">
+                  <div class="svc-card__head" data-depth="44"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-automatisation"></use></svg></div>
+                  <h3 class="t-h3 svc-card__title" id="carte-automatisation" data-depth="30">Automatisations IA</h3>
+                  <p class="t-small svc-card__tagline">Les tâches répétitives en pilote automatique</p>
+                  <p>Les tâches répétitives se font toutes seules. Vous récupérez des heures chaque semaine.</p>
+                  <ul class="checklist"><li>Repérage des tâches qui vous font perdre du temps</li><li>Connexion de vos outils entre eux</li><li>IA pour trier, rédiger et relancer</li></ul>
+                  <p class="price" data-depth="48"><span class="price__from">À partir de</span> <strong class="price__value" data-price="automatisation">500 €</strong> <span class="price__tax">HT</span></p>
+                  <div class="svc-card__actions" data-depth="26">
+                    <a class="btn btn--lime" href="contact.html?besoins=automatisation#formulaire">Je veux ça<span class="sr-only"> : Automatisations IA</span></a>
+                    <a class="link link-arrow" href="services.html#automatisation">Voir le détail<span class="sr-only"> : Automatisations IA</span></a>
+                  </div>
+                </div>
               </div>
             </article>
-            <article class="svc-card" aria-labelledby="carte-agent-ia" data-reveal>
-              <div class="svc-card__head"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-agent"></use></svg></div>
-              <h3 class="t-h3 svc-card__title" id="carte-agent-ia">Agent IA</h3>
-              <p class="t-small svc-card__tagline">Il répond à vos clients 24h/24</p>
-              <p>Un assistant qui répond à vos clients jour et nuit et prend les rendez-vous à votre place.</p>
-              <ul class="checklist"><li>Réponses à vos clients 24h/24</li><li>Prise de rendez-vous dans votre agenda</li><li>Ton et informations adaptés à votre activité</li></ul>
-              <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="agent-ia">1 000 € + 100 €/mois</strong> <span class="price__tax">HT</span></p>
-              <div class="svc-card__actions">
-                <a class="btn btn--lime" href="contact.html?besoins=agent-ia#formulaire">Je veux ça<span class="sr-only"> : Agent IA</span></a>
-                <a class="link link-arrow" href="services.html#agent-ia">Voir le détail<span class="sr-only"> : Agent IA</span></a>
+            <article class="svc-card" aria-labelledby="carte-agent-ia" data-tilt="12">
+              <span class="svc-card__shadow" aria-hidden="true"></span>
+              <div class="svc-card__body" data-tilt-body>
+                <div class="svc-card__face">
+                  <div class="svc-card__head" data-depth="44"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-agent"></use></svg></div>
+                  <h3 class="t-h3 svc-card__title" id="carte-agent-ia" data-depth="30">Agent IA</h3>
+                  <p class="t-small svc-card__tagline">Il répond à vos clients 24h/24</p>
+                  <p>Un assistant qui répond à vos clients jour et nuit et prend les rendez-vous à votre place.</p>
+                  <ul class="checklist"><li>Réponses à vos clients 24h/24</li><li>Prise de rendez-vous dans votre agenda</li><li>Ton et informations adaptés à votre activité</li></ul>
+                  <p class="price" data-depth="48"><span class="price__from">À partir de</span> <strong class="price__value" data-price="agent-ia">1 000 € + 100 €/mois</strong> <span class="price__tax">HT</span></p>
+                  <div class="svc-card__actions" data-depth="26">
+                    <a class="btn btn--lime" href="contact.html?besoins=agent-ia#formulaire">Je veux ça<span class="sr-only"> : Agent IA</span></a>
+                    <a class="link link-arrow" href="services.html#agent-ia">Voir le détail<span class="sr-only"> : Agent IA</span></a>
+                  </div>
+                </div>
               </div>
             </article>
-            <article class="svc-card" aria-labelledby="carte-seo" data-reveal>
-              <div class="svc-card__head"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-seo"></use></svg></div>
-              <h3 class="t-h3 svc-card__title" id="carte-seo">SEO</h3>
-              <p class="t-small svc-card__tagline">Être trouvé sur Google, sans payer chaque clic</p>
-              <p>Remonter sur Google quand vos clients vous cherchent. Des visites qui arrivent toutes seules, mois après mois.</p>
-              <ul class="checklist"><li>Audit de votre site et de vos mots-clés</li><li>Optimisations techniques et contenus</li><li>Suivi de vos positions chaque mois</li></ul>
-              <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="seo">200 €/mois</strong> <span class="price__tax">HT</span></p>
-              <div class="svc-card__actions">
-                <a class="btn btn--lime" href="contact.html?besoins=seo#formulaire">Je veux ça<span class="sr-only"> : SEO (référencement naturel)</span></a>
-                <a class="link link-arrow" href="services.html#seo">Voir le détail<span class="sr-only"> : SEO (référencement naturel)</span></a>
+            <article class="svc-card" aria-labelledby="carte-seo" data-tilt="12">
+              <span class="svc-card__shadow" aria-hidden="true"></span>
+              <div class="svc-card__body" data-tilt-body>
+                <div class="svc-card__face">
+                  <div class="svc-card__head" data-depth="44"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-seo"></use></svg></div>
+                  <h3 class="t-h3 svc-card__title" id="carte-seo" data-depth="30">SEO</h3>
+                  <p class="t-small svc-card__tagline">Être trouvé sur Google, sans payer chaque clic</p>
+                  <p>Remonter sur Google quand vos clients vous cherchent. Des visites qui arrivent toutes seules, mois après mois.</p>
+                  <ul class="checklist"><li>Audit de votre site et de vos mots-clés</li><li>Optimisations techniques et contenus</li><li>Suivi de vos positions chaque mois</li></ul>
+                  <p class="price" data-depth="48"><span class="price__from">À partir de</span> <strong class="price__value" data-price="seo">200 €/mois</strong> <span class="price__tax">HT</span></p>
+                  <div class="svc-card__actions" data-depth="26">
+                    <a class="btn btn--lime" href="contact.html?besoins=seo#formulaire">Je veux ça<span class="sr-only"> : SEO (référencement naturel)</span></a>
+                    <a class="link link-arrow" href="services.html#seo">Voir le détail<span class="sr-only"> : SEO (référencement naturel)</span></a>
+                  </div>
+                </div>
               </div>
             </article>
-            <article class="svc-card" aria-labelledby="carte-sea" data-reveal>
-              <div class="svc-card__head"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-sea"></use></svg></div>
-              <h3 class="t-h3 svc-card__title" id="carte-sea">SEA</h3>
-              <p class="t-small svc-card__tagline">Publicité payante sur Google et les réseaux</p>
-              <p>Des publicités qui s’affichent devant les bons clients, au bon moment.</p>
-              <ul class="checklist"><li>Création et réglage des campagnes</li><li>Annonces et visuels</li><li>Suivi et optimisation chaque mois</li></ul>
-              <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="sea">150 €/mois</strong> <span class="price__tax">HT</span><span class="price__note">Budget publicitaire en plus</span></p>
-              <div class="svc-card__actions">
-                <a class="btn btn--lime" href="contact.html?besoins=sea#formulaire">Je veux ça<span class="sr-only"> : SEA (Google Ads, Meta Ads)</span></a>
-                <a class="link link-arrow" href="services.html#sea">Voir le détail<span class="sr-only"> : SEA (Google Ads, Meta Ads)</span></a>
+            <article class="svc-card" aria-labelledby="carte-sea" data-tilt="12">
+              <span class="svc-card__shadow" aria-hidden="true"></span>
+              <div class="svc-card__body" data-tilt-body>
+                <div class="svc-card__face">
+                  <div class="svc-card__head" data-depth="44"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-sea"></use></svg></div>
+                  <h3 class="t-h3 svc-card__title" id="carte-sea" data-depth="30">SEA</h3>
+                  <p class="t-small svc-card__tagline">Publicité payante sur Google et les réseaux</p>
+                  <p>Des publicités qui s’affichent devant les bons clients, au bon moment.</p>
+                  <ul class="checklist"><li>Création et réglage des campagnes</li><li>Annonces et visuels</li><li>Suivi et optimisation chaque mois</li></ul>
+                  <p class="price" data-depth="48"><span class="price__from">À partir de</span> <strong class="price__value" data-price="sea">150 €/mois</strong> <span class="price__tax">HT</span><span class="price__note">Budget publicitaire en plus</span></p>
+                  <div class="svc-card__actions" data-depth="26">
+                    <a class="btn btn--lime" href="contact.html?besoins=sea#formulaire">Je veux ça<span class="sr-only"> : SEA (Google Ads, Meta Ads)</span></a>
+                    <a class="link link-arrow" href="services.html#sea">Voir le détail<span class="sr-only"> : SEA (Google Ads, Meta Ads)</span></a>
+                  </div>
+                </div>
               </div>
             </article>
-            <article class="svc-card" aria-labelledby="carte-crm" data-reveal>
-              <div class="svc-card__head"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-crm"></use></svg></div>
-              <h3 class="t-h3 svc-card__title" id="carte-crm">CRM</h3>
-              <p class="t-small svc-card__tagline">Installation et automatisation du suivi clients</p>
-              <p>Tous vos clients et prospects au même endroit, avec des relances qui partent toutes seules.</p>
-              <ul class="checklist"><li>Choix et installation du bon outil</li><li>Import de vos contacts</li><li>Relances et suivi automatisés</li></ul>
-              <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="crm">800 €</strong> <span class="price__tax">HT</span></p>
-              <div class="svc-card__actions">
-                <a class="btn btn--lime" href="contact.html?besoins=crm#formulaire">Je veux ça<span class="sr-only"> : CRM (suivi clients)</span></a>
-                <a class="link link-arrow" href="services.html#crm">Voir le détail<span class="sr-only"> : CRM (suivi clients)</span></a>
+            <article class="svc-card" aria-labelledby="carte-crm" data-tilt="12">
+              <span class="svc-card__shadow" aria-hidden="true"></span>
+              <div class="svc-card__body" data-tilt-body>
+                <div class="svc-card__face">
+                  <div class="svc-card__head" data-depth="44"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-crm"></use></svg></div>
+                  <h3 class="t-h3 svc-card__title" id="carte-crm" data-depth="30">CRM</h3>
+                  <p class="t-small svc-card__tagline">Installation et automatisation du suivi clients</p>
+                  <p>Tous vos clients et prospects au même endroit, avec des relances qui partent toutes seules.</p>
+                  <ul class="checklist"><li>Choix et installation du bon outil</li><li>Import de vos contacts</li><li>Relances et suivi automatisés</li></ul>
+                  <p class="price" data-depth="48"><span class="price__from">À partir de</span> <strong class="price__value" data-price="crm">800 €</strong> <span class="price__tax">HT</span></p>
+                  <div class="svc-card__actions" data-depth="26">
+                    <a class="btn btn--lime" href="contact.html?besoins=crm#formulaire">Je veux ça<span class="sr-only"> : CRM (suivi clients)</span></a>
+                    <a class="link link-arrow" href="services.html#crm">Voir le détail<span class="sr-only"> : CRM (suivi clients)</span></a>
+                  </div>
+                </div>
               </div>
             </article>
             </div>
@@ -246,10 +339,10 @@
           <div class="wrap offer__grid">
             <div class="offer__title">
               <p><span class="sticker">Offre de lancement</span></p>
-              <h2 class="t-h2" id="offer-title"><span class="hl">-40&nbsp;%</span> pour nos 5 premiers clients.</h2>
+              <h2 class="t-h2" data-anim="lines" id="offer-title"><span class="hl">-40&nbsp;%</span> pour nos 5 premiers clients.</h2>
               <p class="sticker-round" aria-hidden="true"><span><strong>5</strong>places</span></p>
             </div>
-            <div class="offer__body" data-reveal>
+            <div class="offer__body" data-anim="fade">
               <p class="t-intro">En échange d’un avis et du droit de présenter votre projet sur notre site.</p>
               <p>GJS vient de naître. On cherche nos 5 premiers clients pour construire ensemble nos premières réalisations. Vous payez moins, on gagne une vitrine&nbsp;: tout le monde y gagne.</p>
               <p>Quand les 5 places sont prises, l’offre s’arrête.</p>
@@ -261,26 +354,26 @@
         <section class="section" id="methode" aria-labelledby="steps-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" id="steps-title">Comment ça marche</h2>
+              <h2 class="t-h2" data-anim="lines" id="steps-title">Comment ça marche</h2>
               <p class="t-intro">Quatre étapes, zéro surprise.</p>
             </div>
             <ol class="steps">
-              <li class="step" data-reveal>
+              <li class="step" data-anim="fade">
                 <span class="step__num" aria-hidden="true">1</span>
                 <h3 class="t-h3">Échange gratuit</h3>
                 <p class="step__text">30 minutes au téléphone ou en visio. Vous nous parlez de votre activité, on vous pose les bonnes questions.</p>
               </li>
-              <li class="step" data-reveal>
+              <li class="step" data-anim="fade">
                 <span class="step__num" aria-hidden="true">2</span>
                 <h3 class="t-h3">Devis clair sous 48&nbsp;h</h3>
                 <p class="step__text">Un prix ferme, ce qui est inclus, ce qui ne l’est pas, et un planning. Vous décidez sans pression.</p>
               </li>
-              <li class="step" data-reveal>
+              <li class="step" data-anim="fade">
                 <span class="step__num" aria-hidden="true">3</span>
                 <h3 class="t-h3">Réalisation</h3>
                 <p class="step__text">On construit, vous validez à chaque étape. Un point régulier, un seul interlocuteur.</p>
               </li>
-              <li class="step" data-reveal>
+              <li class="step" data-anim="fade">
                 <span class="step__num" aria-hidden="true">4</span>
                 <h3 class="t-h3">Suivi</h3>
                 <p class="step__text">Après la mise en ligne, on reste là&nbsp;: ajustements, conseils et résultats suivis ensemble.</p>
@@ -292,21 +385,21 @@
         <section class="section" id="pourquoi" aria-labelledby="why-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" id="why-title">Pourquoi GJS</h2>
+              <h2 class="t-h2" data-anim="lines" id="why-title">Pourquoi GJS</h2>
               <p class="t-intro">Trois engagements simples, et on les tient.</p>
             </div>
             <ul class="posters posters--3">
-              <li class="poster" data-reveal>
+              <li class="poster" data-anim="fade">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-team"></use></svg>
                 <h3 class="t-h3">Trois associés disponibles</h3>
                 <p>Vous parlez directement aux personnes qui réalisent votre projet. Et on répond vite&nbsp;: sous 24&nbsp;h, promis.</p>
               </li>
-              <li class="poster" data-reveal>
+              <li class="poster" data-anim="fade">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-spark"></use></svg>
                 <h3 class="t-h3">L’IA dans chaque projet</h3>
                 <p>On utilise des outils d’intelligence artificielle pour aller plus vite et vous faire gagner du temps&nbsp;: rédaction, réponses clients, automatisations.</p>
               </li>
-              <li class="poster" data-reveal>
+              <li class="poster" data-anim="fade">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-contact"></use></svg>
                 <h3 class="t-h3">Un interlocuteur unique</h3>
                 <p>Du devis à la mise en ligne, la même personne suit votre projet. Vous savez toujours qui appeler.</p>
@@ -325,11 +418,11 @@
         <section class="section" id="realisations" aria-labelledby="projects-title" hidden>
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" id="projects-title">Nos réalisations</h2>
+              <h2 class="t-h2" data-anim="lines" id="projects-title">Nos réalisations</h2>
               <p class="t-intro">Quelques projets menés avec nos clients.</p>
             </div>
             <ul class="projects">
-              <li class="project-card" data-reveal>
+              <li class="project-card" data-anim="fade">
                 <img src="assets/img/realisation-exemple.webp" width="800" height="600" alt="[À REMPLACER] Description du visuel du projet" loading="lazy" decoding="async">
                 <div class="project-card__body">
                   <p><span class="sticker sticker--cream">Site internet</span></p>
@@ -337,7 +430,7 @@
                   <p>[À REMPLACER] Ce qu’on a fait, en une ou deux phrases.</p>
                 </div>
               </li>
-              <li class="project-card" data-reveal>
+              <li class="project-card" data-anim="fade">
                 <img src="assets/img/realisation-exemple.webp" width="800" height="600" alt="[À REMPLACER] Description du visuel du projet" loading="lazy" decoding="async">
                 <div class="project-card__body">
                   <p><span class="sticker sticker--cream">Site internet</span></p>
@@ -345,7 +438,7 @@
                   <p>[À REMPLACER] Ce qu’on a fait, en une ou deux phrases.</p>
                 </div>
               </li>
-              <li class="project-card" data-reveal>
+              <li class="project-card" data-anim="fade">
                 <img src="assets/img/realisation-exemple.webp" width="800" height="600" alt="[À REMPLACER] Description du visuel du projet" loading="lazy" decoding="async">
                 <div class="project-card__body">
                   <p><span class="sticker sticker--cream">Site internet</span></p>
@@ -360,26 +453,26 @@
         <section class="section" id="faq" aria-labelledby="faq-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" id="faq-title">Vos questions</h2>
+              <h2 class="t-h2" data-anim="lines" id="faq-title">Vos questions</h2>
             </div>
             <div class="faq">
-              <details class="faq__item" name="faq" data-reveal>
+              <details class="faq__item" name="faq" data-anim="fade">
                 <summary class="faq__q">Combien coûte un projet&nbsp;?<span class="faq__icon" aria-hidden="true"></span></summary>
                 <div class="faq__a"><p>Chaque service a un prix de départ affiché sur ce site, hors taxes. Après un premier échange gratuit, on vous envoie un devis précis sous 48&nbsp;h. Vous savez exactement ce que vous payez avant de commencer.</p></div>
               </details>
-              <details class="faq__item" name="faq" data-reveal>
+              <details class="faq__item" name="faq" data-anim="fade">
                 <summary class="faq__q">Combien de temps faut-il&nbsp;?<span class="faq__icon" aria-hidden="true"></span></summary>
                 <div class="faq__a"><p>Comptez 2 à 4 semaines pour un site vitrine, 4 à 8 semaines pour un e-commerce et 8 à 12 semaines pour une application mobile. Le délai exact est écrit noir sur blanc dans votre devis.</p></div>
               </details>
-              <details class="faq__item" name="faq" data-reveal>
+              <details class="faq__item" name="faq" data-anim="fade">
                 <summary class="faq__q">Comment marche l’offre de lancement&nbsp;?<span class="faq__icon" aria-hidden="true"></span></summary>
                 <div class="faq__a"><p>-40&nbsp;% pour nos 5 premiers clients. En échange, vous laissez un avis sur notre travail et vous nous autorisez à présenter votre projet sur notre site. Quand les 5 places sont prises, l’offre s’arrête.</p></div>
               </details>
-              <details class="faq__item" name="faq" data-reveal>
+              <details class="faq__item" name="faq" data-anim="fade">
                 <summary class="faq__q">Vous êtes une nouvelle agence. Pourquoi vous faire confiance&nbsp;?<span class="faq__icon" aria-hidden="true"></span></summary>
                 <div class="faq__a"><p>C’est vrai, GJS vient de naître, et on préfère vous le dire. Ce qu’on vous promet&nbsp;: un devis clair, un interlocuteur unique du début à la fin, et un projet qui vous appartient à 100&nbsp;%. Le premier échange est gratuit&nbsp;: jugez sur pièce.</p></div>
               </details>
-              <details class="faq__item" name="faq" data-reveal>
+              <details class="faq__item" name="faq" data-anim="fade">
                 <summary class="faq__q">À qui appartiennent le site et les comptes&nbsp;?<span class="faq__icon" aria-hidden="true"></span></summary>
                 <div class="faq__a"><p>À vous. Le site, le nom de domaine, les comptes publicitaires et les données sont à votre nom. Vous n’êtes jamais bloqué chez nous.</p></div>
               </details>
@@ -388,9 +481,9 @@
         </section>
 
         <section class="section is-dark cta" aria-labelledby="cta-title">
-          <div class="wrap" data-reveal>
+          <div class="wrap" data-anim="fade">
             <p><span class="sticker">Réponse sous 24 h</span></p>
-            <h2 class="t-h2" id="cta-title">Un projet&nbsp;? <span class="hl">Parlons-en.</span></h2>
+            <h2 class="t-h2" data-anim="lines" id="cta-title">Un projet&nbsp;? <span class="hl">Parlons-en.</span></h2>
             <p class="t-intro">Premier échange gratuit et sans engagement. Un devis clair sous 48&nbsp;h.</p>
             <div class="btn-row">
               <a class="btn btn--lime" href="contact.html#formulaire">Demander mon devis gratuit</a>
@@ -462,5 +555,6 @@
     </form>
   </section>
 
+  <div class="curtain" aria-hidden="true"><span class="curtain__logo">GJS</span></div>
 </body>
 </html>

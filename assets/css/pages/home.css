@@ -4,38 +4,184 @@
    · (Réalisations, masquée) · FAQ · CTA final
    ========================================================================== */
 
-/* ---- Hero ----------------------------------------------------------------- */
+/* ---- Hero vidéo ----------------------------------------------------------
+   Pile (du fond vers l'avant) : titre noir (sur le crème) · ombre · carte vidéo
+   (avec le titre crème, contre-transformé pour rester à la même place à l'écran)
+   · canvas WebGL (ordinateur) · étiquette crème · bouton pause.
+   hero.js anime tout en transform à partir d'un seul « état » de la carte. */
 
 .hero {
-  padding-top: clamp(40px, 1rem + 5vw, 104px);
+  position: relative;
+  --title-bottom: clamp(48px, 9vh, 112px);
 }
 
-.hero__grid {
-  display: grid;
-  gap: 56px;
-  align-items: center;
+.hero__stage {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
 }
 
-.hero__content > * + * {
-  margin-top: 24px;
+.hero__card,
+.hero__shadow {
+  position: absolute;
+  top: var(--header-h);
+  left: 0;
+  width: 100%;
+  height: calc(100% - var(--header-h));
+  border-radius: var(--hero-radius, 0px);
+  transform-origin: 50% 50%;
+}
+
+.hero__card {
+  z-index: 3;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.hero__shadow {
+  z-index: 2;
+  background: var(--ink);
+  opacity: 0;
+}
+
+.hero__media,
+.hero__video,
+.hero__veil {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__video {
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+
+/* Voile calculé image par image : contraste du titre crème ≥ 4,2:1 sur le pixel
+   le plus clair de toute la boucle (≥ 4,5:1 sur 99 % des pixels). */
+.hero__veil {
+  background: linear-gradient(to top right, rgba(20, 20, 20, 0.6) 0%, rgba(20, 20, 20, 0.52) 50%, rgba(20, 20, 20, 0.2) 100%);
+}
+
+.hero__border {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: var(--hero-border, 3px) solid var(--ink);
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero__counter {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform-origin: 50% 50%;
+  pointer-events: none;
 }
 
 .hero__title {
-  max-width: 14ch;
+  position: absolute;
+  left: var(--gutter);
+  bottom: var(--title-bottom);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h1);
+  font-weight: 400;
+  line-height: 0.88;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  pointer-events: none;
 }
 
-.hero__text {
-  max-width: 48ch;
+.hero__title--ink {
+  z-index: 1;
+  color: var(--ink);
 }
 
-.hero__content .btn-row {
-  margin-top: 32px;
+.hero__title--cream { color: var(--cream); }
+
+.hero__line {
+  display: block;
+  overflow: clip;
+  padding-top: 0.14em;
+  margin-top: -0.14em;
+  will-change: transform;
 }
+
+.hero__line-in {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Le même coup de marqueur dans les deux couches (même géométrie) :
+   sur le crème, trait sous le mot ; sur la vidéo, aplat citron avec texte noir. */
+.hero__title .hl { padding-inline: 0.12em; margin-inline: -0.12em; }
+
+.hero__title--cream .hl { color: var(--ink); }
+
+.hero__title--cream .hl::before {
+  left: 0;
+  right: 0;
+  top: 0.04em;
+  bottom: 0.08em;
+  height: auto;
+  border-radius: 0.04em 0.12em 0.06em 0.1em;
+}
+
+.hero__gl {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero.is-gl .hero__gl { opacity: 1; }
+.hero.is-gl .hero__card,
+.hero.is-gl .hero__shadow { opacity: 0 !important; }
+
+.hero__label {
+  position: absolute;
+  right: var(--gutter);
+  bottom: var(--title-bottom);
+  z-index: 5;
+  width: min(430px, calc(100% - 2 * var(--gutter)));
+  padding: 30px 26px 24px;
+  background: var(--cream);
+  color: var(--ink);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--ink);
+  transform-origin: 100% 100%;
+}
+
+.hero__label > * + * { margin-top: 16px; }
+
+.hero__kicker {
+  position: absolute;
+  top: -20px;
+  left: 20px;
+  margin: 0;
+}
+
+.hero__kicker .sticker { font-size: 1.125rem; }
+
+.hero__text { font-weight: 500; }
+
+.hero__label .btn-row { gap: 12px 16px; }
 
 .hero__reassure {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 18px;
+  gap: 4px 16px;
+  font-size: var(--fs-small);
   font-weight: 500;
 }
 
@@ -47,96 +193,69 @@
 
 .hero__reassure span::before {
   content: "";
-  width: 12px;
-  height: 12px;
+  width: 11px;
+  height: 11px;
   background: var(--lime);
   border: var(--border-thin) solid var(--ink);
   border-radius: 2px;
   transform: rotate(45deg);
 }
 
-/* Flyer collé (desktop) : les 3 services phares */
-.flyer {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .hero__grid {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: 64px;
-  }
-
-  .flyer {
-    position: relative;
-    display: block;
-    justify-self: end;
-    width: min(100%, 440px);
-    padding: 44px 34px 36px;
-    background: var(--cream-2);
-    border: var(--border) solid var(--ink);
-    border-radius: var(--radius);
-    box-shadow: 6px 6px 0 var(--shadow-color);
-    transform: rotate(2deg);
-  }
-}
-
-.flyer__title {
-  margin-top: 18px;
-}
-
-.flyer__list {
-  display: grid;
-  margin-top: 18px;
-}
-
-.flyer__list li {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  padding-block: 14px;
-  border-bottom: var(--border-thin) dashed var(--ink);
-}
-
-.flyer__list a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.flyer__list a:hover {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-}
-
-.flyer__price {
-  font-family: var(--font-display);
-  font-size: var(--fs-h3);
-  line-height: 1;
-  text-align: right;
-  white-space: nowrap;
-}
-
-.flyer__price small {
-  display: block;
-  font-family: var(--font-text);
-  font-size: var(--fs-small);
-  font-weight: 500;
-}
-
-.flyer__note {
-  margin-top: 16px;
-  text-align: right;
-  color: var(--ink-2);
-}
-
-.flyer .sticker-round {
+.hero__pause {
   position: absolute;
-  left: -64px;
-  bottom: -56px;
-  width: 138px;
+  top: calc(var(--header-h) + 20px);
+  right: var(--gutter);
+  z-index: 6;
+}
+
+/* Arrivée : titre révélé ligne par ligne au masque (CSS pur, sans attendre le JS,
+   pour préserver l'affichage initial), puis l'étiquette en fondu. */
+@keyframes hero-line { from { transform: translateY(108%); } }
+@keyframes hero-in { from { opacity: 0; transform: translateY(28px); } }
+@keyframes hero-fade { from { opacity: 0; } }
+
+.has-motion:not([data-motion="reduced"]) .hero__line-in {
+  animation: hero-line 1.1s var(--ease-expo) both;
+}
+
+.has-motion:not([data-motion="reduced"]) .hero__line:nth-child(2) .hero__line-in { animation-delay: 0.08s; }
+.has-motion:not([data-motion="reduced"]) .hero__line:nth-child(3) .hero__line-in { animation-delay: 0.16s; }
+
+/* Le conteneur et le bouton pause reçoivent des transforms de hero.js :
+   on ne les anime qu'en opacité ; le glissement est porté par leurs enfants. */
+.has-motion:not([data-motion="reduced"]) .hero__label > * {
+  animation: hero-in 0.9s var(--ease-expo) 0.5s both;
+}
+
+.has-motion:not([data-motion="reduced"]) .hero__pause {
+  animation: hero-fade 0.9s var(--ease-expo) 0.7s both;
+}
+
+.has-motion:not([data-motion="reduced"]) .hero__label > :nth-child(3) { animation-delay: 0.58s; }
+.has-motion:not([data-motion="reduced"]) .hero__label > :nth-child(4) { animation-delay: 0.66s; }
+
+.has-motion:not([data-motion="reduced"]) .hero__label {
+  animation: hero-fade 0.9s var(--ease-expo) 0.42s both;
+}
+
+/* Mobile : titre au-dessus de l'étiquette, recadrage portrait */
+@media (max-width: 767px) {
+  .hero { --title-bottom: calc(var(--label-h, 300px) + 40px); }
+  .hero__video { object-position: 21% 50%; }
+  .hero__veil { background: linear-gradient(to top, rgba(20, 20, 20, 0.62) 0%, rgba(20, 20, 20, 0.55) 60%, rgba(20, 20, 20, 0.3) 100%); }
+  .hero__label {
+    right: auto;
+    left: var(--gutter);
+    bottom: 20px;
+    padding: 26px 18px 18px;
+    transform-origin: 50% 100%;
+  }
+  .hero__label .btn { flex: 1 1 auto; }
+  .hero__label > * + * { margin-top: 12px; }
+  .hero__text { font-size: var(--fs-small); line-height: 1.5; }
+  .hero__label .btn-row { gap: 10px; }
+  .hero__reassure { gap: 2px 14px; }
+  .hero__pause { top: calc(var(--header-h) + 14px); }
 }
 
 /* ---- Offre de lancement (section noire n° 1) ----------------------------- */
@@ -199,3 +318,6 @@
 @media (min-width: 1100px) {
   .projects { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
+/* L'accueil commence par le hero plein écran : il gère lui-même la hauteur du header. */
+body[data-page="home"] main { padding-top: 0; }

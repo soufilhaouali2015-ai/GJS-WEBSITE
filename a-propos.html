@@ -28,7 +28,7 @@
   <link rel="icon" href="assets/img/icons/icon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/icons/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <script>(function(h){h.classList.replace('no-js','js');if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){h.classList.add('has-reveal');setTimeout(function(){if(!window.__gjsReady)h.classList.remove('has-reveal')},2500)}})(document.documentElement);</script>
+  <script>(function(h){h.classList.replace('no-js','js');var m=function(q){return matchMedia(q).matches};var p=m('(prefers-reduced-motion: reduce)')?'reduced':(m('(min-width: 1024px) and (hover: hover) and (pointer: fine)')?'desktop':'mobile');h.setAttribute('data-motion',p);h.classList.add('has-motion');try{if(sessionStorage.getItem('gjs-curtain')){sessionStorage.removeItem('gjs-curtain');if(p!=='reduced')h.classList.add('is-curtain-in')}}catch(e){}setTimeout(function(){if(!window.__gjsMotion)h.classList.remove('has-motion','is-curtain-in')},3000)})(document.documentElement);</script>
   <link rel="preload" href="assets/fonts/BebasNeue-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Medium.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,13 +37,19 @@
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/layout.css">
   <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/motion.css">
   <link rel="stylesheet" href="assets/css/pages/about.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"À propos de GJS","url":"https://www.gjs-agence.fr/a-propos.html","inLanguage":"fr-FR","about":{"@id":"https://www.gjs-agence.fr/#organization"}}</script>
+  <script defer src="assets/vendor/gsap/gsap.min.js"></script>
+  <script defer src="assets/vendor/gsap/ScrollTrigger.min.js"></script>
+  <script defer src="assets/vendor/gsap/SplitText.min.js"></script>
+  <script defer src="assets/vendor/lenis/lenis.min.js"></script>
   <script type="module" src="assets/js/main.js"></script>
 </head>
 <body data-page="about">
 
   <a class="skip-link" href="#main">Aller au contenu</a>
+  <div class="read-progress" aria-hidden="true"><span data-read-progress></span></div>
 
   <header class="header">
     <div class="wrap header__inner">
@@ -99,25 +105,25 @@
         <section class="section" id="equipe" aria-labelledby="team-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" id="team-title">L’équipe</h2>
+              <h2 class="t-h2" data-anim="lines" id="team-title">L’équipe</h2>
               <p class="t-intro">Trois têtes, un seul objectif&nbsp;: votre projet.</p>
             </div>
             <ul class="team">
-              <li class="member" data-reveal>
+              <li class="member" data-anim="fade">
                 <figure class="member__photo taped taped--one">
                   <img src="assets/img/equipe/associe-1-960.webp" srcset="assets/img/equipe/associe-1-480.webp 480w, assets/img/equipe/associe-1-960.webp 960w" sizes="(min-width: 1240px) 380px, (min-width: 720px) 30vw, 90vw" width="960" height="1200" alt="[À REMPLACER] Portrait de Prénom Nom, associé 1" loading="lazy" decoding="async">
                 </figure>
                 <h3 class="t-h3">Prénom Nom <span class="todo">[À REMPLACER]</span></h3>
                 <p class="member__role">Rôle, par exemple «&nbsp;Sites et applications&nbsp;» <span class="todo">[À REMPLACER]</span></p>
               </li>
-              <li class="member" data-reveal>
+              <li class="member" data-anim="fade">
                 <figure class="member__photo taped taped--one">
                   <img src="assets/img/equipe/associe-2-960.webp" srcset="assets/img/equipe/associe-2-480.webp 480w, assets/img/equipe/associe-2-960.webp 960w" sizes="(min-width: 1240px) 380px, (min-width: 720px) 30vw, 90vw" width="960" height="1200" alt="[À REMPLACER] Portrait de Prénom Nom, associé 2" loading="lazy" decoding="async">
                 </figure>
                 <h3 class="t-h3">Prénom Nom <span class="todo">[À REMPLACER]</span></h3>
                 <p class="member__role">Rôle, par exemple «&nbsp;Acquisition et réseaux sociaux&nbsp;» <span class="todo">[À REMPLACER]</span></p>
               </li>
-              <li class="member" data-reveal>
+              <li class="member" data-anim="fade">
                 <figure class="member__photo taped taped--one">
                   <img src="assets/img/equipe/associe-3-960.webp" srcset="assets/img/equipe/associe-3-480.webp 480w, assets/img/equipe/associe-3-960.webp 960w" sizes="(min-width: 1240px) 380px, (min-width: 720px) 30vw, 90vw" width="960" height="1200" alt="[À REMPLACER] Portrait de Prénom Nom, associé 3" loading="lazy" decoding="async">
                 </figure>
@@ -131,23 +137,23 @@
         <section class="section" id="valeurs" aria-labelledby="values-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" id="values-title">Nos 4 valeurs</h2>
+              <h2 class="t-h2" data-anim="lines" id="values-title">Nos 4 valeurs</h2>
               <p class="t-intro">Quatre mots qu’on applique tous les jours, avec chaque client.</p>
             </div>
             <ul class="posters posters--2">
-              <li class="poster" data-reveal>
+              <li class="poster" data-anim="fade">
                 <h3 class="t-h3 value__word">Franchise</h3>
                 <p>Si une idée ne vous rapportera rien, on vous le dit. Même si ça nous coûte une vente.</p>
               </li>
-              <li class="poster" data-reveal>
+              <li class="poster" data-anim="fade">
                 <h3 class="t-h3 value__word">Réactivité</h3>
                 <p>Une question&nbsp;? Réponse sous 24&nbsp;h. On est trois, on se parle tous les jours&nbsp;: ça va vite.</p>
               </li>
-              <li class="poster" data-reveal>
+              <li class="poster" data-anim="fade">
                 <h3 class="t-h3 value__word">Clarté</h3>
                 <p>Des prix affichés, des devis lisibles, des mots simples. Pas de jargon pour vous impressionner.</p>
               </li>
-              <li class="poster" data-reveal>
+              <li class="poster" data-anim="fade">
                 <h3 class="t-h3 value__word">Proximité</h3>
                 <p>On est basés en Île-de-France. On peut se voir en vrai, autour d’un café, ou en visio si vous préférez.</p>
               </li>
@@ -156,9 +162,9 @@
         </section>
 
         <section class="section is-dark cta" aria-labelledby="cta-title">
-          <div class="wrap" data-reveal>
+          <div class="wrap" data-anim="fade">
             <p><span class="sticker">Réponse sous 24 h</span></p>
-            <h2 class="t-h2" id="cta-title">Envie de bosser avec <span class="hl">nous</span>&nbsp;?</h2>
+            <h2 class="t-h2" data-anim="lines" id="cta-title">Envie de bosser avec <span class="hl">nous</span>&nbsp;?</h2>
             <p class="t-intro">Faisons connaissance. Le premier échange est gratuit, sans engagement.</p>
             <div class="btn-row">
               <a class="btn btn--lime" href="contact.html#formulaire">Demander mon devis gratuit</a>
@@ -230,5 +236,6 @@
     </form>
   </section>
 
+  <div class="curtain" aria-hidden="true"><span class="curtain__logo">GJS</span></div>
 </body>
 </html>

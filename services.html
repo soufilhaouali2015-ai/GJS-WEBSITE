@@ -28,7 +28,7 @@
   <link rel="icon" href="assets/img/icons/icon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/icons/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <script>(function(h){h.classList.replace('no-js','js');if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){h.classList.add('has-reveal');setTimeout(function(){if(!window.__gjsReady)h.classList.remove('has-reveal')},2500)}})(document.documentElement);</script>
+  <script>(function(h){h.classList.replace('no-js','js');var m=function(q){return matchMedia(q).matches};var p=m('(prefers-reduced-motion: reduce)')?'reduced':(m('(min-width: 1024px) and (hover: hover) and (pointer: fine)')?'desktop':'mobile');h.setAttribute('data-motion',p);h.classList.add('has-motion');try{if(sessionStorage.getItem('gjs-curtain')){sessionStorage.removeItem('gjs-curtain');if(p!=='reduced')h.classList.add('is-curtain-in')}}catch(e){}setTimeout(function(){if(!window.__gjsMotion)h.classList.remove('has-motion','is-curtain-in')},3000)})(document.documentElement);</script>
   <link rel="preload" href="assets/fonts/BebasNeue-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Medium.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,15 +37,21 @@
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/layout.css">
   <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/motion.css">
   <link rel="stylesheet" href="assets/css/pages/services.css">
   <!-- @services:jsonld-services -->
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#site","name":"Création de site internet","serviceType":"Création de site internet","description":"Un site qui inspire confiance et transforme vos visiteurs en clients. Vous nous donnez vos idées, on s’occupe du reste. Design sur-mesure, parfait sur mobile. Textes, photos et référencement de base. Mise en ligne, nom de domaine et hébergement configurés.","provider":{"@id":"https://www.gjs-agence.fr/#organization"},"areaServed":[{"@type":"AdministrativeArea","name":"Île-de-France"},{"@type":"Country","name":"France"}],"url":"https://www.gjs-agence.fr/services.html#site","offers":{"@type":"Offer","priceCurrency":"EUR","price":800,"priceSpecification":[{"@type":"PriceSpecification","minPrice":800,"priceCurrency":"EUR","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=site#formulaire"}},{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#app","name":"Application mobile","serviceType":"Application mobile","description":"Votre application dans la poche de vos clients. Pour les fidéliser et leur simplifier la vie. Maquettes et parcours pensés pour vos clients. Application iPhone et Android. Publication sur l’App Store et Google Play.","provider":{"@id":"https://www.gjs-agence.fr/#organization"},"areaServed":[{"@type":"AdministrativeArea","name":"Île-de-France"},{"@type":"Country","name":"France"}],"url":"https://www.gjs-agence.fr/services.html#app","offers":{"@type":"Offer","priceCurrency":"EUR","price":4000,"priceSpecification":[{"@type":"PriceSpecification","minPrice":4000,"priceCurrency":"EUR","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=app#formulaire"}},{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#acquisition","name":"Acquisition de nouveaux clients","serviceType":"Acquisition de nouveaux clients","description":"Des prospects qualifiés contactés chaque mois, sans passer vos soirées à prospecter. Base de données de prospects ciblés. Prospection automatisée par email et LinkedIn. Techniques de growth hacking testées chaque mois.","provider":{"@id":"https://www.gjs-agence.fr/#organization"},"areaServed":[{"@type":"AdministrativeArea","name":"Île-de-France"},{"@type":"Country","name":"France"}],"url":"https://www.gjs-agence.fr/services.html#acquisition","offers":{"@type":"Offer","priceCurrency":"EUR","price":650,"priceSpecification":[{"@type":"PriceSpecification","minPrice":650,"priceCurrency":"EUR","valueAddedTaxIncluded":false},{"@type":"UnitPriceSpecification","minPrice":500,"priceCurrency":"EUR","unitText":"mois","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=acquisition#formulaire"}},{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#social","name":"Gestion et optimisation des réseaux sociaux","serviceType":"Gestion et optimisation des réseaux sociaux","description":"Des comptes actifs et soignés qui donnent envie de vous suivre. Sans y passer vos journées. Calendrier de publications chaque mois. Création des visuels et des textes. Optimisation de vos profils.","provider":{"@id":"https://www.gjs-agence.fr/#organization"},"areaServed":[{"@type":"AdministrativeArea","name":"Île-de-France"},{"@type":"Country","name":"France"}],"url":"https://www.gjs-agence.fr/services.html#social","offers":{"@type":"Offer","priceCurrency":"EUR","price":350,"priceSpecification":[{"@type":"UnitPriceSpecification","minPrice":350,"priceCurrency":"EUR","unitText":"mois","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=social#formulaire"}},{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#automatisation","name":"Automatisations IA","serviceType":"Automatisations IA","description":"Les tâches répétitives se font toutes seules. Vous récupérez des heures chaque semaine. Repérage des tâches qui vous font perdre du temps. Connexion de vos outils entre eux. IA pour trier, rédiger et relancer.","provider":{"@id":"https://www.gjs-agence.fr/#organization"},"areaServed":[{"@type":"AdministrativeArea","name":"Île-de-France"},{"@type":"Country","name":"France"}],"url":"https://www.gjs-agence.fr/services.html#automatisation","offers":{"@type":"Offer","priceCurrency":"EUR","price":500,"priceSpecification":[{"@type":"PriceSpecification","minPrice":500,"priceCurrency":"EUR","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=automatisation#formulaire"}},{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#agent-ia","name":"Agent IA","serviceType":"Agent IA","description":"Un assistant qui répond à vos clients jour et nuit et prend les rendez-vous à votre place. Réponses à vos clients 24h/24. Prise de rendez-vous dans votre agenda. Ton et informations adaptés à votre activité.","provider":{"@id":"https://www.gjs-agence.fr/#organization"},"areaServed":[{"@type":"AdministrativeArea","name":"Île-de-France"},{"@type":"Country","name":"France"}],"url":"https://www.gjs-agence.fr/services.html#agent-ia","offers":{"@type":"Offer","priceCurrency":"EUR","price":1000,"priceSpecification":[{"@type":"PriceSpecification","minPrice":1000,"priceCurrency":"EUR","valueAddedTaxIncluded":false},{"@type":"UnitPriceSpecification","minPrice":100,"priceCurrency":"EUR","unitText":"mois","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=agent-ia#formulaire"}},{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#seo","name":"SEO (référencement naturel)","serviceType":"SEO (référencement naturel)","description":"Remonter sur Google quand vos clients vous cherchent. Des visites qui arrivent toutes seules, mois après mois. Audit de votre site et de vos mots-clés. Optimisations techniques et contenus. Suivi de vos positions chaque mois.","provider":{"@id":"https://www.gjs-agence.fr/#organization"},"areaServed":[{"@type":"AdministrativeArea","name":"Île-de-France"},{"@type":"Country","name":"France"}],"url":"https://www.gjs-agence.fr/services.html#seo","offers":{"@type":"Offer","priceCurrency":"EUR","price":200,"priceSpecification":[{"@type":"UnitPriceSpecification","minPrice":200,"priceCurrency":"EUR","unitText":"mois","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=seo#formulaire"}},{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#sea","name":"SEA (Google Ads, Meta Ads)","serviceType":"SEA (Google Ads, Meta Ads)","description":"Des publicités qui s’affichent devant les bons clients, au bon moment. Création et réglage des campagnes. Annonces et visuels. Suivi et optimisation chaque mois.","provider":{"@id":"https://www.gjs-agence.fr/#organization"},"areaServed":[{"@type":"AdministrativeArea","name":"Île-de-France"},{"@type":"Country","name":"France"}],"url":"https://www.gjs-agence.fr/services.html#sea","offers":{"@type":"Offer","priceCurrency":"EUR","price":150,"priceSpecification":[{"@type":"UnitPriceSpecification","minPrice":150,"priceCurrency":"EUR","unitText":"mois","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=sea#formulaire"}},{"@type":"Service","@id":"https://www.gjs-agence.fr/services.html#crm","name":"CRM (suivi clients)","serviceType":"CRM (suivi clients)","description":"Tous vos clients et prospects au même endroit, avec des relances qui partent toutes seules. Choix et installation du bon outil. Import de vos contacts. Relances et suivi automatisés.","provider":{"@id":"https://www.gjs-agence.fr/#organization"},"areaServed":[{"@type":"AdministrativeArea","name":"Île-de-France"},{"@type":"Country","name":"France"}],"url":"https://www.gjs-agence.fr/services.html#crm","offers":{"@type":"Offer","priceCurrency":"EUR","price":800,"priceSpecification":[{"@type":"PriceSpecification","minPrice":800,"priceCurrency":"EUR","valueAddedTaxIncluded":false}],"url":"https://www.gjs-agence.fr/contact.html?besoins=crm#formulaire"}}]}</script>
   <!-- /@services:jsonld-services -->
+  <script defer src="assets/vendor/gsap/gsap.min.js"></script>
+  <script defer src="assets/vendor/gsap/ScrollTrigger.min.js"></script>
+  <script defer src="assets/vendor/gsap/SplitText.min.js"></script>
+  <script defer src="assets/vendor/lenis/lenis.min.js"></script>
   <script type="module" src="assets/js/main.js"></script>
 </head>
 <body data-page="services">
 
   <a class="skip-link" href="#main">Aller au contenu</a>
+  <div class="read-progress" aria-hidden="true"><span data-read-progress></span></div>
 
   <header class="header">
     <div class="wrap header__inner">
@@ -114,12 +120,12 @@
         <section class="section" id="phares" aria-labelledby="featured-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" id="featured-title">Nos 3 services phares</h2>
+              <h2 class="t-h2" data-anim="lines" id="featured-title">Nos 3 services phares</h2>
               <p class="t-intro">Les plus complets pour lancer ou relancer votre activité.</p>
             </div>
             <!-- @services:featured -->
             <div class="svc-details">
-            <article class="svc-detail svc-detail--featured" id="site" aria-labelledby="titre-site" data-reveal>
+            <article class="svc-detail svc-detail--featured" id="site" aria-labelledby="titre-site" data-anim="fade">
               <span class="sticker svc-detail__badge" data-badge="site">Best-seller</span>
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-site"></use></svg>
@@ -137,7 +143,7 @@
                 <a class="btn btn--block" href="contact.html?besoins=site#formulaire">Je veux ça<span class="sr-only"> : Création de site internet</span></a>
               </div>
             </article>
-            <article class="svc-detail svc-detail--featured" id="app" aria-labelledby="titre-app" data-reveal>
+            <article class="svc-detail svc-detail--featured" id="app" aria-labelledby="titre-app" data-anim="fade">
               <span class="sticker svc-detail__badge" data-badge="app">Coup de cœur</span>
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-app"></use></svg>
@@ -155,7 +161,7 @@
                 <a class="btn btn--block" href="contact.html?besoins=app#formulaire">Je veux ça<span class="sr-only"> : Application mobile</span></a>
               </div>
             </article>
-            <article class="svc-detail svc-detail--featured" id="acquisition" aria-labelledby="titre-acquisition" data-reveal>
+            <article class="svc-detail svc-detail--featured" id="acquisition" aria-labelledby="titre-acquisition" data-anim="fade">
               <span class="sticker svc-detail__badge" data-badge="acquisition">Le plus demandé</span>
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-acquisition"></use></svg>
@@ -181,12 +187,12 @@
         <section class="section" id="autres" aria-labelledby="others-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" id="others-title">Et aussi</h2>
+              <h2 class="t-h2" data-anim="lines" id="others-title">Et aussi</h2>
               <p class="t-intro">Six services à la carte, seuls ou en complément.</p>
             </div>
             <!-- @services:others -->
             <div class="svc-details svc-details--others">
-            <article class="svc-detail" id="social" aria-labelledby="titre-social" data-reveal>
+            <article class="svc-detail" id="social" aria-labelledby="titre-social" data-anim="fade">
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-social"></use></svg>
                 <h3 class="t-h3" id="titre-social">Gestion et optimisation des réseaux sociaux</h3>
@@ -203,7 +209,7 @@
                 <a class="btn btn--block" href="contact.html?besoins=social#formulaire">Je veux ça<span class="sr-only"> : Gestion et optimisation des réseaux sociaux</span></a>
               </div>
             </article>
-            <article class="svc-detail" id="automatisation" aria-labelledby="titre-automatisation" data-reveal>
+            <article class="svc-detail" id="automatisation" aria-labelledby="titre-automatisation" data-anim="fade">
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-automatisation"></use></svg>
                 <h3 class="t-h3" id="titre-automatisation">Automatisations IA</h3>
@@ -220,7 +226,7 @@
                 <a class="btn btn--block" href="contact.html?besoins=automatisation#formulaire">Je veux ça<span class="sr-only"> : Automatisations IA</span></a>
               </div>
             </article>
-            <article class="svc-detail" id="agent-ia" aria-labelledby="titre-agent-ia" data-reveal>
+            <article class="svc-detail" id="agent-ia" aria-labelledby="titre-agent-ia" data-anim="fade">
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-agent"></use></svg>
                 <h3 class="t-h3" id="titre-agent-ia">Agent IA</h3>
@@ -237,7 +243,7 @@
                 <a class="btn btn--block" href="contact.html?besoins=agent-ia#formulaire">Je veux ça<span class="sr-only"> : Agent IA</span></a>
               </div>
             </article>
-            <article class="svc-detail" id="seo" aria-labelledby="titre-seo" data-reveal>
+            <article class="svc-detail" id="seo" aria-labelledby="titre-seo" data-anim="fade">
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-seo"></use></svg>
                 <h3 class="t-h3" id="titre-seo">SEO (référencement naturel)</h3>
@@ -254,7 +260,7 @@
                 <a class="btn btn--block" href="contact.html?besoins=seo#formulaire">Je veux ça<span class="sr-only"> : SEO (référencement naturel)</span></a>
               </div>
             </article>
-            <article class="svc-detail" id="sea" aria-labelledby="titre-sea" data-reveal>
+            <article class="svc-detail" id="sea" aria-labelledby="titre-sea" data-anim="fade">
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-sea"></use></svg>
                 <h3 class="t-h3" id="titre-sea">SEA (Google Ads, Meta Ads)</h3>
@@ -271,7 +277,7 @@
                 <a class="btn btn--block" href="contact.html?besoins=sea#formulaire">Je veux ça<span class="sr-only"> : SEA (Google Ads, Meta Ads)</span></a>
               </div>
             </article>
-            <article class="svc-detail" id="crm" aria-labelledby="titre-crm" data-reveal>
+            <article class="svc-detail" id="crm" aria-labelledby="titre-crm" data-anim="fade">
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-crm"></use></svg>
                 <h3 class="t-h3" id="titre-crm">CRM (suivi clients)</h3>
@@ -297,7 +303,7 @@
         <section class="section" id="configurateur" aria-labelledby="config-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" id="config-title">Votre estimation en 10 secondes</h2>
+              <h2 class="t-h2" data-anim="lines" id="config-title">Votre estimation en 10 secondes</h2>
               <p class="t-intro">Cochez ce qui vous intéresse&nbsp;: le prix de départ s’affiche. Vos choix arrivent pré-remplis dans le formulaire de contact.</p>
             </div>
             <form class="configurator" data-configurator action="contact.html#formulaire" method="get">
@@ -341,9 +347,9 @@
         </section>
 
         <section class="section is-dark cta" aria-labelledby="cta-title">
-          <div class="wrap" data-reveal>
+          <div class="wrap" data-anim="fade">
             <p><span class="sticker">Conseil gratuit</span></p>
-            <h2 class="t-h2" id="cta-title">Pas sûr de ce qu’il vous <span class="hl">faut</span>&nbsp;?</h2>
+            <h2 class="t-h2" data-anim="lines" id="cta-title">Pas sûr de ce qu’il vous <span class="hl">faut</span>&nbsp;?</h2>
             <p class="t-intro">Racontez-nous votre projet. On vous conseille gratuitement, même si la réponse est «&nbsp;vous n’avez pas besoin de nous&nbsp;».</p>
             <div class="btn-row">
               <a class="btn btn--lime" href="contact.html#formulaire">Demander mon devis gratuit</a>
@@ -415,5 +421,6 @@
     </form>
   </section>
 
+  <div class="curtain" aria-hidden="true"><span class="curtain__logo">GJS</span></div>
 </body>
 </html>

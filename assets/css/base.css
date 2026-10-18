@@ -231,38 +231,9 @@ main:focus {
   outline: none;
 }
 
-/* ---- Apparition des blocs : fondu + léger glissement, 0,4 s, une fois ---- */
-/* La classe .has-reveal n'est posée que si JS est actif ET le mouvement autorisé. */
-
-.has-reveal [data-reveal] {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
-}
-
-.has-reveal [data-reveal].is-in {
-  opacity: 1;
-  transform: none;
-}
-
-/* ---- Navigation entre pages : fondu natif très court (navigateurs compatibles) */
-
-@view-transition {
-  navigation: auto;
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.2s;
-}
-
 /* ---- Mouvement réduit ---------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
-  @view-transition {
-    navigation: none;
-  }
-
   *,
   *::before,
   *::after {

@@ -3,5 +3,6 @@ User-agent: *
 Allow: /
 Disallow: /404.html
 Disallow: /scripts/
+Disallow: /assets/video/source/
 
 Sitemap: https://www.gjs-agence.fr/sitemap.xml

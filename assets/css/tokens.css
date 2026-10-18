@@ -119,6 +119,7 @@
   /* ---- Motion (une seule animation : fondu + léger glissement, 0,4 s) --- */
   --dur: 0.4s;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);       /* expo.out : le seul langage de mouvement */
 
   /* ---- Profondeurs ----------------------------------------------------- */
   --z-header: 100;

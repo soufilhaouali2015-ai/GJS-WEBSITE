@@ -28,7 +28,7 @@
   <link rel="icon" href="assets/img/icons/icon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/icons/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <script>(function(h){h.classList.replace('no-js','js');if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){h.classList.add('has-reveal');setTimeout(function(){if(!window.__gjsReady)h.classList.remove('has-reveal')},2500)}})(document.documentElement);</script>
+  <script>(function(h){h.classList.replace('no-js','js');var m=function(q){return matchMedia(q).matches};var p=m('(prefers-reduced-motion: reduce)')?'reduced':(m('(min-width: 1024px) and (hover: hover) and (pointer: fine)')?'desktop':'mobile');h.setAttribute('data-motion',p);h.classList.add('has-motion');try{if(sessionStorage.getItem('gjs-curtain')){sessionStorage.removeItem('gjs-curtain');if(p!=='reduced')h.classList.add('is-curtain-in')}}catch(e){}setTimeout(function(){if(!window.__gjsMotion)h.classList.remove('has-motion','is-curtain-in')},3000)})(document.documentElement);</script>
   <link rel="preload" href="assets/fonts/BebasNeue-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Medium.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,12 +37,18 @@
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/layout.css">
   <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/motion.css">
   <link rel="stylesheet" href="assets/css/pages/legal.css">
+  <script defer src="assets/vendor/gsap/gsap.min.js"></script>
+  <script defer src="assets/vendor/gsap/ScrollTrigger.min.js"></script>
+  <script defer src="assets/vendor/gsap/SplitText.min.js"></script>
+  <script defer src="assets/vendor/lenis/lenis.min.js"></script>
   <script type="module" src="assets/js/main.js"></script>
 </head>
 <body data-page="legal">
 
   <a class="skip-link" href="#main">Aller au contenu</a>
+  <div class="read-progress" aria-hidden="true"><span data-read-progress></span></div>
 
   <header class="header">
     <div class="wrap header__inner">
@@ -170,6 +176,7 @@
                     <thead><tr><th scope="col">Nom</th><th scope="col">Type</th><th scope="col">Finalité</th><th scope="col">Durée</th></tr></thead>
                     <tbody>
                       <tr><td><code>gjs-consent</code></td><td>Stockage local, indispensable</td><td>Mémoriser vos choix cookies</td><td>6 mois</td></tr>
+                      <tr><td><code>gjs-curtain</code></td><td>Stockage de session, indispensable</td><td>Afficher la transition entre deux pages du site (aucune donnée personnelle)</td><td>Effacé à l’arrivée sur la page suivante</td></tr>
                       <tr><td>[Outil de mesure] <span class="todo">[À REMPLACER]</span></td><td>Cookie, mesure d’audience</td><td>Statistiques de fréquentation</td><td>13 mois max.</td></tr>
                     </tbody>
                   </table>
@@ -251,5 +258,6 @@
     </form>
   </section>
 
+  <div class="curtain" aria-hidden="true"><span class="curtain__logo">GJS</span></div>
 </body>
 </html>

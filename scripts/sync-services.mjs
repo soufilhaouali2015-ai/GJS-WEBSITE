@@ -42,28 +42,70 @@ const list = (items, cls = 'checklist') => `<ul class="${cls}">${items.map((i) =
 
 /* ---- Accueil : grille de cartes courtes --------------------------------- */
 
+/* Carte courte de l'accueil.
+   - toutes : inclinaison 3D (data-tilt), couches en relief (data-depth), ombre dure séparée ;
+   - phares : recto allégé + verso « ce qui est inclus » (data-flip).
+   Sans JavaScript ou en mouvement réduit, le verso s'affiche simplement sous le recto. */
 function card(s) {
-  const cls = ['svc-card', s.featured ? 'svc-card--featured taped taped--one' : ''].filter(Boolean).join(' ');
+  const title = `<h3 class="t-h3 svc-card__title" id="carte-${s.id}" data-depth="30">${esc(s.name)}</h3>`;
+  const head = `<div class="svc-card__head" data-depth="44">${icon(s.icon)}</div>`;
+  const actions = (btnClass) => [
+    `<div class="svc-card__actions" data-depth="26">`,
+    `  <a class="btn${btnClass}" href="${contactHref(s)}">Je veux ça<span class="sr-only"> : ${esc(s.label)}</span></a>`,
+    `  <a class="link link-arrow" href="services.html#${s.id}">Voir le détail<span class="sr-only"> : ${esc(s.label)}</span></a>`,
+    '</div>',
+  ];
+  if (!s.featured) {
+    return [
+      `<article class="svc-card" aria-labelledby="carte-${s.id}" data-tilt="12">`,
+      '  <span class="svc-card__shadow" aria-hidden="true"></span>',
+      '  <div class="svc-card__body" data-tilt-body>',
+      '    <div class="svc-card__face">',
+      `      ${head}`,
+      `      ${title}`,
+      `      <p class="t-small svc-card__tagline">${esc(s.tagline)}</p>`,
+      `      <p>${esc(s.benefit)}</p>`,
+      `      ${list(s.includes)}`,
+      `      ${priceHtml(s).replace('<p class="price">', '<p class="price" data-depth="48">')}`,
+      ...actions(' btn--lime').map((l) => `      ${l}`),
+      '    </div>',
+      '  </div>',
+      '</article>',
+    ].join('\n');
+  }
   return [
-    `<article class="${cls}" aria-labelledby="carte-${s.id}" data-reveal>`,
-    s.badge ? `  <span class="sticker sticker--ink svc-card__badge" data-badge="${s.id}">${esc(s.badge)}</span>` : '',
-    `  <div class="svc-card__head">${icon(s.icon)}</div>`,
-    `  <h3 class="t-h3 svc-card__title" id="carte-${s.id}">${esc(s.name)}</h3>`,
-    `  <p class="t-small svc-card__tagline">${esc(s.tagline)}</p>`,
-    `  <p>${esc(s.benefit)}</p>`,
-    `  ${list(s.includes)}`,
-    `  ${priceHtml(s)}`,
-    '  <div class="svc-card__actions">',
-    `    <a class="btn${s.featured ? '' : ' btn--lime'}" href="${contactHref(s)}">Je veux ça<span class="sr-only"> : ${esc(s.label)}</span></a>`,
-    `    <a class="link link-arrow" href="services.html#${s.id}">Voir le détail<span class="sr-only"> : ${esc(s.label)}</span></a>`,
+    `<article class="svc-card svc-card--featured" aria-labelledby="carte-${s.id}" data-tilt="12" data-flip>`,
+    '  <span class="svc-card__shadow" aria-hidden="true"></span>',
+    '  <div class="svc-card__body" data-tilt-body>',
+    '    <div class="svc-card__inner" data-flip-inner>',
+    '      <div class="svc-card__face svc-card__face--front">',
+    s.badge ? `        <span class="sticker sticker--ink svc-card__badge" data-badge="${s.id}" data-depth="70">${esc(s.badge)}</span>` : '',
+    `        ${head}`,
+    `        ${title}`,
+    `        <p class="t-small svc-card__tagline">${esc(s.tagline)}</p>`,
+    `        <p class="svc-card__benefit">${esc(s.benefit)}</p>`,
+    `        ${priceHtml(s).replace('<p class="price">', '<p class="price" data-depth="52">')}`,
+    `        <button class="svc-card__flip-btn" type="button" data-flip-toggle aria-expanded="false" aria-controls="verso-${s.id}">Ce qui est inclus<span class="sr-only"> : ${esc(s.label)}</span></button>`,
+    '      </div>',
+    `      <div class="svc-card__face svc-card__face--back" id="verso-${s.id}">`,
+    `        <p class="svc-card__back-title" data-depth="30">Ce qui est inclus<span class="sr-only"> : ${esc(s.label)}</span></p>`,
+    `        ${list(s.includes).replace('<ul class="checklist">', '<ul class="checklist" data-depth="22">')}`,
+    `        ${priceHtml(s).replace('<p class="price">', '<p class="price" data-depth="44">')}`,
+    ...actions('').map((l) => `        ${l}`),
+    '      </div>',
+    '    </div>',
     '  </div>',
     '</article>',
   ].filter(Boolean).join('\n');
 }
 
+/* Double bandeau (décor) : les 9 services, répétés */
+const STAR = '<svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>';
+const bandGroup = (list) => `<div class="band__group">${list.map((n) => `<span class="band__item">${esc(n)}</span>${STAR}`).join('')}</div>`;
+
 const blocks = {
   cards: () => [
-    '<div class="svc-grid">',
+    '<div class="svc-grid" data-anim="svc-grid">',
     ...featured.map(card),
     '<p class="svc-grid__label">Et aussi</p>',
     ...others.map(card),
@@ -71,11 +113,10 @@ const blocks = {
     `<p class="price-legal">${esc(PRICE_NOTE)}</p>`,
   ].join('\n'),
 
-  /* Flyer du hero : les 3 services phares */
-  flyer: () => [
-    '<ul class="flyer__list">',
-    ...featured.map((s) => `  <li><a href="services.html#${s.id}">${esc(s.short)}</a><span class="flyer__price"><small>dès</small><span data-price="${s.id}">${esc(formatPrice(s))}</span></span></li>`),
-    '</ul>',
+  /* Double bandeau entre le hero et les services */
+  bands: () => [
+    `<div class="band band--lime" data-band data-speed="60" data-dir="-1"><div class="band__track" data-band-track>${bandGroup(SERVICES.map((x) => x.short))}</div></div>`,
+    `<div class="band band--ink" data-band data-speed="48" data-dir="1"><div class="band__track" data-band-track>${bandGroup([...SERVICES].reverse().map((x) => x.name))}</div></div>`,
   ].join('\n'),
 
   /* Page Services : sommaire cliquable */
@@ -101,7 +142,7 @@ const blocks = {
 function detail(s) {
   const cls = ['svc-detail', s.featured ? 'svc-detail--featured' : ''].filter(Boolean).join(' ');
   return [
-    `<article class="${cls}" id="${s.id}" aria-labelledby="titre-${s.id}" data-reveal>`,
+    `<article class="${cls}" id="${s.id}" aria-labelledby="titre-${s.id}" data-anim="fade">`,
     s.badge ? `  <span class="sticker svc-detail__badge" data-badge="${s.id}">${esc(s.badge)}</span>` : '',
     '  <div class="svc-detail__head">',
     `    ${icon(s.icon)}`,

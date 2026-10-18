@@ -176,7 +176,7 @@ ANALYTICS: { src: 'https://plausible.io/js/script.js', attrs: { 'data-domain': '
 
 **Matière street** : bordures noires de 2 à 3 px, ombres dures décalées sans flou, coins de 4 px, stickers inclinés de 2 à 4° (`.sticker`), ruban adhésif (`.taped`), coche citron (`.checklist`).
 
-**Mouvement** : une seule animation sur tout le site, un fondu avec léger glissement (0,4 s), joué une fois quand un bloc `[data-reveal]` entre à l'écran. Désactivée en `prefers-reduced-motion` et sans JavaScript. Navigation classique, avec un fondu natif de 0,2 s entre les pages dans les navigateurs compatibles (View Transitions, sans JS).
+**Mouvement** : un seul langage (courbe `expo.out`, 0,6 à 1,2 s), hero vidéo en WebGL, cartes 3D, boutons magnétiques, double bandeau, rideau citron entre les pages. Détails et règles dans la section 11.
 
 **Ton** : direct et chaleureux, phrases courtes, vouvoiement, **pas de tiret long (—)**.
 
@@ -203,13 +203,19 @@ ANALYTICS: { src: 'https://plausible.io/js/script.js', attrs: { 'data-domain': '
 ```
 index.html  services.html  a-propos.html  contact.html
 mentions-legales.html  politique-confidentialite.html  404.html
-favicon.svg  site.webmanifest  robots.txt  sitemap.xml  serve.json  package.json
-scripts/sync-services.mjs          synchronise services.js → HTML
-assets/css/  tokens.css · base.css · layout.css · components.css
+favicon.svg  site.webmanifest  robots.txt  sitemap.xml  serve.json  package.json  .vercelignore
+scripts/sync-services.mjs          synchronise services.js → HTML (cartes, bandeaux, détails)
+scripts/vendor/                    recette du paquet Three.js du hero (non déployé)
+assets/css/  tokens.css · base.css · layout.css · components.css · motion.css
              pages/ home · services · about · contact · legal · error
 assets/js/   main.js · config.js · services.js
-             core/  menu · cookies · reveal · hydrate · utils
+             core/  profile · scroll (Lenis) · motion · spring · tilt · magnetic
+                    marquee · header · transition · pause · menu · cookies · hydrate · utils
+             hero/  hero.js (scroll, repli DOM) · webgl.js (shaders)
              pages/ contact (formulaire) · configurateur
+assets/vendor/ gsap (gsap, ScrollTrigger, SplitText) · lenis · three · matter, avec leurs licences
+assets/video/  hero.mp4 · hero.webm · hero-mobile.mp4 · hero-mobile.webm · hero-poster.jpg
+               source/ vidéo originale + encode-hero.sh (non déployé)
 assets/img/  icons.svg (12 pictogrammes) · og-image.jpg · icons/ · equipe/
 assets/fonts/ Bebas Neue + Poppins (woff2, OFL)
 ```
@@ -218,9 +224,9 @@ assets/fonts/ Bebas Neue + Poppins (woff2, OFL)
 
 ## 9. RGPD, cookies et accessibilité
 
-- **Bandeau cookies** : « Tout refuser » et « Tout accepter » côte à côte, même style ; « Personnaliser » juste en dessous. Aucun script de mesure avant consentement. Choix conservé 6 mois. Lien « Gérer les cookies » dans le footer et sur la page Confidentialité. Seul stockage actif par défaut : `gjs-consent`.
-- **Aucun transfert vers des tiers au chargement** : polices et scripts sont servis par votre hébergeur.
-- **Accessibilité** : lien d'évitement, navigation clavier complète, menu mobile avec focus piégé et Échap, régions `aria-live`, erreurs de formulaire annoncées et reliées aux champs, cibles tactiles de 48 px, `prefers-reduced-motion` respecté, site lisible sans JavaScript (le formulaire part alors en `mailto:`).
+- **Bandeau cookies** : « Tout refuser » et « Tout accepter » côte à côte, même style ; « Personnaliser » juste en dessous. Aucun script de mesure avant consentement. Choix conservé 6 mois. Lien « Gérer les cookies » dans le footer et sur la page Confidentialité. Stockages actifs par défaut, tous deux indispensables et sans donnée personnelle : `gjs-consent` (vos choix, 6 mois) et `gjs-curtain` (stockage de session, effacé dès la page suivante, sert à la transition entre les pages).
+- **Aucun transfert vers des tiers au chargement** : polices, librairies d'animation (`assets/vendor/`) et vidéo sont servies par votre hébergeur. Aucun CDN.
+- **Accessibilité** : lien d'évitement, navigation clavier complète, menu mobile avec focus piégé et Échap, régions `aria-live`, erreurs de formulaire annoncées et reliées aux champs, cibles tactiles de 48 px, bouton « Mettre en pause » qui arrête vidéo, bandeaux et effets (WCAG 2.2.2), `prefers-reduced-motion` respecté (voir section 11), site lisible sans JavaScript (le formulaire part alors en `mailto:`).
 
 ---
 
@@ -237,3 +243,51 @@ assets/fonts/ Bebas Neue + Poppins (woff2, OFL)
 | Parcours testés | Cookies (refus, rechargement, gestion, Échap) ; menu mobile au clavier ; « Je veux ça » → service pré-coché ; validation des 3 étapes ; envoi POST JSON vers un endpoint simulé → écran de succès ; configurateur → contact pré-rempli ; rendu sans JS ; mouvement réduit |
 
 Refaites une mesure Lighthouse sur l'hébergement final, avec les vraies photos.
+
+---
+
+## 11. Animations
+
+### Trois profils, choisis avant le premier affichage
+
+Un petit script dans le `<head>` de chaque page pose `<html data-motion="…">` :
+
+| Profil | Quand | Ce qui tourne |
+|---|---|---|
+| `desktop` | écran ≥ 1024 px, souris | tout : défilement doux (Lenis), hero WebGL épinglé, cartes 3D, boutons magnétiques |
+| `mobile` | le reste | hero en DOM (sans WebGL ni épinglage), bandeaux, retournement des cartes au toucher, apparitions au scroll |
+| `reduced` | `prefers-reduced-motion: reduce` | simples fondus, vidéo en pause sur son poster, aucun épinglage, aucune 3D, aucun effet lié au scroll |
+
+Sans JavaScript (ou si les librairies ne répondent pas en 3 s), tout le contenu s'affiche normalement.
+
+### Animer un nouvel élément : un attribut suffit
+
+```html
+<h2 class="t-h2" data-anim="lines">Titre révélé ligne par ligne</h2>
+<p data-anim="fade" data-anim-delay="0.2">Bloc qui monte en fondu</p>
+<ul data-anim="cascade">…les enfants arrivent l'un après l'autre…</ul>
+<span class="sticker" data-anim="stick">Se colle comme un sticker</span>
+<span class="sticker" data-anim="stamp">Effet tampon</span>
+```
+
+Autres types : `chars` (lettres en vague) et `svc-grid` (grille des services). Le langage est unique : courbe `expo.out`, 0,6 à 1,2 s, décalages de 0,06 à 0,1 s, ressorts physiques pour ce qui suit la souris (`assets/js/core/spring.js`). Les effets ne touchent que `transform` et `opacity`.
+
+### Cartes services, boutons, bandeaux
+
+- **Cartes** : `data-tilt="12"` (inclinaison maxi en degrés) et `data-depth="30"` sur les éléments qui « sortent » de la carte. Les 3 cartes phares (`data-flip`) se retournent : survol sur ordinateur, toucher sur mobile, bouton « Ce qui est inclus » au clavier (Échap pour revenir). Le balisage est généré par `npm run services` (section 2).
+- **Boutons** : tous les `.btn` reçoivent le remplissage et le texte qui roule ; sur ordinateur ils sont aussi magnétiques. Ajoutez `btn--no-roll` pour s'en passer.
+- **Bandeaux** (`data-band`) : vitesse et sens suivent le scroll, pause au survol.
+
+### Vidéo du hero
+
+La vidéo originale est dans `assets/video/source/` (exclue du déploiement par `.vercelignore` et de l'indexation par `robots.txt`). Pour régénérer les fichiers (ffmpeg requis) :
+
+```bash
+cd assets/video && bash source/encode-hero.sh
+```
+
+Le script choisit l'extrait (0:31 → 0:44), le passe en noir et blanc contrasté, rend la boucle invisible (fondu de 0,6 s), produit les versions ordinateur 1280×720 (MP4 H.264 2,0 Mo, WebM VP9 1,2 Mo), mobile 406×720 (0,6 Mo et 0,4 Mo) et le poster (38 Ko). Le voile sombre qui garantit la lisibilité du titre est réglé dans `assets/js/hero/hero.js` (`VEIL_DESKTOP`) et `assets/css/pages/home.css` (`.hero__veil`).
+
+### Librairies (toutes en local)
+
+GSAP 3.15 + ScrollTrigger + SplitText (licence GSAP « Standard No Charge »), Lenis 1.3 (MIT), un sous-ensemble de Three.js r186 (MIT, chargé uniquement sur ordinateur, à l'arrivée du hero) et Matter.js 0.20 (MIT, prévu pour le footer). Pour reconstruire le paquet Three.js : voir `scripts/vendor/README.md`.

@@ -51,7 +51,6 @@ main {
   background: var(--cream);
   color: var(--ink);
   border-bottom: var(--border-thin) solid var(--ink);
-  view-transition-name: header;
 }
 
 .header__inner {

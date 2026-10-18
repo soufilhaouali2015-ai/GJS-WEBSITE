@@ -1,0 +1,4 @@
+GSAP 3.15.0 (gsap, ScrollTrigger, SplitText)
+Licence : GSAP Standard "No Charge" License
+https://gsap.com/standard-license
+Copyright (c) 2008-2025, GreenSock / Webflow. Tous droits réservés.

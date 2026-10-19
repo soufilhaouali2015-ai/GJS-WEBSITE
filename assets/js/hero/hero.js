@@ -215,7 +215,8 @@ export function initHero() {
   const springs = [mouseX, mouseY, hover, vel];
 
   function frame(t, dms) {
-    if (!visible || !M) return;
+    // Rideau de sortie en cours : la page est couverte, on libère le processeur pour la suivante
+    if (!visible || !M || document.documentElement.classList.contains('is-leaving')) return;
     if (gl && gl.lost) disableGL();
     const moved = progress !== lastP;
     if (!gl) {

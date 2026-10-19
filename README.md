@@ -230,17 +230,19 @@ assets/fonts/ Bebas Neue + Poppins (woff2, OFL)
 
 ---
 
-## 10. Recette (mesures du 16 octobre 2026, en local)
+## 10. Recette (mesures du 19 octobre 2026, en local, avec les animations)
 
 | Contrôle | Résultat |
 |---|---|
-| Lighthouse mobile (6 pages) | **100 / 100 / 100 / 100**, LCP 1,4 à 1,5 s, CLS ≤ 0,006, TBT 0 ms |
-| Lighthouse ordinateur (6 pages) | **100 / 100 / 100 / 100**, LCP 0,4 s, CLS 0 |
-| axe-core WCAG 2.2 AA + bonnes pratiques | **0 violation** sur les 7 pages à 390 et 1440 px, bandeau cookies affiché, menu ouvert, erreurs de formulaire |
+| Lighthouse mobile | Accueil **95 à 96** / 100 / 100 / 100 (LCP 2,3 s, CLS ≤ 0,01) ; Services 98, Contact 99 |
+| Lighthouse ordinateur | **100 / 100 / 100 / 100** sur Accueil, Services, Contact (LCP ≤ 0,6 s, TBT 0 ms) |
+| axe-core WCAG 2.2 AA + bonnes pratiques | **0 violation** sur les 7 pages à 390 et 1440 px, bandeau cookies affiché, erreurs de formulaire. Menu mobile ouvert : 2 alertes « moderate » attendues (le contenu derrière le menu est rendu inerte) |
+| Clavier | Tab parcourt toutes les cartes et tous les liens (rien n'est sauté en attendant son animation) ; retournement des cartes au clavier, Échap pour revenir |
 | Erreurs console | 0 (hors réponse 404 attendue de la page 404) |
-| Débordement horizontal à 390 et 1440 px | Aucun |
-| Couleurs hors palette, anciennes polices, tirets longs | Aucun |
-| Parcours testés | Cookies (refus, rechargement, gestion, Échap) ; menu mobile au clavier ; « Je veux ça » → service pré-coché ; validation des 3 étapes ; envoi POST JSON vers un endpoint simulé → écran de succès ; configurateur → contact pré-rempli ; rendu sans JS ; mouvement réduit |
+| Débordement horizontal à 320, 360, 375, 390, 768, 1024, 1440 px | Aucun ; titre du hero jamais sous le bouton pause, le header ou l'étiquette |
+| Mouvement réduit | Ni épinglage, ni Lenis, ni WebGL, ni 3D ; vidéo en pause sur le poster et non téléchargée |
+| Rideau entre les pages | Levé en CSS 0,04 s après le premier affichage : jamais bloqué par le JavaScript, même en 4G lente |
+| Parcours testés | Cookies ; menu mobile ; « Je veux ça » → service pré-coché ; 3 étapes du formulaire ; envoi simulé → écran de succès ; configurateur → contact pré-rempli ; rendu sans JS ; retour arrière (WebGL recréé) ; rechargement (position conservée) ; lecture automatique refusée (pas de carte noire) |
 
 Refaites une mesure Lighthouse sur l'hébergement final, avec les vraies photos.
 
@@ -277,6 +279,7 @@ Autres types : `chars` (lettres en vague) et `svc-grid` (grille des services). L
 - **Cartes** : `data-tilt="12"` (inclinaison maxi en degrés) et `data-depth="30"` sur les éléments qui « sortent » de la carte. Les 3 cartes phares (`data-flip`) se retournent : survol sur ordinateur, toucher sur mobile, bouton « Ce qui est inclus » au clavier (Échap pour revenir). Le balisage est généré par `npm run services` (section 2).
 - **Boutons** : tous les `.btn` reçoivent le remplissage et le texte qui roule ; sur ordinateur ils sont aussi magnétiques. Ajoutez `btn--no-roll` pour s'en passer.
 - **Bandeaux** (`data-band`) : vitesse et sens suivent le scroll, pause au survol.
+- **Zone qui défile elle-même** (liste, tableau, fenêtre) : ajoutez `data-lenis-prevent` pour qu'elle garde la molette native (déjà fait pour le message du formulaire, les cookies, le menu et les tableaux).
 
 ### Vidéo du hero
 

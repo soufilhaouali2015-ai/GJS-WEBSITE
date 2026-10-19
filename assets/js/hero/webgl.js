@@ -69,7 +69,8 @@ const CARD_FRAGMENT = /* glsl */`
     float ra = uSize.x / uSize.y;
     float rv = uVideoRes.x / uVideoRes.y;
     vec2 s = ra > rv ? vec2(1.0, rv / ra) : vec2(ra / rv, 1.0);
-    return (uv - 0.5) * s + 0.5;
+    // Même cadrage que le DOM (object-position: 50% 40%) : aucun saut au passage en WebGL
+    return (uv - 0.5) * s + vec2(0.5, 0.5 + 0.1 * (1.0 - s.y));
   }
   void main() {
     vec2 px = (vUv - 0.5) * uSize;
@@ -216,6 +217,12 @@ export async function createHeroGL({ canvas, video, veil }) {
   videoTex.minFilter = LinearFilter;
   videoTex.magFilter = LinearFilter;
   videoTex.generateMipmaps = false;
+  // VideoTexture ne se met à jour qu'à chaque nouvelle image jouée : une vidéo en
+  // pause (lecture refusée, bouton pause) doit quand même fournir son image
+  const upload = () => { videoTex.needsUpdate = true; };
+  if (video.readyState >= 2) upload();
+  video.addEventListener('loadeddata', upload);
+  video.addEventListener('seeked', upload);
 
   const emptyTitle = document.createElement('canvas');
   emptyTitle.width = 2;
@@ -353,6 +360,8 @@ export async function createHeroGL({ canvas, video, veil }) {
 
   function dispose() {
     canvas.removeEventListener('webglcontextlost', onLost);
+    video.removeEventListener('loadeddata', upload);
+    video.removeEventListener('seeked', upload);
     geometry.dispose();
     cardMat.dispose();
     shadowMat.dispose();

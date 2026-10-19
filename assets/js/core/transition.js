@@ -3,8 +3,8 @@
    Rideau citron avec le logo GJS : 0,3 s pour couvrir, 0,3 s pour découvrir.
    La navigation reste classique (pas d'application d'une seule page) :
    bouton retour, ancres, nouvel onglet et Ctrl/Cmd+clic marchent normalement.
-   Le <head> pose .is-curtain-in à l'arrivée (rideau visible dès le premier
-   affichage, sans flash) ; il s'efface seul en CSS si le JS ne répond pas.
+   Le <head> pose .is-curtain-in à l'arrivée : le rideau couvre le premier
+   affichage puis se lève en CSS, sans attendre le JS (0,35 s au plus).
    ========================================================================== */
 
 import { isReduced } from './profile.js';
@@ -17,17 +17,12 @@ const root = document.documentElement;
 const normalize = (path) => path.replace(/\/index\.html$/, '/').replace(/\/$/, '/');
 
 function reveal(curtain) {
+  // Le rideau se lève en CSS dès le premier affichage ; ici on ne fait que ranger
   if (!root.classList.contains('is-curtain-in')) return;
-  const logo = curtain.querySelector('.curtain__logo');
-  gsap.timeline({
-    onComplete: () => {
-      root.classList.remove('is-curtain-in');
-      gsap.set([curtain, logo], { clearProps: 'all' });
-    },
-  })
-    .set(curtain, { animation: 'none', y: 0, yPercent: 0 })
-    .to(logo, { yPercent: -60, autoAlpha: 0, duration: 0.3, ease: 'expo.out' }, 0)
-    .to(curtain, { yPercent: -101, duration: 0.32, ease: 'expo.out' }, 0.04);
+  const done = () => root.classList.remove('is-curtain-in');
+  const anim = curtain.getAnimations ? curtain.getAnimations().find((a) => a.animationName === 'curtain-out') : null;
+  if (anim) anim.finished.then(done, done);
+  else setTimeout(done, 500);
 }
 
 function leave(curtain, href) {

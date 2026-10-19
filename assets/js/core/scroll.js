@@ -57,7 +57,11 @@ export function initScroll() {
   };
 
   if (profile !== 'reduced' && typeof Lenis === 'function') {
-    lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 1, smoothWheel: true, syncTouch: false, autoRaf: false });
+    lenis = new Lenis({
+      lerp: 0.11, wheelMultiplier: 1, smoothWheel: true, syncTouch: false, autoRaf: false,
+      // Les zones qui défilent elles-mêmes gardent la molette native (message, cookies, menu, tableaux)
+      prevent: (node) => node.matches('textarea, .cookies, .menu, .table-wrap, [data-lenis-prevent]'),
+    });
     lenis.on('scroll', () => { ScrollTrigger.update(); emit(); });
     gsap.ticker.add((time) => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);

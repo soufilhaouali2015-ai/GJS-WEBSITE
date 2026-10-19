@@ -3,7 +3,7 @@
    Un seul « état » de carte, calculé à partir de la progression du scroll,
    pilote tout : la carte (DOM ou WebGL), son ombre, le titre en deux couches,
    l'étiquette crème et le bouton pause.
-     ordinateur : section épinglée (1,5 écran) + scène WebGL (si disponible)
+     ordinateur : scène épinglée sur 1,5 écran (réservé en CSS) + WebGL si disponible
      mobile     : pas d'épinglage, la carte rétrécit et s'incline au scroll
      réduit     : rien de lié au scroll, vidéo en pause sur le poster
    Tout est animé en transform (et opacity).
@@ -52,8 +52,9 @@ export function initHero() {
     video.preload = 'auto';
   }
   onPause((p) => (p ? video.pause() : play()));
-  new IntersectionObserver(([entry]) => {
-    visible = entry.isIntersecting;
+  // Plusieurs relevés peuvent arriver d'un coup (épinglage au démarrage) : le dernier fait foi
+  new IntersectionObserver((entries) => {
+    visible = entries[entries.length - 1].isIntersecting;
     if (visible) play(); else video.pause();
   }).observe(stage);
   play();
@@ -84,6 +85,8 @@ export function initHero() {
       label: { x: lr.right - sRect.left, y: lr.bottom - sRect.top, w: lr.width, h: lr.height },
       pause: { x: pr.right - sRect.left, y: pr.top - sRect.top },
       gutter: parseFloat(getComputedStyle(root.querySelector('.hero__title')).left) || 16,
+      // Mise en page empilée (< 1024 px, titre au-dessus de l'étiquette) ou côte à côte
+      stacked: matchMedia('(max-width: 1023px)').matches,
     };
     // Rayon et bordure fixés pour l'échelle finale (le DOM ne les anime pas)
     card.style.setProperty('--hero-radius', `${RADIUS_END / S_END}px`);
@@ -158,8 +161,12 @@ export function initHero() {
     if (isDesktop) {
       // Étiquette : reste en bas à droite, s'incline et vient se coller sur le coin de la carte
       gsap.set(label, { x: lerp(0, -8, e), y: lerp(0, -16, e), rotation: lerp(0, 3, e), force3D: true });
-    } else {
+    } else if (M.stacked) {
+      // L'étiquette, alignée à gauche, suit le coin bas-gauche de la carte
       gsap.set(label, { x: c.bl.x, y: c.bl.y - M.H, rotation: lerp(0, 2, e), force3D: true });
+    } else {
+      // Tablette tactile en paysage : étiquette à droite, elle suit le coin bas-droit
+      gsap.set(label, { x: c.br.x - M.W, y: c.br.y - M.H, rotation: lerp(0, -2, e), force3D: true });
     }
     const px = lerp(M.pause.x - M.W, -18, e);
     const py = lerp(M.pause.y - M.top, 18, e);
@@ -237,12 +244,15 @@ export function initHero() {
   /* ---- Scroll ---- */
   measure();
   if (!isReduced) {
+    // Ordinateur : la hauteur de l'épinglage (1,5 écran) est réservée en CSS dès le
+    // premier affichage (.hero à 250svh) : rien ne bouge dans la page quand le JS
+    // arrive, et le scroll restauré au rechargement tombe au bon endroit.
     ScrollTrigger.create({
       trigger: root,
       start: 'top top',
-      end: isDesktop ? '+=150%' : 'bottom top',
-      pin: isDesktop,
-      pinSpacing: true,
+      end: isDesktop ? 'bottom bottom' : 'bottom top',
+      pin: isDesktop ? stage : false,
+      pinSpacing: false,
       scrub: true,
       onUpdate: (self) => { progress = self.progress; },
       onRefreshInit: () => { measure(); },
@@ -321,6 +331,8 @@ export function initHero() {
     glPending = true;
     try {
       await document.fonts.load('400 100px "Bebas Neue"');
+      // Pas de carte noire : le poster reste affiché tant qu'aucune image n'est décodée
+      if (video.readyState < 2) await new Promise((resolve) => video.addEventListener('loadeddata', resolve, { once: true }));
       const { createHeroGL } = await import('./webgl.js');
       gl = await createHeroGL({ canvas, video, veil: VEIL_DESKTOP });
       if (!gl) return;

@@ -113,14 +113,23 @@ function setupFlip(cardEl) {
   };
 
   if (isDesktop) {
+    let dismissed = false; // Échap pendant le survol : le recto reste jusqu'à la sortie
     cardEl.addEventListener('pointerenter', (e) => {
-      if (e.pointerType !== 'mouse') return;
+      if (e.pointerType !== 'mouse' || dismissed) return;
       clearTimeout(timer);
       timer = setTimeout(() => set(true), 140);
     });
     cardEl.addEventListener('pointerleave', () => {
+      dismissed = false;
       clearTimeout(timer);
       timer = setTimeout(() => set(false), 160);
+    });
+    // WCAG 1.4.13 : le verso montré au survol se referme avec Échap, sans bouger la souris
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape' || !cardEl.matches(':hover') || cardEl.contains(document.activeElement)) return;
+      clearTimeout(timer);
+      dismissed = true;
+      set(false);
     });
   } else {
     // Toucher la carte (hors lien ou bouton) la retourne

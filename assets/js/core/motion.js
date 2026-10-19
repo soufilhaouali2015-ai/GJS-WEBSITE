@@ -12,6 +12,9 @@
 
    Déclenché une seule fois, à l'arrivée à l'écran. Le texte est soit absent,
    soit lisible à 100 % : jamais semi-transparent en attendant le scroll.
+   Les blocs en attente sont masqués en opacité seulement : ils restent dans
+   l'ordre de tabulation et lisibles par les lecteurs d'écran, et se révèlent
+   aussitôt qu'ils reçoivent le focus clavier.
    Mouvement réduit : simples fondus de 0,4 s.
    ========================================================================== */
 
@@ -23,8 +26,30 @@ const START = 'top 86%';
 
 const ready = (el) => el.classList.add('is-anim-ready');
 
+/* Révélations en attente (élément → fonction), jouées une seule fois : à
+   l'arrivée à l'écran, ou plus tôt si le focus clavier entre dans l'élément. */
+const pending = new Map();
+
+function arm(el, fn) {
+  const run = (index = 0) => {
+    if (!pending.has(el)) return;
+    pending.delete(el);
+    fn(index);
+  };
+  pending.set(el, run);
+  return run;
+}
+
 function onEnter(el, fn, start = START) {
-  ScrollTrigger.create({ trigger: el, start, once: true, onEnter: fn });
+  const run = arm(el, fn);
+  ScrollTrigger.create({ trigger: el, start, once: true, onEnter: () => run() });
+}
+
+function revealOnFocus(e) {
+  for (let n = e.target; n && n !== document.body; n = n.parentElement) {
+    const run = pending.get(n);
+    if (run) run();
+  }
 }
 
 /* ---- Briques ---------------------------------------------------------------- */
@@ -77,33 +102,33 @@ function chars(el, delay) {
   });
 }
 
-const fadeFrom = { autoAlpha: 0, y: 48 };
+const fadeFrom = { opacity: 0, y: 48 };
 
 function fade(el, delay) {
   gsap.set(el, fadeFrom);
   ready(el);
-  onEnter(el, () => gsap.to(el, { autoAlpha: 1, y: 0, duration: 1, ease: EASE, delay }));
+  onEnter(el, () => gsap.to(el, { opacity: 1, y: 0, duration: 1, ease: EASE, delay }));
 }
 
 function cascade(el, delay) {
   const kids = [...el.children];
   gsap.set(kids, fadeFrom);
   ready(el);
-  onEnter(el, () => gsap.to(kids, { autoAlpha: 1, y: 0, duration: 1, stagger: 0.08, ease: EASE, delay }));
+  onEnter(el, () => gsap.to(kids, { opacity: 1, y: 0, duration: 1, stagger: 0.08, ease: EASE, delay }));
 }
 
 /** Un sticker qu'on colle : il arrive de travers, se pose et rebondit à peine. */
 export function stickTimeline(el, { rotation = 0 } = {}) {
   return gsap.timeline()
-    .fromTo(el, { autoAlpha: 0, y: -36, rotation: rotation - 14, scale: 1.16 }, { autoAlpha: 1, y: 6, rotation: rotation + 1.2, scale: 0.985, duration: 0.6, ease: EASE })
+    .fromTo(el, { opacity: 0, y: -36, rotation: rotation - 14, scale: 1.16 }, { opacity: 1, y: 6, rotation: rotation + 1.2, scale: 0.985, duration: 0.6, ease: EASE })
     .to(el, { y: 0, rotation, scale: 1, duration: 0.7, ease: EASE });
 }
 
 /** Un tampon : il s'écrase sur la surface, qui encaisse une petite secousse. */
 export function stampTimeline(el, { rotation = 0, shake = el.parentElement } = {}) {
   const tl = gsap.timeline()
-    .fromTo(el, { autoAlpha: 0, scale: 1.6, rotation: rotation - 16 }, { autoAlpha: 1, scale: 1, rotation, duration: 0.6, ease: EASE });
-  if (shake) tl.fromTo(shake, { x: 0 }, { keyframes: { x: [-5, 4, -2, 1, 0] }, duration: 0.6, ease: 'power2.out' }, 0.18);
+    .fromTo(el, { opacity: 0, scale: 1.6, rotation: rotation - 16 }, { opacity: 1, scale: 1, rotation, duration: 0.6, ease: EASE });
+  if (shake) tl.fromTo(shake, { x: 0 }, { keyframes: { x: [-5, 4, -2, 1, 0] }, duration: 0.6, ease: EASE }, 0.18);
   return tl;
 }
 
@@ -111,14 +136,14 @@ const baseRotation = (el) => Number(gsap.getProperty(el, 'rotation')) || 0;
 
 function stick(el, delay) {
   const r = baseRotation(el);
-  gsap.set(el, { autoAlpha: 0 });
+  gsap.set(el, { opacity: 0 });
   ready(el);
   onEnter(el, () => stickTimeline(el, { rotation: r }).delay(delay));
 }
 
 function stamp(el, delay) {
   const r = baseRotation(el);
-  gsap.set(el, { autoAlpha: 0 });
+  gsap.set(el, { opacity: 0 });
   ready(el);
   onEnter(el, () => stampTimeline(el, { rotation: r }).delay(delay));
 }
@@ -130,48 +155,57 @@ function svcGrid(el) {
   const others = [...el.querySelectorAll('.svc-card:not(.svc-card--featured)')];
   const label = el.querySelector('.svc-grid__label');
   const badges = new Map(featured.map((c) => [c, c.querySelector('.svc-card__badge')]));
-  gsap.set(featured, { autoAlpha: 0 });
-  badges.forEach((b) => b && gsap.set(b, { autoAlpha: 0 }));
-  gsap.set(others, { autoAlpha: 0, y: 70, rotation: 1.5 });
+  gsap.set(featured, { opacity: 0 });
+  badges.forEach((b) => b && gsap.set(b, { opacity: 0 }));
+  gsap.set(others, { opacity: 0, y: 70, rotation: 1.5 });
   if (label) gsap.set(label, fadeFrom);
   ready(el);
 
-  ScrollTrigger.batch(featured, {
-    start: 'top 88%',
-    once: true,
-    onEnter: (batch) => batch.forEach((cardEl, i) => {
-      const tl = stickTimeline(cardEl).delay(i * 0.14);
-      const badge = badges.get(cardEl);
-      if (badge) tl.add(stampTimeline(badge, { rotation: baseRotation(badge), shake: cardEl.querySelector('[data-tilt-body]') }), '-=0.45');
-    }),
-  });
-  if (label) onEnter(label, () => gsap.to(label, { autoAlpha: 1, y: 0, duration: 1, ease: EASE }), 'top 92%');
-  ScrollTrigger.batch(others, {
-    start: 'top 90%',
-    once: true,
-    onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, rotation: 0, duration: 1, stagger: 0.08, ease: EASE }),
-  });
+  featured.forEach((cardEl) => arm(cardEl, (i) => {
+    const tl = stickTimeline(cardEl).delay(i * 0.1);
+    const badge = badges.get(cardEl);
+    if (badge) tl.add(stampTimeline(badge, { rotation: baseRotation(badge), shake: cardEl.querySelector('[data-tilt-body]') }), '-=0.45');
+  }));
+  others.forEach((cardEl) => arm(cardEl, (i) => {
+    gsap.to(cardEl, { opacity: 1, y: 0, rotation: 0, duration: 1, delay: i * 0.08, ease: EASE });
+  }));
+  const play = (batch) => batch.forEach((cardEl, i) => { const run = pending.get(cardEl); if (run) run(i); });
+  ScrollTrigger.batch(featured, { start: 'top 88%', once: true, onEnter: play });
+  if (label) onEnter(label, () => gsap.to(label, { opacity: 1, y: 0, duration: 1, ease: EASE }), 'top 92%');
+  ScrollTrigger.batch(others, { start: 'top 90%', once: true, onEnter: play });
 }
 
-const TYPES = { lines, chars, fade, cascade, stick, stamp, 'svc-grid': svcGrid };
+// Sans SplitText (fichier bloqué ou non chargé), les titres arrivent en simple fondu
+const TYPES = SplitText
+  ? { lines, chars, fade, cascade, stick, stamp, 'svc-grid': svcGrid }
+  : { lines: fade, chars: fade, fade, cascade, stick, stamp, 'svc-grid': svcGrid };
 
 /* ---- Mouvement réduit : un simple fondu, partout ---------------------------- */
 
 function reducedFade(el) {
   const targets = el.dataset.anim === 'svc-grid' ? [...el.children] : [el];
-  gsap.set(targets, { autoAlpha: 0 });
+  gsap.set(targets, { opacity: 0 });
   ready(el);
-  onEnter(el, () => gsap.to(targets, { autoAlpha: 1, duration: 0.4, ease: 'power1.out' }), 'top 96%');
+  onEnter(el, () => gsap.to(targets, { opacity: 1, duration: 0.4, ease: 'power1.out' }), 'top 96%');
 }
 
 export function initMotion(root = document) {
-  gsap.registerPlugin(ScrollTrigger, SplitText);
+  gsap.registerPlugin(...[ScrollTrigger, SplitText].filter(Boolean));
   root.querySelectorAll('[data-anim]').forEach((el) => {
     if (el.parentElement && el.parentElement.closest('[data-anim="svc-grid"]')) return;
     const delay = parseFloat(el.dataset.animDelay || '0') || 0;
-    if (isReduced) { reducedFade(el); return; }
-    const fn = TYPES[el.dataset.anim] || fade;
-    fn(el, delay);
+    try {
+      if (isReduced) reducedFade(el);
+      else (TYPES[el.dataset.anim] || fade)(el, delay);
+    } catch (err) {
+      // Un bloc qui échoue reste affiché normalement, sans bloquer les suivants
+      console.error('[GJS] animation', el, err);
+      const parts = [el, ...el.children, ...el.querySelectorAll('.svc-card__badge')];
+      parts.forEach((part) => pending.delete(part));
+      gsap.set(parts, { clearProps: 'opacity,visibility,transform' });
+      ready(el);
+    }
   });
+  document.addEventListener('focusin', revealOnFocus);
   window.__gjsMotion = true;
 }

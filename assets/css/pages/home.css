@@ -15,6 +15,10 @@
   --title-bottom: clamp(48px, 9vh, 112px);
 }
 
+/* Ordinateur : la course de l'épinglage (1,5 écran) est réservée dès le premier
+   affichage, pour que la page ne s'allonge pas quand le JS arrive */
+.has-motion[data-motion="desktop"] .hero { height: 250vh; height: 250svh; }
+
 .hero__stage {
   position: relative;
   height: 100vh;
@@ -238,10 +242,14 @@
   animation: hero-fade 0.9s var(--ease-expo) 0.42s both;
 }
 
-/* Mobile : titre au-dessus de l'étiquette, recadrage portrait */
-@media (max-width: 767px) {
-  .hero { --title-bottom: calc(var(--label-h, 300px) + 40px); }
-  .hero__video { object-position: 21% 50%; }
+/* Mobile et tablette (< 1024 px) : titre au-dessus de l'étiquette.
+   Côte à côte, ils se chevaucheraient sous ~1000 px de large. */
+@media (max-width: 1023px) {
+  .hero { --title-bottom: calc(var(--label-h, 400px) + 40px); }
+  /* Petits téléphones : la scène s'allonge plutôt que de faire passer le titre
+     sous le bouton pause ou le header (pause 14 + 48 px + marge, titre 3 × 0,88 em,
+     étiquette mesurée par hero.js ; 400 px sans JS) */
+  .hero__stage { min-height: calc(var(--header-h) + 96px + var(--fs-h1) * 2.64 + 40px + var(--label-h, 400px) + 20px); }
   .hero__veil { background: linear-gradient(to top, rgba(20, 20, 20, 0.62) 0%, rgba(20, 20, 20, 0.55) 60%, rgba(20, 20, 20, 0.3) 100%); }
   .hero__label {
     right: auto;
@@ -256,6 +264,16 @@
   .hero__label .btn-row { gap: 10px; }
   .hero__reassure { gap: 2px 14px; }
   .hero__pause { top: calc(var(--header-h) + 14px); }
+}
+
+/* Mobile : recadrage portrait de la vidéo mobile (déjà recadrée par plan) */
+@media (max-width: 767px) {
+  .hero__video { object-position: 21% 50%; }
+}
+
+/* Très petits écrans (320 px) : le sticker tient dans l'étiquette */
+@media (max-width: 359px) {
+  .hero__kicker .sticker { font-size: 0.95rem; }
 }
 
 /* ---- Offre de lancement (section noire n° 1) ----------------------------- */

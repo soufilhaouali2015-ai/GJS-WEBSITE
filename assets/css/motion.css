@@ -16,7 +16,8 @@ html.lenis body { height: auto; }
 
 /* ---- États initiaux (avant que motion.js ne prenne la main) ------------- */
 
-.has-motion [data-anim]:not(.is-anim-ready) { visibility: hidden; }
+/* Avant le JS : masqué en opacité seulement (reste focusable et lisible par les lecteurs d'écran) */
+.has-motion [data-anim]:not(.is-anim-ready) { opacity: 0; }
 
 /* Masques des lignes (SplitText) : un peu de marge pour les accents et le marqueur */
 .anim-line-mask {
@@ -142,15 +143,24 @@ html.lenis body { height: auto; }
   pointer-events: auto;
 }
 
-/* Arrivée par transition : le rideau couvre dès le premier affichage.
-   Filet de sécurité : il s'efface seul si le JavaScript ne répond pas. */
+/* Arrivée par transition : le rideau couvre le premier affichage puis se lève
+   tout seul en CSS (0,3 s), sans attendre le JavaScript : sur une connexion
+   lente, la page n'est jamais cachée plus longtemps. */
 .is-curtain-in .curtain {
   transform: none;
-  animation: curtain-safety 0.5s var(--ease-expo) 1.4s forwards;
+  animation: curtain-out 0.3s var(--ease-expo) 0.04s forwards;
 }
 
-@keyframes curtain-safety {
+.is-curtain-in .curtain__logo {
+  animation: curtain-logo-out 0.26s var(--ease-expo) forwards;
+}
+
+@keyframes curtain-out {
   to { transform: translateY(-101%); visibility: hidden; }
+}
+
+@keyframes curtain-logo-out {
+  to { transform: translateY(-60%) rotate(-4deg); opacity: 0; }
 }
 
 /* ---- Double bandeau ------------------------------------------------------ */
@@ -249,6 +259,11 @@ html.lenis body { height: auto; }
   transform: translate(var(--gx, 0%), var(--gy, 0%));
 }
 
+/* Sur le verso noir, reflet plus discret : le texte crème garde un contraste AA */
+.svc-card.is-flipped .tilt-glare::before {
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--cream) 22%, transparent) 0%, color-mix(in srgb, var(--cream) 8%, transparent) 28%, transparent 54%);
+}
+
 /* ---- Bouton pause des animations (WCAG 2.2.2) ---------------------------- */
 
 .hero__pause {
@@ -285,7 +300,7 @@ html.lenis body { height: auto; }
 .hero__pause-icon::before { left: 1px; }
 .hero__pause-icon::after { right: 1px; }
 
-.hero__pause[aria-pressed="true"] .hero__pause-icon::before {
+html.is-paused .hero__pause-icon::before {
   left: 2px;
   width: 0;
   height: 0;
@@ -295,9 +310,40 @@ html.lenis body { height: auto; }
   border-color: transparent transparent transparent var(--ink);
 }
 
-.hero__pause[aria-pressed="true"] .hero__pause-icon::after { display: none; }
+html.is-paused .hero__pause-icon::after { display: none; }
+
+/* Sans JavaScript (ou sans GSAP) rien ne bouge : le bouton serait inutile */
+html:not(.has-motion) .hero__pause { display: none; }
 
 /* ---- Mouvement réduit ---------------------------------------------------- */
 
 [data-motion="reduced"] .band__track { transform: none !important; }
 [data-motion="reduced"] .header { transition: none; }
+
+/* ---- Impression : tout le contenu, à sa place, sans effet ------------------ */
+
+@media print {
+  [data-anim],
+  [data-anim="cascade"] > *,
+  [data-anim="svc-grid"] > *,
+  .svc-card__badge,
+  .anim-line,
+  .anim-char {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .tilt-glare { display: none !important; }
+
+  /* Cartes phares : recto puis verso, à plat */
+  .svc-card.is-flippable .svc-card__inner,
+  .svc-card.is-flippable .svc-card__face--back { transform: none !important; }
+  .svc-card.is-flippable .svc-card__face { grid-area: auto; backface-visibility: visible; }
+  .svc-card.is-flippable .svc-card__inner { grid-template-rows: auto auto; }
+
+  .curtain,
+  .read-progress,
+  .hero__pause,
+  .bands { display: none !important; }
+}

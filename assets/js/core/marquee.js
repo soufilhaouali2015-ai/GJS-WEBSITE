@@ -39,8 +39,11 @@ function setupBand(band) {
     }
   };
   fill();
-  new ResizeObserver(fill).observe(band);
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(band);
+  // La bande ne change pas de taille quand la police arrive, le groupe si : on observe les deux
+  const ro = new ResizeObserver(fill);
+  ro.observe(band);
+  ro.observe(group);
+  new IntersectionObserver((entries) => { visible = entries[entries.length - 1].isIntersecting; }).observe(band);
   band.addEventListener('pointerenter', () => { hover = true; });
   band.addEventListener('pointerleave', () => { hover = false; });
 

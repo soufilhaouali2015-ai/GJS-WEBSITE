@@ -101,6 +101,7 @@ Les textes provisoires portent une étiquette visible en pointillés `[À REMPLA
 | `mentions-legales.html` | Raison sociale, forme juridique et capital, siège, RCS, SIRET, TVA, directeur de la publication, hébergeur, crédits photo, date de mise à jour |
 | `politique-confidentialite.html` | Coordonnées du responsable, DPO éventuel, hébergeur, outil de formulaire (Formspree ou Make), outil de mesure d'audience, outil de rendez-vous, transferts hors UE, date de mise à jour |
 | `index.html` (section masquée) | Réalisations : images, noms de clients et textes (voir §7) |
+| `assets/img/services/` | **Facultatif** : 9 visuels des services pour le survol de l'index (page Services). Des affiches street générées sont en place (`poster-site.webp`…), à remplacer par vos photos ou visuels au même nom, format portrait **4:5**, 640×800 px, ≤ 70 Ko. Pour régénérer les affiches : `scripts/posters/README.md` |
 
 > Après avoir changé l'email, le téléphone, WhatsApp, le lien de rendez-vous ou le domaine dans `config.js`, faites aussi un **rechercher/remplacer** dans les `*.html`, `sitemap.xml` et `robots.txt` : le JavaScript corrige l'affichage, mais le HTML doit être juste pour le SEO et pour les visiteurs sans JavaScript.
 
@@ -206,17 +207,20 @@ mentions-legales.html  politique-confidentialite.html  404.html
 favicon.svg  site.webmanifest  robots.txt  sitemap.xml  serve.json  package.json  .vercelignore
 scripts/sync-services.mjs          synchronise services.js → HTML (cartes, bandeaux, détails)
 scripts/vendor/                    recette du paquet Three.js du hero (non déployé)
+scripts/posters/                   générateur des 9 affiches de services (non déployé)
 assets/css/  tokens.css · base.css · layout.css · components.css · motion.css
              pages/ home · services · about · contact · legal · error
 assets/js/   main.js · config.js · services.js
              core/  profile · scroll (Lenis) · motion · spring · tilt · magnetic
                     marquee · header · transition · pause · menu · cookies · hydrate · utils
              hero/  hero.js (scroll, repli DOM) · webgl.js (shaders)
+             sections/ steps · faq · stickers (footer) · services-index · carousel
              pages/ contact (formulaire) · configurateur
 assets/vendor/ gsap (gsap, ScrollTrigger, SplitText) · lenis · three · matter, avec leurs licences
 assets/video/  hero.mp4 · hero.webm · hero-mobile.mp4 · hero-mobile.webm · hero-poster.jpg
                source/ vidéo originale + encode-hero.sh (non déployé)
-assets/img/  icons.svg (12 pictogrammes) · og-image.jpg · icons/ · equipe/
+assets/img/  icons.svg (14 pictogrammes + 6 décors street) · og-image.jpg · icons/ · equipe/
+             services/ 9 affiches des services (générées par scripts/posters)
 assets/fonts/ Bebas Neue + Poppins (woff2, OFL)
 ```
 
@@ -256,7 +260,7 @@ Un petit script dans le `<head>` de chaque page pose `<html data-motion="…">` 
 
 | Profil | Quand | Ce qui tourne |
 |---|---|---|
-| `desktop` | écran ≥ 1024 px, souris | tout : défilement doux (Lenis), hero WebGL épinglé, cartes 3D, boutons magnétiques |
+| `desktop` | écran ≥ 1024 px, souris | tout : défilement doux (Lenis), hero WebGL épinglé, scènes collantes, cartes 3D, boutons magnétiques, physique du footer, parallaxe |
 | `mobile` | le reste | hero en DOM (sans WebGL ni épinglage), bandeaux, retournement des cartes au toucher, apparitions au scroll |
 | `reduced` | `prefers-reduced-motion: reduce` | simples fondus, vidéo en pause sur son poster, aucun épinglage, aucune 3D, aucun effet lié au scroll |
 
@@ -272,7 +276,9 @@ Sans JavaScript (ou si les librairies ne répondent pas en 3 s), tout le contenu
 <span class="sticker" data-anim="stamp">Effet tampon</span>
 ```
 
-Autres types : `chars` (lettres en vague) et `svc-grid` (grille des services). Le langage est unique : courbe `expo.out`, 0,6 à 1,2 s, décalages de 0,06 à 0,1 s, ressorts physiques pour ce qui suit la souris (`assets/js/core/spring.js`). Les effets ne touchent que `transform` et `opacity`.
+Autres types : `chars` (lettres en vague), `marker` (trait citron qui se dessine sous un `.hl`), `photo` (photo révélée par un masque avec un léger zoom arrière) et `svc-grid` (grille des services). Options du tampon : `data-stamp-from="2.2"` (échelle de départ), `data-stamp-spin="5"` (rotation de départ), `data-shake=".wrap"` (bloc qui encaisse la secousse). Dans un titre `lines` ou `chars`, `<span data-count="40">40</span>` défile de 0 à 40 (la vraie valeur reste dans le HTML) et chaque `.hl` dessine son trait après le titre.
+
+Partout : `data-skew` sur un grand titre le fait s'incliner et s'étirer selon la vitesse du scroll ; `data-parallax="0.12 | 0.25 | 0.45"` sur un décor (`<svg class="deco deco--star">…#d-star`, voir `index.html`) le fait glisser à sa profondeur et réagir un peu à la souris. Les décors sont placés dans les marges, sous le contenu, et masqués sous 1024 px. Le langage est unique : courbe `expo.out`, 0,6 à 1,2 s, décalages de 0,06 à 0,1 s, ressorts physiques pour ce qui suit la souris (`assets/js/core/spring.js`). Les effets ne touchent que `transform` et `opacity`.
 
 ### Cartes services, boutons, bandeaux
 
@@ -280,6 +286,18 @@ Autres types : `chars` (lettres en vague) et `svc-grid` (grille des services). L
 - **Boutons** : tous les `.btn` reçoivent le remplissage et le texte qui roule ; sur ordinateur ils sont aussi magnétiques. Ajoutez `btn--no-roll` pour s'en passer.
 - **Bandeaux** (`data-band`) : vitesse et sens suivent le scroll, pause au survol.
 - **Zone qui défile elle-même** (liste, tableau, fenêtre) : ajoutez `data-lenis-prevent` pour qu'elle garde la molette native (déjà fait pour le message du formulaire, les cookies, le menu et les tableaux).
+
+### Sections animées (chargées seulement si la page les contient)
+
+| Section | Fichier | Ordinateur | Mobile | Mouvement réduit |
+|---|---|---|---|---|
+| Comment ça marche | `sections/steps.js` | scène collante sur ~1,6 écran, trait ondulé qui relie les 4 étapes | trait vertical à gauche | tout affiché, trait posé |
+| FAQ | `sections/faq.js` | ouverture en FLIP (transform), « + » qui pivote en croix, une seule question ouverte | idem | ouverture immédiate |
+| Stickers du footer (accueil) | `sections/stickers.js` | physique Matter.js (attraper, lancer), chargée à l'approche du footer | chute avec rebond, un toucher les fait sauter | posés |
+| Index des services | `sections/services-index.js` | l'affiche du service suit le curseur | liste simple | liste simple |
+| Le tour des 9 services | `sections/carousel.js` | cylindre 3D au fil du scroll, clic ou focus pour amener une carte au centre | glissé horizontal | grille |
+
+Les stickers du footer sont générés depuis `services.js` (badges et noms courts) par `npm run services`. Pour les ajouter à une autre page, copiez le bloc `<div class="footer__play" data-stickers>` de `index.html`.
 
 ### Vidéo du hero
 
@@ -293,4 +311,4 @@ Le script choisit l'extrait (0:31 → 0:44), le passe en noir et blanc contrast�
 
 ### Librairies (toutes en local)
 
-GSAP 3.15 + ScrollTrigger + SplitText (licence GSAP « Standard No Charge »), Lenis 1.3 (MIT), un sous-ensemble de Three.js r186 (MIT, chargé uniquement sur ordinateur, à l'arrivée du hero) et Matter.js 0.20 (MIT, prévu pour le footer). Pour reconstruire le paquet Three.js : voir `scripts/vendor/README.md`.
+GSAP 3.15 + ScrollTrigger + SplitText (licence GSAP « Standard No Charge »), Lenis 1.3 (MIT), un sous-ensemble de Three.js r186 (MIT, chargé uniquement sur ordinateur, à l'arrivée du hero) et Matter.js 0.20 (MIT, chargé uniquement sur ordinateur, à l'approche du footer de l'accueil). Pour reconstruire le paquet Three.js : voir `scripts/vendor/README.md`.

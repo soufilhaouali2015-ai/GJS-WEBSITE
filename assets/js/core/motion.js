@@ -8,6 +8,7 @@
    data-anim="stick"     se colle comme un sticker (rotation qui se pose, rebond)
    data-anim="stamp"     effet tampon (échelle 1,6 → 1, petite secousse)
                            data-stamp-from="2.2"  échelle de départ
+                           data-stamp-spin="5"    rotation de départ (degrés)
                            data-shake=".wrap"     bloc parent qui encaisse la secousse
    data-anim="marker"    trait de marqueur citron qui se dessine sous un .hl
    data-anim="photo"     photo révélée par un masque, avec un léger zoom arrière
@@ -175,9 +176,9 @@ export function stickTimeline(el, { rotation = 0 } = {}) {
 }
 
 /** Un tampon : il s'écrase sur la surface, qui encaisse une petite secousse. */
-export function stampTimeline(el, { rotation = 0, shake = el.parentElement, from = 1.6 } = {}) {
+export function stampTimeline(el, { rotation = 0, shake = el.parentElement, from = 1.6, spin = 16 } = {}) {
   const tl = gsap.timeline()
-    .fromTo(el, { opacity: 0, scale: from, rotation: rotation - 16 }, { opacity: 1, scale: 1, rotation, duration: 0.6, ease: EASE });
+    .fromTo(el, { opacity: 0, scale: from, rotation: rotation - spin }, { opacity: 1, scale: 1, rotation, duration: 0.6, ease: EASE });
   if (shake) tl.fromTo(shake, { x: 0 }, { keyframes: { x: [-5, 4, -2, 1, 0] }, duration: 0.6, ease: EASE }, 0.18);
   return tl;
 }
@@ -194,10 +195,11 @@ function stick(el, delay) {
 function stamp(el, delay) {
   const r = baseRotation(el);
   const from = parseFloat(el.dataset.stampFrom) || 1.6;
+  const spin = el.dataset.stampSpin !== undefined ? parseFloat(el.dataset.stampSpin) : 16;
   const shake = el.dataset.shake ? el.closest(el.dataset.shake) : el.parentElement;
   gsap.set(el, { opacity: 0 });
   ready(el);
-  onEnter(el, () => stampTimeline(el, { rotation: r, shake, from }).delay(delay));
+  onEnter(el, () => stampTimeline(el, { rotation: r, shake, from, spin }).delay(delay));
 }
 
 /** Trait de marqueur seul (dans un paragraphe) : il se dessine à l'arrivée à l'écran. */

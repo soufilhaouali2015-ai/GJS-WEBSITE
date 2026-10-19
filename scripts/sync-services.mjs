@@ -132,9 +132,38 @@ const blocks = {
   },
 
   /* Page Services : sommaire cliquable */
+  /* Index typographique géant : au survol (ordinateur), l'affiche du service suit le curseur.
+     Sur mobile, une liste simple avec les pictogrammes. */
   toc: () => [
-    '<ul class="toc-chips">',
-    ...SERVICES.map((s) => `  <li><a class="chip${s.featured ? ' chip--featured' : ''}" href="#${s.id}">${icon(s.icon)}${esc(s.short)}</a></li>`),
+    '<ol class="svc-index" data-svc-index>',
+    ...SERVICES.map((s, i) => [
+      `  <li class="svc-index__item${s.featured ? ' is-featured' : ''}">`,
+      `    <a class="svc-index__link" href="#${s.id}" data-poster="assets/img/services/poster-${s.id}.webp">`,
+      `      <span class="svc-index__num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>`,
+      `      ${icon(s.icon, 'icon svc-index__icon')}`,
+      `      <span class="svc-index__name">${esc(s.short)}</span>`,
+      `      <span class="svc-index__price"><span class="sr-only">, </span>dès <span data-price="${s.id}">${esc(formatPrice(s))}</span></span>`,
+      '    </a>',
+      '  </li>',
+    ].join('\n')),
+    '</ol>',
+  ].join('\n'),
+
+  /* Carrousel en cylindre : les 9 services tournent au fil du scroll (ordinateur),
+     glissé horizontal sur mobile, simple grille en mouvement réduit et sans JS. */
+  orbit: () => [
+    '<ul class="orbit__ring" data-orbit-ring>',
+    ...SERVICES.map((s, i) => [
+      `  <li class="orbit__card${s.featured ? ' is-featured' : ''}" data-orbit-card="${i}">`,
+      `    <article class="orbit__face" aria-labelledby="orbite-${s.id}">`,
+      `      ${icon(s.icon)}`,
+      `      <h3 class="t-h3" id="orbite-${s.id}">${esc(s.short)}</h3>`,
+      `      <p class="orbit__tagline">${esc(s.tagline)}</p>`,
+      `      <p class="orbit__price">dès <span data-price="${s.id}">${esc(formatPrice(s))}</span> <small>HT</small></p>`,
+      `      <a class="link link-arrow" href="#${s.id}">Voir le détail<span class="sr-only"> : ${esc(s.label)}</span></a>`,
+      '    </article>',
+      '  </li>',
+    ].join('\n')),
     '</ul>',
   ].join('\n'),
 
@@ -154,7 +183,7 @@ const blocks = {
 function detail(s) {
   const cls = ['svc-detail', s.featured ? 'svc-detail--featured' : ''].filter(Boolean).join(' ');
   return [
-    `<article class="${cls}" id="${s.id}" aria-labelledby="titre-${s.id}" data-anim="fade">`,
+    `<article class="${cls}" id="${s.id}" aria-labelledby="titre-${s.id}" data-anim="fade" data-tilt="4">`,
     s.badge ? `  <span class="sticker svc-detail__badge" data-badge="${s.id}">${esc(s.badge)}</span>` : '',
     '  <div class="svc-detail__head">',
     `    ${icon(s.icon)}`,
@@ -166,7 +195,7 @@ function detail(s) {
     `    <div><h4 class="svc-detail__label">Ce qu’on fait</h4>${list(s.does)}</div>`,
     `    <div><h4 class="svc-detail__label">Ce que vous obtenez</h4>${list(s.gets)}</div>`,
     '  </div>',
-    '  <div class="price-box">',
+    '  <div class="price-box" data-anim="stamp" data-stamp-from="1.3" data-stamp-spin="5">',
     `    ${priceHtml(s)}`,
     `    <p class="price-box__delay"><strong>Délai indicatif</strong>${esc(s.delay)}</p>`,
     `    <a class="btn btn--block" href="${contactHref(s)}">Je veux ça<span class="sr-only"> : ${esc(s.label)}</span></a>`,

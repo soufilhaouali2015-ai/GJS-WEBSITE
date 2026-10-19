@@ -108,6 +108,30 @@ html.lenis body { height: auto; }
 .is-dark .link:hover { color: var(--ink); }
 .is-dark .link::after { bottom: calc(50% - 0.7em); height: 1.3em; border-radius: 3px; }
 
+/* ---- Titres des pages intérieures : révélés au masque, en CSS pur ---------- */
+/* Sans attendre le JS (premier affichage et Lighthouse préservés). */
+
+.mask {
+  display: block;
+  overflow: clip;
+  padding-block: 0.14em 0.06em;
+  margin-block: -0.14em -0.06em;
+}
+
+.mask__in { display: block; }
+
+@keyframes mask-up { from { transform: translateY(112%) rotate(2deg); } }
+@keyframes marker-in { from { transform: scaleX(0) rotate(-1.5deg); } }
+
+.has-motion:not([data-motion="reduced"]) .mask__in {
+  animation: mask-up 1.1s var(--ease-expo) 0.08s both;
+}
+
+.has-motion:not([data-motion="reduced"]) .mask__in .hl::before {
+  transform-origin: left center;
+  animation: marker-in 0.9s var(--ease-expo) 0.55s both;
+}
+
 /* ---- Trait de marqueur qui se dessine (scaleX, jamais de largeur animée) --- */
 
 .has-motion .hl.is-marker::before {

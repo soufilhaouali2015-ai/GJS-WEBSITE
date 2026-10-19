@@ -858,6 +858,10 @@
 
 .poster:nth-child(even) { --tilt: 1deg; }
 
+/* Affichette inclinable : ses couches (data-depth) sortent en relief au survol */
+.poster[data-tilt] { transform-style: preserve-3d; }
+.poster [data-depth] { display: inline-block; }
+
 .poster > * + * { margin-top: 12px; }
 
 .poster .icon { width: 52px; height: 52px; }

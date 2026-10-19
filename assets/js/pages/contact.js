@@ -148,12 +148,18 @@ async function send(data) {
 }
 
 function showSuccess(form, success, viaMail) {
+  const stamp = $('[data-success-stamp]', success);
   if (viaMail) {
+    if (stamp) stamp.textContent = 'Encore un clic\u00a0!';
     $('[data-success-title]', success).textContent = 'Votre messagerie prend le relais.';
     $('[data-success-text]', success).textContent = `Votre demande est pré-remplie dans un nouvel email : il ne reste qu’à cliquer sur « Envoyer ». Rien ne s’est ouvert ? Écrivez-nous à ${CONFIG.EMAIL}.`;
   }
   form.hidden = true;
   success.hidden = false;
+  // Le tampon « Reçu ! » s'écrase sur le panneau, qui encaisse une petite secousse
+  if (stamp && window.gsap && !env.reducedMotion) {
+    import('../core/motion.js').then(({ stampTimeline }) => stampTimeline(stamp, { rotation: -4, from: 2.2, shake: success }));
+  }
   success.focus({ preventScroll: true });
   success.scrollIntoView({ block: 'center', behavior: env.reducedMotion ? 'auto' : 'smooth' });
   announce(viaMail ? 'Votre messagerie s’ouvre avec la demande pré-remplie.' : 'Demande envoyée. Nous vous répondons sous 24 heures.', 'assertive');
@@ -219,9 +225,14 @@ function initForm() {
   };
 
   const goTo = (n) => {
+    const dir = n > current ? 1 : -1;
     steps[current - 1].hidden = true;
     current = n;
     steps[current - 1].hidden = false;
+    // L'étape suivante arrive en glissant depuis le côté où l'on va (transform et opacity)
+    if (window.gsap && !env.reducedMotion) {
+      window.gsap.fromTo(steps[current - 1], { x: 48 * dir, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: 'expo.out', clearProps: 'transform,opacity' });
+    }
     showSummary([]);
     render();
     steps[current - 1].focus({ preventScroll: true });

@@ -30,6 +30,14 @@
   object-fit: cover;
 }
 
+/* Masque de la photo : l'image y monte en dézoomant, le scotch reste posé dessus */
+.member__mask {
+  display: block;
+  overflow: hidden;
+  border-radius: 1px;
+  background: var(--cream-2);
+}
+
 .member__role {
   color: var(--ink-2);
   font-weight: 500;

@@ -207,6 +207,7 @@
 }
 
 .contact-block {
+  position: relative;
   padding: 22px 20px;
   border: var(--border-thin) solid var(--ink);
   border-radius: var(--radius);

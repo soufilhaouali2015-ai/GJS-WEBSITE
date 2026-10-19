@@ -15,6 +15,266 @@
   text-transform: uppercase;
 }
 
+/* ---- Index typographique géant (sommaire) --------------------------------- */
+/* Une ligne par service : numéro, pictogramme, nom en grand, prix.
+   Au survol, un aplat citron se déroule (scaleX) et le nom glisse ; sur
+   ordinateur l'affiche du service suit le curseur (sections/services-index.js). */
+
+.svc-index {
+  border-top: var(--border) solid var(--ink);
+}
+
+.svc-index__link {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 14px;
+  min-height: 64px;
+  padding: 14px 6px;
+  border-bottom: var(--border-thin) solid var(--ink);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.svc-index__link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--lime);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.6s var(--ease-expo);
+}
+
+.svc-index__num {
+  display: none;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+}
+
+.svc-index__icon { width: 30px; height: 30px; }
+
+.svc-index__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.875rem, 1rem + 4.2vw, 5.75rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  transition: transform 0.6s var(--ease-expo);
+}
+
+.svc-index__price {
+  grid-column: 2 / -1;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.svc-index__item.is-featured .svc-index__num { color: var(--ink); }
+
+.svc-index__link:hover::before,
+.svc-index__link:focus-visible::before,
+.svc-index__link.is-active::before {
+  transform: none;
+  transform-origin: left center;
+}
+
+.svc-index__link:hover .svc-index__name,
+.svc-index__link:focus-visible .svc-index__name,
+.svc-index__link.is-active .svc-index__name { transform: translateX(14px); }
+
+@media (min-width: 720px) {
+  .svc-index__link {
+    grid-template-columns: 3ch auto minmax(0, 1fr) auto;
+    gap: 18px;
+    padding: 12px 10px;
+  }
+  .svc-index__num { display: block; }
+  .svc-index__icon { width: 36px; height: 36px; }
+  .svc-index__price { grid-column: auto; font-size: var(--fs-body); }
+}
+
+@media (min-width: 1024px) {
+  .svc-index__link:hover .svc-index__name,
+  .svc-index__link:focus-visible .svc-index__name,
+  .svc-index__link.is-active .svc-index__name { transform: translateX(32px); }
+}
+
+/* Affiche qui suit le curseur (créée par le JS, ordinateur seulement) */
+.svc-float {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  width: clamp(220px, 16vw + 60px, 300px);
+  aspect-ratio: 4 / 5;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.svc-float__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.08);
+  transition: opacity 0.3s var(--ease-expo), transform 0.8s var(--ease-expo);
+}
+
+.svc-float__img.is-active { opacity: 1; transform: none; }
+
+/* ---- Carrousel en cylindre (« Le tour des 9 services ») ------------------ */
+/* Sans JS et en mouvement réduit : une simple grille. */
+
+.orbit { margin-top: 8px; }
+
+.orbit__ring {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: 24px;
+  width: min(100% - 2 * var(--gutter), 1240px);
+  margin-inline: auto;
+}
+
+.orbit__card { position: relative; }
+
+.orbit__face {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  height: 100%;
+  padding: 26px 22px 22px;
+  background: var(--card);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--shadow-color);
+}
+
+.orbit__card.is-featured .orbit__face { background: var(--lime); }
+
+.orbit__face .icon { width: 44px; height: 44px; }
+
+.orbit__tagline { font-size: var(--fs-small); font-weight: 500; color: var(--ink-2); }
+.orbit__card.is-featured .orbit__tagline { color: var(--ink); }
+
+.orbit__price {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: var(--border-thin) solid currentColor;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.orbit__price small { font-family: var(--font-text); font-size: 0.75rem; font-weight: 600; }
+
+@media (min-width: 1024px) {
+  .has-motion[data-motion="desktop"] .orbit__face { padding: 32px 26px 26px; gap: 14px; }
+  .has-motion[data-motion="desktop"] .orbit__face .icon { width: 56px; height: 56px; }
+  .has-motion[data-motion="desktop"] .orbit__face .t-h3 { font-size: clamp(2rem, 1.2rem + 1.2vw, 2.75rem); }
+  .has-motion[data-motion="desktop"] .orbit__price { font-size: 2rem; }
+}
+
+.orbit__veil {
+  position: absolute;
+  inset: -8px;
+  z-index: 2;
+  background: var(--cream);
+  border-radius: var(--radius);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Consigne adaptée à ce que voit le visiteur (grille, glissé ou cylindre) */
+.orbit-hint--swipe,
+.orbit-hint--3d { display: none; }
+.has-motion[data-motion="mobile"] .orbit-hint--flat { display: none; }
+.has-motion[data-motion="mobile"] .orbit-hint--swipe { display: inline; }
+
+@media (min-width: 1024px) {
+  .has-motion[data-motion="desktop"] .orbit-hint--flat { display: none; }
+  .has-motion[data-motion="desktop"] .orbit-hint--3d { display: inline; }
+}
+
+/* Mobile : glissé horizontal aimanté (natif), les cartes pivotent un peu (JS) */
+.has-motion[data-motion="mobile"] .orbit__ring {
+  display: flex;
+  gap: 18px;
+  width: auto;
+  padding: 12px var(--gutter) 28px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.has-motion[data-motion="mobile"] .orbit__ring::-webkit-scrollbar { display: none; }
+
+.has-motion[data-motion="mobile"] .orbit__card {
+  flex: 0 0 min(76vw, 320px);
+  scroll-snap-align: center;
+}
+
+/* Ordinateur : cylindre 3D dans une scène collante, hauteur réservée dès le premier affichage */
+@media (min-width: 1024px) {
+  .has-motion[data-motion="desktop"] .svc-orbit {
+    height: 320vh;
+    height: 320svh;
+    padding-block: 0;
+  }
+
+  .has-motion[data-motion="desktop"] .svc-orbit__stage {
+    position: sticky;
+    top: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    height: 100vh;
+    height: 100svh;
+    padding-top: calc(var(--header-h) + 16px);
+    overflow: hidden;
+  }
+
+  .has-motion[data-motion="desktop"] .orbit {
+    position: relative;
+    margin: 0;
+    perspective: 1500px;
+    perspective-origin: 50% 40%;
+  }
+
+  .has-motion[data-motion="desktop"] .orbit__ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: clamp(280px, 12vw + 170px, 360px);
+    height: min(450px, 100% - 48px);
+    margin: 0;
+    transform-style: preserve-3d;
+  }
+
+  .has-motion[data-motion="desktop"] .orbit__card {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    cursor: pointer;
+  }
+
+  .has-motion[data-motion="desktop"] .orbit__card.is-center { cursor: auto; }
+}
+
 /* ---- Configurateur ------------------------------------------------------- */
 
 .configurator {

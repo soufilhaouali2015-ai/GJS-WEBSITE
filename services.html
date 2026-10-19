@@ -95,37 +95,202 @@
           <div class="wrap">
             <div class="page-hero__inner">
               <p><span class="sticker">Services et tarifs</span></p>
-              <h1 class="t-h1" id="page-title">Ce qu’on fait pour <span class="hl">vous</span></h1>
+              <h1 class="t-h1" id="page-title"><span class="mask"><span class="mask__in">Ce qu’on fait pour <span class="hl">vous</span></span></span></h1>
               <p class="t-intro">Neuf services, des prix de départ affichés et un devis précis après un échange gratuit. Vous choisissez, on s’occupe du reste.</p>
             </div>
             <nav class="toc" aria-labelledby="toc-title">
-              <p class="toc__title" id="toc-title">Aller directement à</p>
+              <p class="toc__title" id="toc-title">Les 9 services, en un coup d’œil</p>
               <!-- @services:toc -->
-              <ul class="toc-chips">
-                <li><a class="chip chip--featured" href="#site"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-site"></use></svg>Site internet</a></li>
-                <li><a class="chip chip--featured" href="#app"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-app"></use></svg>Appli mobile</a></li>
-                <li><a class="chip chip--featured" href="#acquisition"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-acquisition"></use></svg>Nouveaux clients</a></li>
-                <li><a class="chip" href="#social"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-social"></use></svg>Réseaux sociaux</a></li>
-                <li><a class="chip" href="#automatisation"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-automatisation"></use></svg>Automatisations IA</a></li>
-                <li><a class="chip" href="#agent-ia"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-agent"></use></svg>Agent IA</a></li>
-                <li><a class="chip" href="#seo"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-seo"></use></svg>SEO</a></li>
-                <li><a class="chip" href="#sea"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-sea"></use></svg>SEA</a></li>
-                <li><a class="chip" href="#crm"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-crm"></use></svg>CRM</a></li>
-              </ul>
+              <ol class="svc-index" data-svc-index>
+                <li class="svc-index__item is-featured">
+                  <a class="svc-index__link" href="#site" data-poster="assets/img/services/poster-site.webp">
+                    <span class="svc-index__num" aria-hidden="true">01</span>
+                    <svg class="icon svc-index__icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-site"></use></svg>
+                    <span class="svc-index__name">Site internet</span>
+                    <span class="svc-index__price"><span class="sr-only">, </span>dès <span data-price="site">800 €</span></span>
+                  </a>
+                </li>
+                <li class="svc-index__item is-featured">
+                  <a class="svc-index__link" href="#app" data-poster="assets/img/services/poster-app.webp">
+                    <span class="svc-index__num" aria-hidden="true">02</span>
+                    <svg class="icon svc-index__icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-app"></use></svg>
+                    <span class="svc-index__name">Appli mobile</span>
+                    <span class="svc-index__price"><span class="sr-only">, </span>dès <span data-price="app">4 000 €</span></span>
+                  </a>
+                </li>
+                <li class="svc-index__item is-featured">
+                  <a class="svc-index__link" href="#acquisition" data-poster="assets/img/services/poster-acquisition.webp">
+                    <span class="svc-index__num" aria-hidden="true">03</span>
+                    <svg class="icon svc-index__icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-acquisition"></use></svg>
+                    <span class="svc-index__name">Nouveaux clients</span>
+                    <span class="svc-index__price"><span class="sr-only">, </span>dès <span data-price="acquisition">650 € + 500 €/mois</span></span>
+                  </a>
+                </li>
+                <li class="svc-index__item">
+                  <a class="svc-index__link" href="#social" data-poster="assets/img/services/poster-social.webp">
+                    <span class="svc-index__num" aria-hidden="true">04</span>
+                    <svg class="icon svc-index__icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-social"></use></svg>
+                    <span class="svc-index__name">Réseaux sociaux</span>
+                    <span class="svc-index__price"><span class="sr-only">, </span>dès <span data-price="social">350 €/mois</span></span>
+                  </a>
+                </li>
+                <li class="svc-index__item">
+                  <a class="svc-index__link" href="#automatisation" data-poster="assets/img/services/poster-automatisation.webp">
+                    <span class="svc-index__num" aria-hidden="true">05</span>
+                    <svg class="icon svc-index__icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-automatisation"></use></svg>
+                    <span class="svc-index__name">Automatisations IA</span>
+                    <span class="svc-index__price"><span class="sr-only">, </span>dès <span data-price="automatisation">500 €</span></span>
+                  </a>
+                </li>
+                <li class="svc-index__item">
+                  <a class="svc-index__link" href="#agent-ia" data-poster="assets/img/services/poster-agent-ia.webp">
+                    <span class="svc-index__num" aria-hidden="true">06</span>
+                    <svg class="icon svc-index__icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-agent"></use></svg>
+                    <span class="svc-index__name">Agent IA</span>
+                    <span class="svc-index__price"><span class="sr-only">, </span>dès <span data-price="agent-ia">1 000 € + 100 €/mois</span></span>
+                  </a>
+                </li>
+                <li class="svc-index__item">
+                  <a class="svc-index__link" href="#seo" data-poster="assets/img/services/poster-seo.webp">
+                    <span class="svc-index__num" aria-hidden="true">07</span>
+                    <svg class="icon svc-index__icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-seo"></use></svg>
+                    <span class="svc-index__name">SEO</span>
+                    <span class="svc-index__price"><span class="sr-only">, </span>dès <span data-price="seo">200 €/mois</span></span>
+                  </a>
+                </li>
+                <li class="svc-index__item">
+                  <a class="svc-index__link" href="#sea" data-poster="assets/img/services/poster-sea.webp">
+                    <span class="svc-index__num" aria-hidden="true">08</span>
+                    <svg class="icon svc-index__icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-sea"></use></svg>
+                    <span class="svc-index__name">SEA</span>
+                    <span class="svc-index__price"><span class="sr-only">, </span>dès <span data-price="sea">150 €/mois</span></span>
+                  </a>
+                </li>
+                <li class="svc-index__item">
+                  <a class="svc-index__link" href="#crm" data-poster="assets/img/services/poster-crm.webp">
+                    <span class="svc-index__num" aria-hidden="true">09</span>
+                    <svg class="icon svc-index__icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-crm"></use></svg>
+                    <span class="svc-index__name">CRM</span>
+                    <span class="svc-index__price"><span class="sr-only">, </span>dès <span data-price="crm">800 €</span></span>
+                  </a>
+                </li>
+              </ol>
               <!-- /@services:toc -->
             </nav>
+          </div>
+        </section>
+
+        <section class="section svc-orbit" id="tour" aria-labelledby="orbit-title">
+          <div class="svc-orbit__stage">
+            <div class="wrap">
+              <div class="section__head">
+                <h2 class="t-h2" data-anim="lines" data-skew id="orbit-title">Le tour des <span class="hl">9 services</span></h2>
+                <p class="t-intro">
+                  <span class="orbit-hint orbit-hint--flat">Les 9 services d’un coup d’œil, avec leur prix de départ.</span>
+                  <span class="orbit-hint orbit-hint--swipe">Faites glisser les cartes pour passer d’un service à l’autre.</span>
+                  <span class="orbit-hint orbit-hint--3d">Faites défiler&nbsp;: chaque service passe devant vous. Cliquez sur une carte pour l’amener au centre.</span>
+                </p>
+              </div>
+            </div>
+            <div class="orbit" data-carousel>
+              <!-- @services:orbit -->
+              <ul class="orbit__ring" data-orbit-ring>
+                <li class="orbit__card is-featured" data-orbit-card="0">
+                  <article class="orbit__face" aria-labelledby="orbite-site">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-site"></use></svg>
+                    <h3 class="t-h3" id="orbite-site">Site internet</h3>
+                    <p class="orbit__tagline">Vitrine ou e-commerce, on s’occupe de tout</p>
+                    <p class="orbit__price">dès <span data-price="site">800 €</span> <small>HT</small></p>
+                    <a class="link link-arrow" href="#site">Voir le détail<span class="sr-only"> : Création de site internet</span></a>
+                  </article>
+                </li>
+                <li class="orbit__card is-featured" data-orbit-card="1">
+                  <article class="orbit__face" aria-labelledby="orbite-app">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-app"></use></svg>
+                    <h3 class="t-h3" id="orbite-app">Appli mobile</h3>
+                    <p class="orbit__tagline">Sur iPhone et Android</p>
+                    <p class="orbit__price">dès <span data-price="app">4 000 €</span> <small>HT</small></p>
+                    <a class="link link-arrow" href="#app">Voir le détail<span class="sr-only"> : Application mobile</span></a>
+                  </article>
+                </li>
+                <li class="orbit__card is-featured" data-orbit-card="2">
+                  <article class="orbit__face" aria-labelledby="orbite-acquisition">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-acquisition"></use></svg>
+                    <h3 class="t-h3" id="orbite-acquisition">Nouveaux clients</h3>
+                    <p class="orbit__tagline">Prospects, prospection automatisée, growth hacking</p>
+                    <p class="orbit__price">dès <span data-price="acquisition">650 € + 500 €/mois</span> <small>HT</small></p>
+                    <a class="link link-arrow" href="#acquisition">Voir le détail<span class="sr-only"> : Acquisition de nouveaux clients</span></a>
+                  </article>
+                </li>
+                <li class="orbit__card" data-orbit-card="3">
+                  <article class="orbit__face" aria-labelledby="orbite-social">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-social"></use></svg>
+                    <h3 class="t-h3" id="orbite-social">Réseaux sociaux</h3>
+                    <p class="orbit__tagline">Instagram, Facebook, LinkedIn, TikTok</p>
+                    <p class="orbit__price">dès <span data-price="social">350 €/mois</span> <small>HT</small></p>
+                    <a class="link link-arrow" href="#social">Voir le détail<span class="sr-only"> : Gestion et optimisation des réseaux sociaux</span></a>
+                  </article>
+                </li>
+                <li class="orbit__card" data-orbit-card="4">
+                  <article class="orbit__face" aria-labelledby="orbite-automatisation">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-automatisation"></use></svg>
+                    <h3 class="t-h3" id="orbite-automatisation">Automatisations IA</h3>
+                    <p class="orbit__tagline">Les tâches répétitives en pilote automatique</p>
+                    <p class="orbit__price">dès <span data-price="automatisation">500 €</span> <small>HT</small></p>
+                    <a class="link link-arrow" href="#automatisation">Voir le détail<span class="sr-only"> : Automatisations IA</span></a>
+                  </article>
+                </li>
+                <li class="orbit__card" data-orbit-card="5">
+                  <article class="orbit__face" aria-labelledby="orbite-agent-ia">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-agent"></use></svg>
+                    <h3 class="t-h3" id="orbite-agent-ia">Agent IA</h3>
+                    <p class="orbit__tagline">Il répond à vos clients 24h/24</p>
+                    <p class="orbit__price">dès <span data-price="agent-ia">1 000 € + 100 €/mois</span> <small>HT</small></p>
+                    <a class="link link-arrow" href="#agent-ia">Voir le détail<span class="sr-only"> : Agent IA</span></a>
+                  </article>
+                </li>
+                <li class="orbit__card" data-orbit-card="6">
+                  <article class="orbit__face" aria-labelledby="orbite-seo">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-seo"></use></svg>
+                    <h3 class="t-h3" id="orbite-seo">SEO</h3>
+                    <p class="orbit__tagline">Être trouvé sur Google, sans payer chaque clic</p>
+                    <p class="orbit__price">dès <span data-price="seo">200 €/mois</span> <small>HT</small></p>
+                    <a class="link link-arrow" href="#seo">Voir le détail<span class="sr-only"> : SEO (référencement naturel)</span></a>
+                  </article>
+                </li>
+                <li class="orbit__card" data-orbit-card="7">
+                  <article class="orbit__face" aria-labelledby="orbite-sea">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-sea"></use></svg>
+                    <h3 class="t-h3" id="orbite-sea">SEA</h3>
+                    <p class="orbit__tagline">Publicité payante sur Google et les réseaux</p>
+                    <p class="orbit__price">dès <span data-price="sea">150 €/mois</span> <small>HT</small></p>
+                    <a class="link link-arrow" href="#sea">Voir le détail<span class="sr-only"> : SEA (Google Ads, Meta Ads)</span></a>
+                  </article>
+                </li>
+                <li class="orbit__card" data-orbit-card="8">
+                  <article class="orbit__face" aria-labelledby="orbite-crm">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-crm"></use></svg>
+                    <h3 class="t-h3" id="orbite-crm">CRM</h3>
+                    <p class="orbit__tagline">Installation et automatisation du suivi clients</p>
+                    <p class="orbit__price">dès <span data-price="crm">800 €</span> <small>HT</small></p>
+                    <a class="link link-arrow" href="#crm">Voir le détail<span class="sr-only"> : CRM (suivi clients)</span></a>
+                  </article>
+                </li>
+              </ul>
+              <!-- /@services:orbit -->
+            </div>
           </div>
         </section>
 
         <section class="section" id="phares" aria-labelledby="featured-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" data-anim="lines" id="featured-title">Nos 3 services phares</h2>
+              <h2 class="t-h2" data-anim="lines" data-skew id="featured-title">Nos 3 services phares</h2>
               <p class="t-intro">Les plus complets pour lancer ou relancer votre activité.</p>
             </div>
             <!-- @services:featured -->
             <div class="svc-details">
-            <article class="svc-detail svc-detail--featured" id="site" aria-labelledby="titre-site" data-anim="fade">
+            <article class="svc-detail svc-detail--featured" id="site" aria-labelledby="titre-site" data-anim="fade" data-tilt="4">
               <span class="sticker svc-detail__badge" data-badge="site">Best-seller</span>
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-site"></use></svg>
@@ -137,13 +302,13 @@
                 <div><h4 class="svc-detail__label">Ce qu’on fait</h4><ul class="checklist"><li>On définit ensemble vos pages, votre message et vos objectifs.</li><li>On crée un design à votre image, adapté au téléphone et à l’ordinateur.</li><li>On intègre vos textes et vos photos, ou on les rédige avec vous.</li><li>On optimise la vitesse et le référencement de base sur Google.</li><li>Pour l’e-commerce : catalogue, paiement en ligne et livraison.</li></ul></div>
                 <div><h4 class="svc-detail__label">Ce que vous obtenez</h4><ul class="checklist"><li>Un site prêt à l’emploi, à votre nom</li><li>Un formulaire de contact relié à votre boîte mail</li><li>Une prise en main pour modifier vos contenus seul</li><li>Les mentions légales et le bandeau cookies conformes</li></ul></div>
               </div>
-              <div class="price-box">
+              <div class="price-box" data-anim="stamp" data-stamp-from="1.3" data-stamp-spin="5">
                 <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="site">800 €</strong> <span class="price__tax">HT</span></p>
                 <p class="price-box__delay"><strong>Délai indicatif</strong>2 à 4 semaines pour un site vitrine, 4 à 8 semaines pour un e-commerce</p>
                 <a class="btn btn--block" href="contact.html?besoins=site#formulaire">Je veux ça<span class="sr-only"> : Création de site internet</span></a>
               </div>
             </article>
-            <article class="svc-detail svc-detail--featured" id="app" aria-labelledby="titre-app" data-anim="fade">
+            <article class="svc-detail svc-detail--featured" id="app" aria-labelledby="titre-app" data-anim="fade" data-tilt="4">
               <span class="sticker svc-detail__badge" data-badge="app">Coup de cœur</span>
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-app"></use></svg>
@@ -155,13 +320,13 @@
                 <div><h4 class="svc-detail__label">Ce qu’on fait</h4><ul class="checklist"><li>On garde les fonctionnalités vraiment utiles, sans superflu.</li><li>On dessine les écrans et on les teste avec vous.</li><li>On développe l’application pour iPhone et Android.</li><li>On s’occupe de la publication sur les stores.</li></ul></div>
                 <div><h4 class="svc-detail__label">Ce que vous obtenez</h4><ul class="checklist"><li>Une application à votre nom sur les deux stores</li><li>Un espace pour gérer vos contenus</li><li>Un accompagnement pendant le lancement</li></ul></div>
               </div>
-              <div class="price-box">
+              <div class="price-box" data-anim="stamp" data-stamp-from="1.3" data-stamp-spin="5">
                 <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="app">4 000 €</strong> <span class="price__tax">HT</span></p>
                 <p class="price-box__delay"><strong>Délai indicatif</strong>8 à 12 semaines</p>
                 <a class="btn btn--block" href="contact.html?besoins=app#formulaire">Je veux ça<span class="sr-only"> : Application mobile</span></a>
               </div>
             </article>
-            <article class="svc-detail svc-detail--featured" id="acquisition" aria-labelledby="titre-acquisition" data-anim="fade">
+            <article class="svc-detail svc-detail--featured" id="acquisition" aria-labelledby="titre-acquisition" data-anim="fade" data-tilt="4">
               <span class="sticker svc-detail__badge" data-badge="acquisition">Le plus demandé</span>
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-acquisition"></use></svg>
@@ -173,7 +338,7 @@
                 <div><h4 class="svc-detail__label">Ce qu’on fait</h4><ul class="checklist"><li>On définit votre client idéal : secteur, taille, zone, décideur.</li><li>On construit votre base de prospects qualifiés.</li><li>On écrit et on automatise vos messages de prospection.</li><li>On teste, on mesure et on ajuste chaque mois.</li></ul></div>
                 <div><h4 class="svc-detail__label">Ce que vous obtenez</h4><ul class="checklist"><li>Un flux régulier de prospects contactés</li><li>Un tableau de suivi des contacts et des réponses</li><li>Un point mensuel sur les résultats</li></ul></div>
               </div>
-              <div class="price-box">
+              <div class="price-box" data-anim="stamp" data-stamp-from="1.3" data-stamp-spin="5">
                 <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="acquisition">650 € + 500 €/mois</strong> <span class="price__tax">HT</span></p>
                 <p class="price-box__delay"><strong>Délai indicatif</strong>Mise en place en 2 semaines, puis suivi chaque mois</p>
                 <a class="btn btn--block" href="contact.html?besoins=acquisition#formulaire">Je veux ça<span class="sr-only"> : Acquisition de nouveaux clients</span></a>
@@ -187,12 +352,12 @@
         <section class="section" id="autres" aria-labelledby="others-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" data-anim="lines" id="others-title">Et aussi</h2>
+              <h2 class="t-h2" data-anim="lines" data-skew id="others-title">Et aussi</h2>
               <p class="t-intro">Six services à la carte, seuls ou en complément.</p>
             </div>
             <!-- @services:others -->
             <div class="svc-details svc-details--others">
-            <article class="svc-detail" id="social" aria-labelledby="titre-social" data-anim="fade">
+            <article class="svc-detail" id="social" aria-labelledby="titre-social" data-anim="fade" data-tilt="4">
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-social"></use></svg>
                 <h3 class="t-h3" id="titre-social">Gestion et optimisation des réseaux sociaux</h3>
@@ -203,13 +368,13 @@
                 <div><h4 class="svc-detail__label">Ce qu’on fait</h4><ul class="checklist"><li>On choisit avec vous les réseaux qui comptent pour votre activité.</li><li>On prépare un calendrier de publications.</li><li>On crée les visuels, les vidéos courtes et les textes.</li><li>On publie et on suit les statistiques.</li></ul></div>
                 <div><h4 class="svc-detail__label">Ce que vous obtenez</h4><ul class="checklist"><li>Des profils complets et cohérents</li><li>Des publications régulières, à votre image</li><li>Un bilan simple chaque mois</li></ul></div>
               </div>
-              <div class="price-box">
+              <div class="price-box" data-anim="stamp" data-stamp-from="1.3" data-stamp-spin="5">
                 <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="social">350 €/mois</strong> <span class="price__tax">HT</span></p>
                 <p class="price-box__delay"><strong>Délai indicatif</strong>Premières publications sous 2 semaines</p>
                 <a class="btn btn--block" href="contact.html?besoins=social#formulaire">Je veux ça<span class="sr-only"> : Gestion et optimisation des réseaux sociaux</span></a>
               </div>
             </article>
-            <article class="svc-detail" id="automatisation" aria-labelledby="titre-automatisation" data-anim="fade">
+            <article class="svc-detail" id="automatisation" aria-labelledby="titre-automatisation" data-anim="fade" data-tilt="4">
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-automatisation"></use></svg>
                 <h3 class="t-h3" id="titre-automatisation">Automatisations IA</h3>
@@ -220,13 +385,13 @@
                 <div><h4 class="svc-detail__label">Ce qu’on fait</h4><ul class="checklist"><li>On repère avec vous les tâches qui vous font perdre du temps.</li><li>On connecte vos outils : mails, agenda, factures, tableurs.</li><li>On ajoute l’IA là où elle aide vraiment : tri, rédaction, résumés.</li><li>On teste, on documente et on vous forme.</li></ul></div>
                 <div><h4 class="svc-detail__label">Ce que vous obtenez</h4><ul class="checklist"><li>Des automatisations qui tournent seules</li><li>Une documentation simple</li><li>Une alerte si quelque chose bloque</li></ul></div>
               </div>
-              <div class="price-box">
+              <div class="price-box" data-anim="stamp" data-stamp-from="1.3" data-stamp-spin="5">
                 <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="automatisation">500 €</strong> <span class="price__tax">HT</span></p>
                 <p class="price-box__delay"><strong>Délai indicatif</strong>1 à 3 semaines</p>
                 <a class="btn btn--block" href="contact.html?besoins=automatisation#formulaire">Je veux ça<span class="sr-only"> : Automatisations IA</span></a>
               </div>
             </article>
-            <article class="svc-detail" id="agent-ia" aria-labelledby="titre-agent-ia" data-anim="fade">
+            <article class="svc-detail" id="agent-ia" aria-labelledby="titre-agent-ia" data-anim="fade" data-tilt="4">
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-agent"></use></svg>
                 <h3 class="t-h3" id="titre-agent-ia">Agent IA</h3>
@@ -237,13 +402,13 @@
                 <div><h4 class="svc-detail__label">Ce qu’on fait</h4><ul class="checklist"><li>On rassemble vos infos : services, prix, horaires, questions fréquentes.</li><li>On configure l’agent avec votre ton.</li><li>On le connecte à votre site et à votre agenda.</li><li>On suit les conversations et on l’améliore.</li></ul></div>
                 <div><h4 class="svc-detail__label">Ce que vous obtenez</h4><ul class="checklist"><li>Un agent installé sur votre site</li><li>Les demandes et rendez-vous transmis directement</li><li>Un suivi et des ajustements chaque mois</li></ul></div>
               </div>
-              <div class="price-box">
+              <div class="price-box" data-anim="stamp" data-stamp-from="1.3" data-stamp-spin="5">
                 <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="agent-ia">1 000 € + 100 €/mois</strong> <span class="price__tax">HT</span></p>
                 <p class="price-box__delay"><strong>Délai indicatif</strong>2 à 4 semaines</p>
                 <a class="btn btn--block" href="contact.html?besoins=agent-ia#formulaire">Je veux ça<span class="sr-only"> : Agent IA</span></a>
               </div>
             </article>
-            <article class="svc-detail" id="seo" aria-labelledby="titre-seo" data-anim="fade">
+            <article class="svc-detail" id="seo" aria-labelledby="titre-seo" data-anim="fade" data-tilt="4">
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-seo"></use></svg>
                 <h3 class="t-h3" id="titre-seo">SEO (référencement naturel)</h3>
@@ -254,13 +419,13 @@
                 <div><h4 class="svc-detail__label">Ce qu’on fait</h4><ul class="checklist"><li>On identifie ce que vos futurs clients tapent sur Google.</li><li>On corrige ce qui freine votre site.</li><li>On optimise vos pages et on rédige des contenus utiles.</li><li>On soigne votre fiche Google Business Profile.</li></ul></div>
                 <div><h4 class="svc-detail__label">Ce que vous obtenez</h4><ul class="checklist"><li>Un plan d’action clair</li><li>Des pages et des contenus optimisés</li><li>Un rapport de positions chaque mois</li></ul></div>
               </div>
-              <div class="price-box">
+              <div class="price-box" data-anim="stamp" data-stamp-from="1.3" data-stamp-spin="5">
                 <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="seo">200 €/mois</strong> <span class="price__tax">HT</span></p>
                 <p class="price-box__delay"><strong>Délai indicatif</strong>Premiers effets en 3 à 6 mois</p>
                 <a class="btn btn--block" href="contact.html?besoins=seo#formulaire">Je veux ça<span class="sr-only"> : SEO (référencement naturel)</span></a>
               </div>
             </article>
-            <article class="svc-detail" id="sea" aria-labelledby="titre-sea" data-anim="fade">
+            <article class="svc-detail" id="sea" aria-labelledby="titre-sea" data-anim="fade" data-tilt="4">
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-sea"></use></svg>
                 <h3 class="t-h3" id="titre-sea">SEA (Google Ads, Meta Ads)</h3>
@@ -271,13 +436,13 @@
                 <div><h4 class="svc-detail__label">Ce qu’on fait</h4><ul class="checklist"><li>On définit vos cibles et votre budget.</li><li>On crée vos campagnes Google Ads et Meta Ads (Facebook, Instagram).</li><li>On rédige les annonces et on prépare les visuels.</li><li>On optimise chaque mois pour réduire le coût par client.</li></ul></div>
                 <div><h4 class="svc-detail__label">Ce que vous obtenez</h4><ul class="checklist"><li>Des campagnes en ligne, sur vos propres comptes</li><li>Un suivi des demandes générées</li><li>Un rapport clair chaque mois</li></ul></div>
               </div>
-              <div class="price-box">
+              <div class="price-box" data-anim="stamp" data-stamp-from="1.3" data-stamp-spin="5">
                 <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="sea">150 €/mois</strong> <span class="price__tax">HT</span><span class="price__note">Budget publicitaire en plus</span></p>
                 <p class="price-box__delay"><strong>Délai indicatif</strong>Campagnes en ligne sous 7 jours</p>
                 <a class="btn btn--block" href="contact.html?besoins=sea#formulaire">Je veux ça<span class="sr-only"> : SEA (Google Ads, Meta Ads)</span></a>
               </div>
             </article>
-            <article class="svc-detail" id="crm" aria-labelledby="titre-crm" data-anim="fade">
+            <article class="svc-detail" id="crm" aria-labelledby="titre-crm" data-anim="fade" data-tilt="4">
               <div class="svc-detail__head">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-crm"></use></svg>
                 <h3 class="t-h3" id="titre-crm">CRM (suivi clients)</h3>
@@ -288,7 +453,7 @@
                 <div><h4 class="svc-detail__label">Ce qu’on fait</h4><ul class="checklist"><li>On choisit avec vous l’outil adapté (HubSpot, Pipedrive, Brevo…).</li><li>On importe vos contacts et on organise vos étapes de vente.</li><li>On automatise les relances, les rappels et les tâches.</li><li>On forme votre équipe.</li></ul></div>
                 <div><h4 class="svc-detail__label">Ce que vous obtenez</h4><ul class="checklist"><li>Un CRM prêt à l’emploi</li><li>Des relances automatiques</li><li>Une formation à la prise en main</li></ul></div>
               </div>
-              <div class="price-box">
+              <div class="price-box" data-anim="stamp" data-stamp-from="1.3" data-stamp-spin="5">
                 <p class="price"><span class="price__from">À partir de</span> <strong class="price__value" data-price="crm">800 €</strong> <span class="price__tax">HT</span></p>
                 <p class="price-box__delay"><strong>Délai indicatif</strong>2 à 4 semaines</p>
                 <a class="btn btn--block" href="contact.html?besoins=crm#formulaire">Je veux ça<span class="sr-only"> : CRM (suivi clients)</span></a>
@@ -303,7 +468,7 @@
         <section class="section" id="configurateur" aria-labelledby="config-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" data-anim="lines" id="config-title">Votre estimation en 10 secondes</h2>
+              <h2 class="t-h2" data-anim="lines" data-skew id="config-title">Votre estimation en 10 secondes</h2>
               <p class="t-intro">Cochez ce qui vous intéresse&nbsp;: le prix de départ s’affiche. Vos choix arrivent pré-remplis dans le formulaire de contact.</p>
             </div>
             <form class="configurator" data-configurator action="contact.html#formulaire" method="get">
@@ -347,11 +512,11 @@
         </section>
 
         <section class="section is-dark cta" aria-labelledby="cta-title">
-          <div class="wrap" data-anim="fade">
-            <p><span class="sticker">Conseil gratuit</span></p>
-            <h2 class="t-h2" data-anim="lines" id="cta-title">Pas sûr de ce qu’il vous <span class="hl">faut</span>&nbsp;?</h2>
-            <p class="t-intro">Racontez-nous votre projet. On vous conseille gratuitement, même si la réponse est «&nbsp;vous n’avez pas besoin de nous&nbsp;».</p>
-            <div class="btn-row">
+          <div class="wrap">
+            <p data-anim="stamp"><span class="sticker">Conseil gratuit</span></p>
+            <h2 class="t-h2" data-anim="chars" data-skew id="cta-title">Pas sûr de ce qu’il vous <span class="nowrap"><span class="hl">faut</span>&nbsp;?</span></h2>
+            <p class="t-intro" data-anim="fade">Racontez-nous votre projet. On vous conseille gratuitement, même si la réponse est «&nbsp;vous n’avez pas besoin de nous&nbsp;».</p>
+            <div class="btn-row" data-anim="fade" data-anim-delay="0.15">
               <a class="btn btn--lime" href="contact.html#formulaire">Demander mon devis gratuit</a>
               <a class="btn btn--outline" href="https://wa.me/33600000000?text=Bonjour%20GJS%2C%20je%20voudrais%20parler%20de%20mon%20projet." data-config="whatsapp" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-whatsapp"></use></svg>Écrire sur WhatsApp<span class="sr-only"> (nouvel onglet)</span></a>
             </div>

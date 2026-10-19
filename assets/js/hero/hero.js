@@ -37,7 +37,7 @@ export function initHero() {
   const border = root.querySelector('[data-hero-border]');
   const label = root.querySelector('[data-hero-label]');
   const pause = root.querySelector('.hero__pause');
-  const canvas = root.querySelector('[data-hero-gl]');
+  let canvas = root.querySelector('[data-hero-gl]');
   const inkLines = [...root.querySelectorAll('.hero__title--ink .hero__line')];
   const creamLines = [...root.querySelectorAll('.hero__title--cream .hero__line')];
 
@@ -89,6 +89,7 @@ export function initHero() {
     card.style.setProperty('--hero-radius', `${RADIUS_END / S_END}px`);
     shadow.style.setProperty('--hero-radius', `${RADIUS_END / S_END}px`);
     card.style.setProperty('--hero-border', `${BORDER / S_END}px`);
+    lastP = -1; // les positions DOM sont à réappliquer
     return M;
   }
 
@@ -199,28 +200,38 @@ export function initHero() {
 
   /* ---- Boucle de rendu (seulement quand le hero est visible) ---- */
   let progress = 0;
+  let lastP = -1; // progression déjà appliquée au DOM
   let gl = null;
   let glLines = null;
+  let glDirty = true; // la scène WebGL doit être redessinée même à l'arrêt
+
+  const springs = [mouseX, mouseY, hover, vel];
 
   function frame(t, dms) {
     if (!visible || !M) return;
+    if (gl && gl.lost) disableGL();
+    const moved = progress !== lastP;
+    if (!gl) {
+      // Repli DOM : tout dépend de la seule progression du scroll
+      if (moved) { lastP = progress; applyDom(state(progress), null); }
+      return;
+    }
     const dt = Math.min(0.05, dms / 1000);
-    if (!isPaused()) time += dt;
+    const paused = isPaused();
+    if (!paused) time += dt;
     if (performance.now() - lastMove > 1400) hover.set(0);
     vel.set(clamp(scrollVelocity() / 45, -1, 1));
-    [mouseX, mouseY, hover, vel].forEach((sp) => sp.step(dt));
+    springs.forEach((sp) => sp.step(dt));
+    // En pause, sans scroll ni souris : l'image ne change pas, on ne redessine rien
+    if (paused && !moved && !glDirty && springs.every((sp) => sp.settled)) return;
+    glDirty = false;
     const st = state(progress);
-    let corners = null;
-    if (gl) {
-      if (gl.lost) { disableGL(); } else {
-        const lines = M.lines.map((r, i) => {
-          const ext = glLines ? glLines[i] : { extTop: 0, extBottom: 0 };
-          return { x: r.x + st.lines[i].dx, y: r.y + st.lines[i].dy - ext.extTop, w: r.w, h: r.h + ext.extTop + ext.extBottom };
-        });
-        corners = gl.render(st, { time, mouse: { x: mouseX.value, y: mouseY.value }, hover: hover.value, vel: vel.value, lines });
-      }
-    }
-    applyDom(st, corners);
+    const lines = M.lines.map((r, i) => {
+      const ext = glLines ? glLines[i] : { extTop: 0, extBottom: 0 };
+      return { x: r.x + st.lines[i].dx, y: r.y + st.lines[i].dy - ext.extTop, w: r.w, h: r.h + ext.extTop + ext.extBottom };
+    });
+    const corners = gl.render(st, { time, mouse: { x: mouseX.value, y: mouseY.value }, hover: hover.value, vel: vel.value, lines });
+    if (moved) { lastP = progress; applyDom(st, corners); }
   }
 
   /* ---- Scroll ---- */
@@ -244,7 +255,18 @@ export function initHero() {
     if (isReduced) return;
     measure();
     if (gl) { gl.resize(M.W, M.H); buildTitle(); }
+    frame(0, 0); // réapplique tout de suite (sinon une image sans transformations)
   }).observe(stage);
+
+  // Densité de pixels qui change (fenêtre déplacée sur un écran Retina, zoom) :
+  // le canvas et l'atlas du titre suivent pour rester nets
+  const watchDpr = () => {
+    matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`).addEventListener('change', () => {
+      if (gl) { gl.setDpr(window.devicePixelRatio); buildTitle(); }
+      watchDpr();
+    }, { once: true });
+  };
+  if (isDesktop) watchDpr();
 
   /* ---- WebGL (ordinateur) : chargé après le premier affichage ---- */
   function titleSegments() {
@@ -278,6 +300,7 @@ export function initHero() {
   function buildTitle() {
     if (!gl) return;
     glLines = gl.setTitle(titleSegments());
+    glDirty = true;
   }
 
   function disableGL() {
@@ -285,10 +308,17 @@ export function initHero() {
     gl.dispose();
     gl = null;
     root.classList.remove('is-gl');
+    lastP = -1;
+    // Un contexte perdu volontairement ne revient jamais : nouveau canvas pour la prochaine scène
+    const fresh = canvas.cloneNode(false);
+    canvas.replaceWith(fresh);
+    canvas = fresh;
   }
 
+  let glPending = false; // une seule création de scène à la fois
   async function enableGL() {
-    if (gl || !isDesktop || saveData() || !canWebGL()) return;
+    if (gl || glPending || !isDesktop || saveData() || !canWebGL()) return;
+    glPending = true;
     try {
       await document.fonts.load('400 100px "Bebas Neue"');
       const { createHeroGL } = await import('./webgl.js');
@@ -297,11 +327,13 @@ export function initHero() {
       measure();
       gl.resize(M.W, M.H);
       buildTitle();
-      frame(0, 16);
       root.classList.add('is-gl');
+      frame(0, 16);
     } catch (err) {
       console.warn('Hero WebGL indisponible, repli CSS.', err);
       disableGL();
+    } finally {
+      glPending = false;
     }
   }
 

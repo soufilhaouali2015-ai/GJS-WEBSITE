@@ -199,11 +199,12 @@ function buildTitleAtlas(lines, dpr) {
 export async function createHeroGL({ canvas, video, veil }) {
   let renderer;
   try {
-    renderer = new WebGLRenderer({ canvas, alpha: true, antialias: true, premultipliedAlpha: true, powerPreference: 'high-performance' });
+    // Ni profondeur ni stencil : l'ordre d'affichage vient de renderOrder (économise la mémoire vidéo)
+    renderer = new WebGLRenderer({ canvas, alpha: true, antialias: true, depth: false, stencil: false, premultipliedAlpha: true, powerPreference: 'high-performance' });
   } catch {
     return null;
   }
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let dpr = Math.min(window.devicePixelRatio || 1, 2);
   renderer.setPixelRatio(dpr);
   renderer.setClearColor(0x000000, 0);
 
@@ -290,6 +291,14 @@ export async function createHeroGL({ canvas, video, veil }) {
     cardMat.uniforms.uViewport.value.set(W, H);
   }
 
+  /** Changement de densité de pixels (écran Retina, zoom du navigateur). */
+  function setDpr(next) {
+    dpr = Math.min(next || 1, 2);
+    renderer.setPixelRatio(dpr);
+    cardMat.uniforms.uDpr.value = dpr;
+    renderer.setSize(W, H, false);
+  }
+
   function setTitle(lines) {
     const { canvas: atlas, uvs } = buildTitleAtlas(lines, dpr);
     titleTex.dispose();
@@ -353,5 +362,5 @@ export async function createHeroGL({ canvas, video, veil }) {
     renderer.forceContextLoss();
   }
 
-  return { resize, setTitle, render, dispose, get lost() { return lost; } };
+  return { resize, setDpr, setTitle, render, dispose, get lost() { return lost; } };
 }

@@ -99,22 +99,35 @@ main {
 }
 
 .nav__link {
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   min-height: 48px;
   padding-inline: 6px;
   font-weight: 500;
   text-decoration: none;
-  background-image: linear-gradient(var(--lime), var(--lime));
-  background-repeat: no-repeat;
-  background-position: 0 72%;
-  background-size: 0 0.45em;
-  transition: background-size 0.2s var(--ease);
 }
 
-.nav__link:hover,
-.nav__link[aria-current="page"] {
-  background-size: 100% 0.45em;
+/* Trait de marqueur citron : s'étire en transform (aucun repaint de fond) */
+.nav__link::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc((100% - 0.45em) * 0.72);
+  z-index: -1;
+  height: 0.45em;
+  background: var(--lime);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.6s var(--ease-expo);
+}
+
+.nav__link:hover::before,
+.nav__link[aria-current="page"]::before {
+  transform: scaleX(1);
+  transform-origin: left center;
 }
 
 .header__cta {

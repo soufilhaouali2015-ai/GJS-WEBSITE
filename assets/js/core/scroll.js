@@ -9,12 +9,14 @@ import { profile } from './profile.js';
 
 let lenis = null;
 let nativeVelocity = 0;
+let nativeAt = 0; // instant de la dernière mesure native
 const scrollListeners = new Set();
 
 export const getLenis = () => lenis;
 
 /** Vitesse de défilement (px par image environ), signe = sens. */
-export const scrollVelocity = () => (lenis ? lenis.velocity : nativeVelocity);
+// Sans Lenis, la vitesse native retombe d'elle-même avec le temps (aucune boucle à faire tourner)
+export const scrollVelocity = () => (lenis ? lenis.velocity : nativeVelocity * 0.85 ** ((performance.now() - nativeAt) / 16.7));
 
 /** Sens du dernier défilement : 1 vers le bas, -1 vers le haut. */
 let direction = 1;
@@ -49,7 +51,7 @@ export function initScroll() {
   const emit = () => {
     const y = window.scrollY;
     if (y !== lastY) direction = y > lastY ? 1 : -1;
-    if (!lenis) nativeVelocity = y - lastY;
+    if (!lenis) { nativeVelocity = y - lastY; nativeAt = performance.now(); }
     lastY = y;
     scrollListeners.forEach((cb) => cb(y));
   };
@@ -61,8 +63,6 @@ export function initScroll() {
     gsap.ticker.lagSmoothing(0);
   } else {
     window.addEventListener('scroll', emit, { passive: true });
-    // La vitesse native retombe à zéro quand on arrête de défiler
-    gsap.ticker.add(() => { nativeVelocity *= 0.85; });
   }
 
   // Arrivée sur une ancre (ex. services.html#site) : on recale après la mise en page

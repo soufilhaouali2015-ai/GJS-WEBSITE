@@ -20,7 +20,6 @@ html {
   color-scheme: light;
   background: var(--cream);
   scroll-padding-top: calc(var(--header-h) + 24px);
-  interpolate-size: allow-keywords;
 }
 
 body {
@@ -134,6 +133,9 @@ strong {
 .prose > * + * { margin-top: 1em; }
 .prose p,
 .prose li { max-width: var(--measure); }
+
+/* Groupe de mots qui ne doit pas être coupé (ex. « projet ? ») */
+.nowrap { white-space: nowrap; }
 
 /* Coup de marqueur citron sous UN mot clé par titre important */
 .hl {

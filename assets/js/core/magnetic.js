@@ -65,16 +65,20 @@ function magnet(btn) {
   };
   const start = () => { if (!stop) stop = run(loop); };
 
+  // data-magnet="strong" (gros bouton rond) : il suit plus loin, son texte encore plus
+  const f = btn.dataset.magnet === 'strong'
+    ? { bx: 0.34, by: 0.34, lx: 0.24, ly: 0.24 }
+    : { bx: 0.22, by: 0.32, lx: 0.1, ly: 0.12 };
   btn.addEventListener('pointermove', (e) => {
     if (e.pointerType !== 'mouse') return;
     const r = btn.getBoundingClientRect();
     const dx = e.clientX - (r.left + r.width / 2);
     const dy = e.clientY - (r.top + r.height / 2);
     const press = pressed ? 3 : -2;
-    bx.set(dx * 0.22 + press);
-    by.set(dy * 0.32 + press);
-    lx.set(dx * 0.1);
-    ly.set(dy * 0.12);
+    bx.set(dx * f.bx + press);
+    by.set(dy * f.by + press);
+    lx.set(dx * f.lx);
+    ly.set(dy * f.ly);
     active = true;
     start();
   });

@@ -74,4 +74,28 @@
     <rect x="4" y="6" width="24" height="22" rx="2"/>
     <path d="M4 12h24M10 3v6M22 3v6m-10 11 3 3 5-6"/>
   </symbol>
+
+  <!-- Décors street (parallaxe) : couleurs de la palette en dur, aria-hidden à l'usage -->
+  <symbol id="d-arrow" viewBox="0 0 160 110" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 92C38 70 52 34 92 26c22-4 40 4 52 16" stroke="#141414" stroke-width="7"/>
+    <path d="M124 18l22 26-32 6" stroke="#141414" stroke-width="7"/>
+  </symbol>
+  <symbol id="d-star" viewBox="0 0 100 100">
+    <path d="M50 4l10 26 27-9-13 25 24 14-28 6 4 28-24-16-24 16 4-28-28-6 24-14-13-25 27 9z" fill="#D4FF3A" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="d-scribble" viewBox="0 0 170 70" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 46c18-30 30-30 30-8s-6 26 10 6 24-30 26-6-4 26 12 6 22-28 26-4 2 24 16 6 18-22 22-6" stroke="#141414" stroke-width="14"/>
+    <path d="M8 46c18-30 30-30 30-8s-6 26 10 6 24-30 26-6-4 26 12 6 22-28 26-4 2 24 16 6 18-22 22-6" stroke="#D4FF3A" stroke-width="8"/>
+  </symbol>
+  <symbol id="d-tape" viewBox="0 0 140 46">
+    <path d="M6 8l4 4-3 5 4 5-4 5 4 5-3 6 128-4-3-5 4-5-4-5 4-5-3-5 4-6z" fill="#E8E1D2" stroke="#57524A" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M22 16h92M22 27h70" stroke="#57524A" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+  </symbol>
+  <symbol id="d-circle" viewBox="0 0 130 120" fill="none" stroke-linecap="round">
+    <path d="M70 12C34 8 10 34 14 66s38 46 70 38 36-46 18-72C88 12 52 10 36 26" stroke="#141414" stroke-width="6"/>
+  </symbol>
+  <symbol id="d-zigzag" viewBox="0 0 150 40" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 30l18-20 18 20 18-20 18 20 18-20 18 20 18-20 12 14" stroke="#141414" stroke-width="13"/>
+    <path d="M6 30l18-20 18 20 18-20 18 20 18-20 18 20 18-20 12 14" stroke="#D4FF3A" stroke-width="7"/>
+  </symbol>
 </svg>

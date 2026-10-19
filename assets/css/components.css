@@ -151,6 +151,34 @@
   --btn-fg-hover: var(--ink);
 }
 
+/* Gros bouton rond (CTA final) : magnétique, le texte se décale à l'intérieur */
+.btn--round {
+  width: clamp(176px, 9vw + 120px, 224px);
+  aspect-ratio: 1;
+  min-height: 0;
+  padding: 28px;
+  font-family: var(--font-display);
+  font-size: clamp(1.625rem, 1.3rem + 0.8vw, 2.125rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.btn--round::before,
+.btn--round::after,
+.btn--round .btn__fill { border-radius: 50%; }
+
+.btn--round .btn__fill {
+  transform: scale(0);
+  transform-origin: 50% 50%;
+}
+
+.btn--round:hover .btn__fill,
+.btn--round:focus-visible .btn__fill { transform: none; }
+
+.btn--round .btn__text { max-width: 8.5ch; }
+
 .btn-row {
   display: flex;
   flex-wrap: wrap;
@@ -243,6 +271,10 @@
   font-size: 2.75rem;
   font-weight: 400;
 }
+
+/* Tampon « 5 places seulement » de l'offre */
+.sticker-round--stamp { font-size: 1.25rem; }
+.sticker-round--stamp strong { font-size: 3rem; line-height: 0.85; }
 
 /* ---- Ruban adhésif (décor, sur les éléments « collés ») ----------------- */
 
@@ -679,16 +711,37 @@
 }
 
 /* ---- Étapes « Comment ça marche » ---------------------------------------- */
+/* Moins de 1024 px : une colonne, numéro à gauche, trait vertical qui relie les numéros.
+   1024 px et plus : 4 colonnes, trait ondulé horizontal (voir sections/steps.js). */
+
+.steps-track {
+  --steps-axis: y;
+  position: relative;
+}
 
 .steps {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 40px 32px;
   counter-reset: step;
 }
 
+.step {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  column-gap: 20px;
+  align-items: start;
+}
+
+.step > :not(.step__num) { grid-column: 2; }
 .step > * + * { margin-top: 12px; }
+.step > .step__num + * { margin-top: 10px; }
 
 .step__num {
+  position: relative;
+  isolation: isolate;
+  grid-row: 1 / span 3;
   display: inline-grid;
   place-items: center;
   width: 64px;
@@ -708,12 +761,82 @@
 
 .step__text { max-width: 36ch; }
 
-@media (min-width: 720px) {
-  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Avec le JS : le numéro attend le trait sur fond crème, le citron arrive en couche (scale) */
+.steps-track.is-armed .step__num { background: var(--cream); }
+
+.steps-track.is-armed .step__num::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--lime);
+  border-radius: 1px;
+  transform: scale(0);
+  transition: transform 0.6s var(--ease-expo);
 }
 
-@media (min-width: 1100px) {
+.steps-track.is-armed .step.is-reached .step__num::before { transform: none; }
+
+/* Le trait : un masque qui avance (translation) sur un dessin qui ne bouge pas */
+.steps__line {
+  position: absolute;
+  z-index: 0;
+  display: none;
+  overflow: hidden;
+  pointer-events: none;
+  width: 40px;
+}
+
+.steps__line-in {
+  width: 100%;
+  height: 100%;
+}
+
+.steps-track.is-armed .steps__line,
+.steps-track.is-drawn .steps__line { display: block; }
+
+.steps__wave {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.steps__wave-edge { stroke: var(--ink); stroke-width: 13px; vector-effect: non-scaling-stroke; }
+.steps__wave-ink { stroke: var(--lime); stroke-width: 7px; vector-effect: non-scaling-stroke; }
+.steps__wave--x { display: none; }
+
+@media (min-width: 1024px) {
+  .steps-track { --steps-axis: x; }
   .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .step { display: block; }
+  .step__num { display: inline-grid; }
+  .steps__line { width: auto; height: 40px; }
+  .steps__wave--x { display: block; }
+  .steps__wave--y { display: none; }
+}
+
+/* Ordinateur avec animations : la scène reste à l'écran sur ~1,6 écran pendant que le trait avance.
+   La hauteur est réservée en CSS dès le premier affichage (la page ne s'allonge pas avec le JS). */
+@media (min-width: 1024px) {
+  .has-motion[data-motion="desktop"] .methode {
+    height: 260vh;
+    height: 260svh;
+    padding-block: 0;
+  }
+
+  .has-motion[data-motion="desktop"] .methode__stage {
+    position: sticky;
+    top: 0;
+    display: grid;
+    align-content: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding-top: var(--header-h);
+  }
 }
 
 /* ---- Affichettes collées (Pourquoi GJS, valeurs) -------------------------- */
@@ -724,6 +847,7 @@
 }
 
 .poster {
+  position: relative;
   padding: 36px 26px 30px;
   background: var(--card);
   border: var(--border) solid var(--ink);
@@ -746,7 +870,9 @@
   .posters--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-/* ---- FAQ en accordéon (<details> natif) --------------------------------- */
+/* ---- FAQ en accordéon (<details> natif, animé en FLIP par sections/faq.js) -- */
+/* Le fond, la bordure et l'ombre sont des calques : le fond s'étire en scaleY
+   pendant l'ouverture, l'ombre glisse en translate. Aucune hauteur animée. */
 
 .faq {
   display: grid;
@@ -755,13 +881,39 @@
 }
 
 .faq__item {
-  background: var(--card);
-  border: var(--border) solid var(--ink);
-  border-radius: var(--radius);
+  --sy: 1;
+  position: relative;
+  isolation: isolate;
 }
 
-.faq__item[open] {
-  box-shadow: 4px 4px 0 var(--shadow-color);
+.faq__item::before,
+.faq__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  transform: scaleY(var(--sy));
+  transform-origin: 50% 0;
+  pointer-events: none;
+}
+
+.faq__item::before {
+  z-index: -1;
+  background: var(--card);
+  border: var(--border) solid var(--ink);
+}
+
+.faq__item::after {
+  z-index: -2;
+  background: var(--shadow-color);
+  opacity: 0;
+  translate: 0 0;
+  transition: opacity 0.3s var(--ease-expo), translate 0.6s var(--ease-expo);
+}
+
+.faq__item[open]::after {
+  opacity: 1;
+  translate: 4px 4px;
 }
 
 .faq__q {
@@ -789,8 +941,13 @@
   border-radius: var(--radius);
 }
 
-.faq__icon::before,
-.faq__icon::after {
+.faq__cross {
+  position: absolute;
+  inset: 0;
+}
+
+.faq__cross::before,
+.faq__cross::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -801,30 +958,13 @@
   transform: translate(-50%, -50%);
 }
 
-.faq__icon::after {
-  transform: translate(-50%, -50%) rotate(90deg);
-  transition: transform 0.2s var(--ease);
-}
-
-.faq__item[open] .faq__icon::after {
-  transform: translate(-50%, -50%) rotate(0deg);
-}
+/* Sans JS : le « + » devient « − » */
+.faq__cross::after { transform: translate(-50%, -50%) rotate(90deg); }
+.faq:not(.is-enhanced) .faq__item[open] .faq__cross::after { transform: translate(-50%, -50%) rotate(0deg); }
 
 .faq__a {
   padding: 0 20px 22px;
   max-width: var(--measure);
-}
-
-/* Ouverture animée là où le navigateur le permet (sans JS) */
-@supports selector(::details-content) {
-  .faq__item::details-content {
-    block-size: 0;
-    overflow: clip;
-    transition: block-size var(--dur) var(--ease), content-visibility var(--dur) allow-discrete;
-  }
-  .faq__item[open]::details-content {
-    block-size: auto;
-  }
 }
 
 /* ---- CTA final (section noire) ------------------------------------------ */
@@ -845,6 +985,13 @@
   justify-content: center;
   margin-top: 36px;
 }
+
+.cta .cta__actions {
+  gap: 28px 40px;
+  margin-top: 48px;
+}
+
+.cta__title { font-size: clamp(3rem, 1.6rem + 6vw, 7.5rem); line-height: 0.92; }
 
 /* ---- Formulaires ---------------------------------------------------------- */
 

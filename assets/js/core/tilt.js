@@ -25,6 +25,9 @@ function setupTilt(cardEl) {
     set: gsap.quickSetter(el, 'z', 'px'),
   }));
 
+  // Carte sans calque intérieur (affichettes, fiches) : la perspective est portée par la carte elle-même
+  if (body === cardEl) gsap.set(cardEl, { transformPerspective: 1000 });
+
   const glare = document.createElement('span');
   glare.className = 'tilt-glare';
   glare.setAttribute('aria-hidden', 'true');

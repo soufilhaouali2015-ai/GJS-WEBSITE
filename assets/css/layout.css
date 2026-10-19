@@ -337,6 +337,105 @@ html.is-menu-open {
   .footer__brand { grid-column: auto; }
 }
 
+/* ---- Zone de stickers du footer (accueil) -------------------------------- */
+/* Sans JS et en mouvement réduit : les stickers sont posés en vrac au fond de la zone.
+   Avec le JS (classe .is-physics) : chacun est placé en transform par sections/stickers.js. */
+
+.footer__play {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-end;
+  justify-content: center;
+  gap: 12px 16px;
+  height: clamp(360px, 60vh, 620px);
+  margin-top: calc(-1 * clamp(56px, 3rem + 3vw, 96px));
+  margin-bottom: clamp(48px, 3rem + 2vw, 80px);
+  padding: 24px var(--gutter);
+  overflow: hidden;
+  border-bottom: var(--border) solid var(--ink);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+}
+
+/* Rien ne tombe (mouvement réduit, sans JS) : la zone se resserre autour des stickers posés */
+html:not(.has-motion) .footer__play,
+[data-motion="reduced"] .footer__play {
+  height: auto;
+  padding-block: 56px 32px;
+}
+
+.footer__play.is-physics {
+  display: block;
+  padding: 0;
+}
+
+.footer__play.is-physics .drop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.has-motion[data-motion="desktop"] .footer__play.is-physics { cursor: grab; }
+.footer__play.is-grabbing { cursor: grabbing; }
+
+.footer__play-hint {
+  position: absolute;
+  top: 24px;
+  left: var(--gutter);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  transform: rotate(-2deg);
+  pointer-events: none;
+}
+
+/* L'indication n'a de sens qu'avec la souris */
+.footer__play-hint { display: none; }
+.has-motion[data-motion="desktop"] .footer__play-hint { display: block; }
+
+.drop {
+  flex-shrink: 0;
+  font-size: clamp(1.25rem, 0.9rem + 1.2vw, 2rem);
+}
+
+.drop--logo {
+  display: inline-grid;
+  place-items: center;
+  padding: 0.18em 0.42em 0.04em;
+  background: var(--ink);
+  color: var(--lime);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 5px 5px 0 var(--lime);
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 2rem + 3vw, 5rem);
+  line-height: 1;
+  transform: rotate(-4deg);
+}
+
+.drop--round {
+  display: grid;
+  place-items: center;
+  width: clamp(96px, 70px + 4vw, 136px);
+  aspect-ratio: 1;
+  background: var(--lime);
+  border: var(--border) solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 4px 4px 0 var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.75rem);
+  line-height: 1;
+  transform: rotate(8deg);
+}
+
+.drop--round strong { font-weight: 400; }
+
 /* ---- En-tête des pages intérieures -------------------------------------- */
 
 .page-hero {

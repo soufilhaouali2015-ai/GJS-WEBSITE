@@ -1,7 +1,7 @@
 /* ==========================================================================
    GJS · DÉMARRAGE
    Ordre : défilement (Lenis) → header, rideau, pause → boutons, cartes 3D,
-   bandeaux → hero → animations au scroll → modules de page.
+   bandeaux → hero → animations au scroll → sections animées → modules de page.
    Les librairies (GSAP, ScrollTrigger, SplitText, Lenis) sont chargées en
    local avant ce module ; Three.js est importé à la demande par le hero.
    ========================================================================== */
@@ -15,6 +15,7 @@ import { initButtons } from './core/magnetic.js';
 import { initTilt } from './core/tilt.js';
 import { initBands } from './core/marquee.js';
 import { initMotion } from './core/motion.js';
+import { initDepth } from './core/parallax.js';
 import { initMenu } from './core/menu.js';
 import { initCookies } from './core/cookies.js';
 import { hydrateConfig, hydrateServices } from './core/hydrate.js';
@@ -23,6 +24,21 @@ const PAGES = {
   services: () => import('./pages/configurateur.js'),
   contact: () => import('./pages/contact.js'),
 };
+
+/* Sections animées : chaque module n'est chargé que si la page contient sa section */
+const SECTIONS = [
+  ['[data-steps]', () => import('./sections/steps.js'), 'initSteps'],
+  ['.faq', () => import('./sections/faq.js'), 'initFaq'],
+  ['[data-stickers]', () => import('./sections/stickers.js'), 'initStickers'],
+  ['[data-svc-index]', () => import('./sections/services-index.js'), 'initServicesIndex'],
+  ['[data-carousel]', () => import('./sections/carousel.js'), 'initCarousel'],
+];
+
+async function initSections() {
+  const present = SECTIONS.filter(([sel]) => document.querySelector(sel));
+  const mods = await Promise.all(present.map(([, load]) => load().catch((err) => { console.error('[GJS] section', err); return null; })));
+  mods.forEach((mod, i) => { if (mod) safe(present[i][2], () => mod[present[i][2]]()); });
+}
 
 function safe(name, fn) {
   try { fn(); } catch (err) { console.error(`[GJS] ${name}`, err); }
@@ -56,6 +72,8 @@ async function boot() {
   }
 
   safe('motion', initMotion);
+  safe('depth', initDepth);
+  await initSections();
   hydrateServices();
 
   const page = document.body.dataset.page;

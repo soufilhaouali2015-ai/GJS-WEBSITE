@@ -146,7 +146,7 @@
         <section class="section" id="services" aria-labelledby="services-title">
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" data-anim="lines" id="services-title">Nos <span class="hl">services</span></h2>
+              <h2 class="t-h2" data-anim="lines" data-skew id="services-title">Nos <span class="hl">services</span></h2>
               <p class="t-intro">Neuf façons de faire grandir votre activité. Le prix de départ est affiché, le devis précis arrive après un premier échange gratuit.</p>
             </div>
             <!-- @services:cards -->
@@ -336,11 +336,13 @@
         </section>
 
         <section class="section is-dark offer" id="offre" aria-labelledby="offer-title">
+          <svg class="deco deco--star" data-parallax="0.45" style="--bottom: 8%; --left: 3%; --rot: -12deg" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#d-star"></use></svg>
+          <svg class="deco deco--zigzag" data-parallax="0.25" style="--top: 14%; --left: 38%; --rot: 6deg" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#d-zigzag"></use></svg>
           <div class="wrap offer__grid">
             <div class="offer__title">
               <p><span class="sticker">Offre de lancement</span></p>
-              <h2 class="t-h2" data-anim="lines" id="offer-title"><span class="hl">-40&nbsp;%</span> pour nos 5 premiers clients.</h2>
-              <p class="sticker-round" aria-hidden="true"><span><strong>5</strong>places</span></p>
+              <h2 class="t-h2" data-anim="lines" data-skew id="offer-title"><span class="hl">-<span data-count="40">40</span>&nbsp;%</span> pour nos 5 premiers clients.</h2>
+              <p class="sticker-round sticker-round--stamp" aria-hidden="true" data-anim="stamp" data-stamp-from="2.2" data-shake=".offer__grid"><span><strong>5</strong>places<br>seulement</span></p>
             </div>
             <div class="offer__body" data-anim="fade">
               <p class="t-intro">En échange d’un avis et du droit de présenter votre projet sur notre site.</p>
@@ -351,58 +353,72 @@
           </div>
         </section>
 
-        <section class="section" id="methode" aria-labelledby="steps-title">
-          <div class="wrap">
-            <div class="section__head">
-              <h2 class="t-h2" data-anim="lines" id="steps-title">Comment ça marche</h2>
-              <p class="t-intro">Quatre étapes, zéro surprise.</p>
-            </div>
-            <ol class="steps">
-              <li class="step" data-anim="fade">
+        <section class="section methode" id="methode" aria-labelledby="steps-title">
+          <div class="methode__stage">
+            <svg class="deco deco--arrow" data-parallax="0.25" style="--top: 16%; --right: 9%; --rot: 168deg" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#d-arrow"></use></svg>
+            <svg class="deco deco--star" data-parallax="0.12" style="--top: 10%; --right: 4%; --rot: 14deg; --size: 64px" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#d-star"></use></svg>
+            <div class="wrap">
+              <div class="section__head">
+                <h2 class="t-h2" data-anim="lines" data-skew id="steps-title">Comment ça marche</h2>
+                <p class="t-intro">Quatre étapes, zéro surprise.</p>
+              </div>
+              <div class="steps-track" data-steps>
+                <ol class="steps">
+                <li class="step">
                 <span class="step__num" aria-hidden="true">1</span>
                 <h3 class="t-h3">Échange gratuit</h3>
                 <p class="step__text">30 minutes au téléphone ou en visio. Vous nous parlez de votre activité, on vous pose les bonnes questions.</p>
               </li>
-              <li class="step" data-anim="fade">
+                <li class="step">
                 <span class="step__num" aria-hidden="true">2</span>
                 <h3 class="t-h3">Devis clair sous 48&nbsp;h</h3>
                 <p class="step__text">Un prix ferme, ce qui est inclus, ce qui ne l’est pas, et un planning. Vous décidez sans pression.</p>
               </li>
-              <li class="step" data-anim="fade">
+                <li class="step">
                 <span class="step__num" aria-hidden="true">3</span>
                 <h3 class="t-h3">Réalisation</h3>
                 <p class="step__text">On construit, vous validez à chaque étape. Un point régulier, un seul interlocuteur.</p>
               </li>
-              <li class="step" data-anim="fade">
+                <li class="step">
                 <span class="step__num" aria-hidden="true">4</span>
                 <h3 class="t-h3">Suivi</h3>
                 <p class="step__text">Après la mise en ligne, on reste là&nbsp;: ajustements, conseils et résultats suivis ensemble.</p>
               </li>
-            </ol>
+                </ol>
+                <div class="steps__line" aria-hidden="true">
+                  <div class="steps__line-in">
+                    <svg class="steps__wave steps__wave--x" viewBox="0 0 1000 40" preserveAspectRatio="none" focusable="false"><path class="steps__wave-edge" d="M0 20 Q31.25 6 62.5 20 T125 20 T187.5 20 T250 20 T312.5 20 T375 20 T437.5 20 T500 20 T562.5 20 T625 20 T687.5 20 T750 20 T812.5 20 T875 20 T937.5 20 T1000 20"/><path class="steps__wave-ink" d="M0 20 Q31.25 6 62.5 20 T125 20 T187.5 20 T250 20 T312.5 20 T375 20 T437.5 20 T500 20 T562.5 20 T625 20 T687.5 20 T750 20 T812.5 20 T875 20 T937.5 20 T1000 20"/></svg>
+                    <svg class="steps__wave steps__wave--y" viewBox="0 0 40 1000" preserveAspectRatio="none" focusable="false"><path class="steps__wave-edge" d="M20 0 Q6 31.25 20 62.5 T20 125 T20 187.5 T20 250 T20 312.5 T20 375 T20 437.5 T20 500 T20 562.5 T20 625 T20 687.5 T20 750 T20 812.5 T20 875 T20 937.5 T20 1000"/><path class="steps__wave-ink" d="M20 0 Q6 31.25 20 62.5 T20 125 T20 187.5 T20 250 T20 312.5 T20 375 T20 437.5 T20 500 T20 562.5 T20 625 T20 687.5 T20 750 T20 812.5 T20 875 T20 937.5 T20 1000"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
         <section class="section" id="pourquoi" aria-labelledby="why-title">
+          <svg class="deco deco--tape" data-parallax="0.12" style="--top: 2%; --right: 12%; --rot: -8deg" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#d-tape"></use></svg>
+          <svg class="deco deco--circle" data-parallax="0.45" style="--top: 0; --right: 4%; --rot: 10deg" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#d-circle"></use></svg>
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" data-anim="lines" id="why-title">Pourquoi GJS</h2>
+              <h2 class="t-h2" data-anim="lines" data-skew id="why-title">Pourquoi GJS</h2>
               <p class="t-intro">Trois engagements simples, et on les tient.</p>
             </div>
-            <ul class="posters posters--3">
-              <li class="poster" data-anim="fade">
+            <ul class="posters posters--3" data-anim="cascade">
+              <li class="poster" data-tilt="8">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-team"></use></svg>
                 <h3 class="t-h3">Trois associés disponibles</h3>
-                <p>Vous parlez directement aux personnes qui réalisent votre projet. Et on répond vite&nbsp;: sous 24&nbsp;h, promis.</p>
+                <p>Vous parlez directement aux personnes qui réalisent votre projet. Et on répond vite&nbsp;: <span class="hl" data-anim="marker">sous 24&nbsp;h</span>, promis.</p>
               </li>
-              <li class="poster" data-anim="fade">
+              <li class="poster" data-tilt="8">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-spark"></use></svg>
                 <h3 class="t-h3">L’IA dans chaque projet</h3>
-                <p>On utilise des outils d’intelligence artificielle pour aller plus vite et vous faire gagner du temps&nbsp;: rédaction, réponses clients, automatisations.</p>
+                <p>On utilise des outils d’intelligence artificielle pour aller plus vite et vous faire <span class="hl" data-anim="marker">gagner du temps</span>&nbsp;: rédaction, réponses clients, automatisations.</p>
               </li>
-              <li class="poster" data-anim="fade">
+              <li class="poster" data-tilt="8">
                 <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-contact"></use></svg>
                 <h3 class="t-h3">Un interlocuteur unique</h3>
-                <p>Du devis à la mise en ligne, la même personne suit votre projet. Vous savez toujours qui appeler.</p>
+                <p>Du devis à la mise en ligne, <span class="hl" data-anim="marker">la même personne</span> suit votre projet. Vous savez toujours qui appeler.</p>
               </li>
             </ul>
           </div>
@@ -451,29 +467,32 @@
         </section>
 
         <section class="section" id="faq" aria-labelledby="faq-title">
+          <svg class="deco deco--star" data-parallax="0.45" style="--top: 26%; --right: 10%; --rot: 8deg; --size: 140px" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#d-star"></use></svg>
+          <svg class="deco deco--scribble" data-parallax="0.25" style="--top: 54%; --right: 6%; --rot: -10deg" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#d-scribble"></use></svg>
+          <svg class="deco deco--arrow" data-parallax="0.12" style="--top: 72%; --right: 17%; --rot: 200deg" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#d-arrow"></use></svg>
           <div class="wrap">
             <div class="section__head">
-              <h2 class="t-h2" data-anim="lines" id="faq-title">Vos questions</h2>
+              <h2 class="t-h2" data-anim="lines" data-skew id="faq-title">Vos questions</h2>
             </div>
             <div class="faq">
               <details class="faq__item" name="faq" data-anim="fade">
-                <summary class="faq__q">Combien coûte un projet&nbsp;?<span class="faq__icon" aria-hidden="true"></span></summary>
+                <summary class="faq__q">Combien coûte un projet&nbsp;?<span class="faq__icon" aria-hidden="true"><span class="faq__cross"></span></span></summary>
                 <div class="faq__a"><p>Chaque service a un prix de départ affiché sur ce site, hors taxes. Après un premier échange gratuit, on vous envoie un devis précis sous 48&nbsp;h. Vous savez exactement ce que vous payez avant de commencer.</p></div>
               </details>
               <details class="faq__item" name="faq" data-anim="fade">
-                <summary class="faq__q">Combien de temps faut-il&nbsp;?<span class="faq__icon" aria-hidden="true"></span></summary>
+                <summary class="faq__q">Combien de temps faut-il&nbsp;?<span class="faq__icon" aria-hidden="true"><span class="faq__cross"></span></span></summary>
                 <div class="faq__a"><p>Comptez 2 à 4 semaines pour un site vitrine, 4 à 8 semaines pour un e-commerce et 8 à 12 semaines pour une application mobile. Le délai exact est écrit noir sur blanc dans votre devis.</p></div>
               </details>
               <details class="faq__item" name="faq" data-anim="fade">
-                <summary class="faq__q">Comment marche l’offre de lancement&nbsp;?<span class="faq__icon" aria-hidden="true"></span></summary>
+                <summary class="faq__q">Comment marche l’offre de lancement&nbsp;?<span class="faq__icon" aria-hidden="true"><span class="faq__cross"></span></span></summary>
                 <div class="faq__a"><p>-40&nbsp;% pour nos 5 premiers clients. En échange, vous laissez un avis sur notre travail et vous nous autorisez à présenter votre projet sur notre site. Quand les 5 places sont prises, l’offre s’arrête.</p></div>
               </details>
               <details class="faq__item" name="faq" data-anim="fade">
-                <summary class="faq__q">Vous êtes une nouvelle agence. Pourquoi vous faire confiance&nbsp;?<span class="faq__icon" aria-hidden="true"></span></summary>
+                <summary class="faq__q">Vous êtes une nouvelle agence. Pourquoi vous faire confiance&nbsp;?<span class="faq__icon" aria-hidden="true"><span class="faq__cross"></span></span></summary>
                 <div class="faq__a"><p>C’est vrai, GJS vient de naître, et on préfère vous le dire. Ce qu’on vous promet&nbsp;: un devis clair, un interlocuteur unique du début à la fin, et un projet qui vous appartient à 100&nbsp;%. Le premier échange est gratuit&nbsp;: jugez sur pièce.</p></div>
               </details>
               <details class="faq__item" name="faq" data-anim="fade">
-                <summary class="faq__q">À qui appartiennent le site et les comptes&nbsp;?<span class="faq__icon" aria-hidden="true"></span></summary>
+                <summary class="faq__q">À qui appartiennent le site et les comptes&nbsp;?<span class="faq__icon" aria-hidden="true"><span class="faq__cross"></span></span></summary>
                 <div class="faq__a"><p>À vous. Le site, le nom de domaine, les comptes publicitaires et les données sont à votre nom. Vous n’êtes jamais bloqué chez nous.</p></div>
               </details>
             </div>
@@ -481,12 +500,15 @@
         </section>
 
         <section class="section is-dark cta" aria-labelledby="cta-title">
-          <div class="wrap" data-anim="fade">
-            <p><span class="sticker">Réponse sous 24 h</span></p>
-            <h2 class="t-h2" data-anim="lines" id="cta-title">Un projet&nbsp;? <span class="hl">Parlons-en.</span></h2>
-            <p class="t-intro">Premier échange gratuit et sans engagement. Un devis clair sous 48&nbsp;h.</p>
-            <div class="btn-row">
-              <a class="btn btn--lime" href="contact.html#formulaire">Demander mon devis gratuit</a>
+          <svg class="deco deco--star" data-parallax="0.45" style="--top: 18%; --left: 7%; --rot: -14deg; --size: 110px" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#d-star"></use></svg>
+          <svg class="deco deco--scribble" data-parallax="0.25" style="--bottom: 16%; --right: 6%; --rot: 8deg" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#d-scribble"></use></svg>
+          <svg class="deco deco--star" data-parallax="0.12" style="--bottom: 22%; --left: 14%; --rot: 20deg; --size: 56px" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#d-star"></use></svg>
+          <div class="wrap">
+            <p data-anim="stamp"><span class="sticker">Réponse sous 24 h</span></p>
+            <h2 class="t-h2 cta__title" data-anim="chars" data-skew id="cta-title">Un <span class="nowrap">projet&nbsp;?</span> <span class="hl">Parlons-en.</span></h2>
+            <p class="t-intro" data-anim="fade">Premier échange gratuit et sans engagement. Un devis clair sous 48&nbsp;h.</p>
+            <div class="btn-row cta__actions" data-anim="fade" data-anim-delay="0.15">
+              <a class="btn btn--lime btn--round" href="contact.html#formulaire" data-magnet="strong">Demander mon devis gratuit</a>
               <a class="btn btn--outline" href="https://wa.me/33600000000?text=Bonjour%20GJS%2C%20je%20voudrais%20parler%20de%20mon%20projet." data-config="whatsapp" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-whatsapp"></use></svg>Écrire sur WhatsApp<span class="sr-only"> (nouvel onglet)</span></a>
             </div>
           </div>
@@ -494,6 +516,26 @@
   </main>
 
   <footer class="footer">
+    <div class="footer__play" data-stickers aria-hidden="true">
+      <p class="footer__play-hint">Attrapez-les, lancez-les.</p>
+      <!-- @services:stickers -->
+      <span class="drop drop--logo">GJS</span>
+      <span class="drop sticker sticker--ink">Best-seller</span>
+      <span class="drop sticker sticker--ink">Coup de cœur</span>
+      <span class="drop sticker sticker--ink">Le plus demandé</span>
+      <span class="drop drop--round"><strong>-40&nbsp;%</strong></span>
+      <span class="drop sticker sticker--cream drop--wide">Fait en Île-de-France</span>
+      <span class="drop sticker">Site internet</span>
+      <span class="drop sticker sticker--cream">Appli mobile</span>
+      <span class="drop sticker">Nouveaux clients</span>
+      <span class="drop sticker sticker--ink">Réseaux sociaux</span>
+      <span class="drop sticker sticker--cream">Automatisations IA</span>
+      <span class="drop sticker">Agent IA</span>
+      <span class="drop sticker sticker--cream">SEO</span>
+      <span class="drop sticker">SEA</span>
+      <span class="drop sticker sticker--ink">CRM</span>
+      <!-- /@services:stickers -->
+    </div>
     <div class="wrap footer__grid">
       <div class="footer__brand">
         <a class="logo" href="index.html" aria-label="GJS, retour à l’accueil"><span class="logo__mark" aria-hidden="true">GJS</span></a>

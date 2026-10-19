@@ -119,6 +119,18 @@ const blocks = {
     `<div class="band band--ink" data-band data-speed="48" data-dir="1"><div class="band__track" data-band-track>${bandGroup([...SERVICES].reverse().map((x) => x.name))}</div></div>`,
   ].join('\n'),
 
+  /* Footer de l'accueil : stickers qui tombent (décor, aria-hidden sur la zone) */
+  stickers: () => {
+    const tones = ['', ' sticker--cream', '', ' sticker--ink', ' sticker--cream', '', ' sticker--cream', '', ' sticker--ink'];
+    return [
+      '<span class="drop drop--logo">GJS</span>',
+      ...SERVICES.filter((x) => x.badge).map((x) => `<span class="drop sticker sticker--ink">${esc(x.badge)}</span>`),
+      '<span class="drop drop--round"><strong>-40&nbsp;%</strong></span>',
+      '<span class="drop sticker sticker--cream drop--wide">Fait en Île-de-France</span>',
+      ...SERVICES.map((x, i) => `<span class="drop sticker${tones[i % tones.length]}">${esc(x.short)}</span>`),
+    ].join('\n');
+  },
+
   /* Page Services : sommaire cliquable */
   toc: () => [
     '<ul class="toc-chips">',

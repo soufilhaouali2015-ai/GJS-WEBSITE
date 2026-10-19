@@ -7,8 +7,17 @@
    data-anim="cascade"   les enfants directs arrivent en cascade
    data-anim="stick"     se colle comme un sticker (rotation qui se pose, rebond)
    data-anim="stamp"     effet tampon (échelle 1,6 → 1, petite secousse)
+                           data-stamp-from="2.2"  échelle de départ
+                           data-shake=".wrap"     bloc parent qui encaisse la secousse
+   data-anim="marker"    trait de marqueur citron qui se dessine sous un .hl
+   data-anim="photo"     photo révélée par un masque, avec un léger zoom arrière
    data-anim="svc-grid"  chorégraphie de la grille des services
    data-anim-delay="0.2" décalage en secondes
+
+   Dans un titre « lines » ou « chars » :
+   <span data-count="40">40</span>  nombre qui défile de 0 à sa valeur (la vraie
+                                    valeur reste écrite dans le HTML) ;
+   <span class="hl">mot</span>      le trait de marqueur se dessine après le titre.
 
    Déclenché une seule fois, à l'arrivée à l'écran. Le texte est soit absent,
    soit lisible à 100 % : jamais semi-transparent en attendant le scroll.
@@ -52,6 +61,43 @@ function revealOnFocus(e) {
   }
 }
 
+/* ---- Compteurs et traits de marqueur contenus dans un titre découpé -------- */
+
+function extras(el) {
+  return {
+    counts: [...el.querySelectorAll('[data-count]')],
+    marks: [...el.querySelectorAll('.hl')],
+  };
+}
+
+/** État de départ : le compteur affiche 0 (largeur finale réservée), le trait est replié. */
+function primeExtras({ counts, marks }) {
+  counts.forEach((c) => {
+    c.style.minWidth = `${c.getBoundingClientRect().width}px`;
+    c.textContent = '0';
+  });
+  marks.forEach((m) => m.classList.add('is-marker'));
+}
+
+/* Sur fond noir, le mot est écrit en noir sur le trait citron : il doit être lisible en 0,6 s */
+const markDelay = (m) => (m.closest('.is-dark') ? 0.1 : 0.35);
+
+function playExtras({ counts, marks }, delay) {
+  counts.forEach((c) => {
+    const to = parseFloat(c.dataset.count) || 0;
+    const o = { v: 0 };
+    gsap.to(o, {
+      v: to,
+      duration: 1.2,
+      delay: delay + 0.15,
+      ease: EASE,
+      onUpdate: () => { c.textContent = String(Math.round(o.v)); },
+      onComplete: () => { c.textContent = c.dataset.count; },
+    });
+  });
+  marks.forEach((m) => gsap.delayedCall(delay + markDelay(m), () => m.classList.add('is-marked')));
+}
+
 /* ---- Briques ---------------------------------------------------------------- */
 
 function lines(el, delay) {
@@ -65,6 +111,8 @@ function lines(el, delay) {
     onSplit(self) {
       ready(el);
       if (played) return undefined;
+      const x = extras(el);
+      primeExtras(x);
       return gsap.from(self.lines, {
         yPercent: 118,
         rotation: 2,
@@ -72,7 +120,7 @@ function lines(el, delay) {
         stagger: 0.08,
         ease: EASE,
         delay,
-        scrollTrigger: { trigger: el, start: START, once: true, onEnter: () => { played = true; } },
+        scrollTrigger: { trigger: el, start: START, once: true, onEnter: () => { played = true; playExtras(x, delay); } },
       });
     },
   });
@@ -89,6 +137,8 @@ function chars(el, delay) {
     onSplit(self) {
       ready(el);
       if (played) return undefined;
+      const x = extras(el);
+      primeExtras(x);
       return gsap.from(self.chars, {
         yPercent: 120,
         rotation: 10,
@@ -96,7 +146,7 @@ function chars(el, delay) {
         stagger: 0.06,
         ease: EASE,
         delay,
-        scrollTrigger: { trigger: el, start: START, once: true, onEnter: () => { played = true; } },
+        scrollTrigger: { trigger: el, start: START, once: true, onEnter: () => { played = true; playExtras(x, delay + self.chars.length * 0.03); } },
       });
     },
   });
@@ -125,9 +175,9 @@ export function stickTimeline(el, { rotation = 0 } = {}) {
 }
 
 /** Un tampon : il s'écrase sur la surface, qui encaisse une petite secousse. */
-export function stampTimeline(el, { rotation = 0, shake = el.parentElement } = {}) {
+export function stampTimeline(el, { rotation = 0, shake = el.parentElement, from = 1.6 } = {}) {
   const tl = gsap.timeline()
-    .fromTo(el, { opacity: 0, scale: 1.6, rotation: rotation - 16 }, { opacity: 1, scale: 1, rotation, duration: 0.6, ease: EASE });
+    .fromTo(el, { opacity: 0, scale: from, rotation: rotation - 16 }, { opacity: 1, scale: 1, rotation, duration: 0.6, ease: EASE });
   if (shake) tl.fromTo(shake, { x: 0 }, { keyframes: { x: [-5, 4, -2, 1, 0] }, duration: 0.6, ease: EASE }, 0.18);
   return tl;
 }
@@ -143,9 +193,27 @@ function stick(el, delay) {
 
 function stamp(el, delay) {
   const r = baseRotation(el);
+  const from = parseFloat(el.dataset.stampFrom) || 1.6;
+  const shake = el.dataset.shake ? el.closest(el.dataset.shake) : el.parentElement;
   gsap.set(el, { opacity: 0 });
   ready(el);
-  onEnter(el, () => stampTimeline(el, { rotation: r }).delay(delay));
+  onEnter(el, () => stampTimeline(el, { rotation: r, shake, from }).delay(delay));
+}
+
+/** Trait de marqueur seul (dans un paragraphe) : il se dessine à l'arrivée à l'écran. */
+function marker(el, delay) {
+  el.classList.add('is-marker');
+  ready(el);
+  onEnter(el, () => gsap.delayedCall(delay + markDelay(el), () => el.classList.add('is-marked')), 'top 90%');
+}
+
+/** Photo : le cadre reste en place, l'image monte derrière son masque en dézoomant. */
+function photo(el, delay) {
+  const img = el.querySelector('img, picture, svg') || el.firstElementChild;
+  if (!img) { fade(el, delay); return; }
+  gsap.set(img, { yPercent: 101, scale: 1.25, transformOrigin: '50% 100%' });
+  ready(el);
+  onEnter(el, () => gsap.to(img, { yPercent: 0, scale: 1, duration: 1.2, ease: EASE, delay }));
 }
 
 /** Grille des services : les 3 phares se collent l'un après l'autre, leur
@@ -177,8 +245,8 @@ function svcGrid(el) {
 
 // Sans SplitText (fichier bloqué ou non chargé), les titres arrivent en simple fondu
 const TYPES = SplitText
-  ? { lines, chars, fade, cascade, stick, stamp, 'svc-grid': svcGrid }
-  : { lines: fade, chars: fade, fade, cascade, stick, stamp, 'svc-grid': svcGrid };
+  ? { lines, chars, fade, cascade, stick, stamp, marker, photo, 'svc-grid': svcGrid }
+  : { lines: fade, chars: fade, fade, cascade, stick, stamp, marker, photo, 'svc-grid': svcGrid };
 
 /* ---- Mouvement réduit : un simple fondu, partout ---------------------------- */
 

@@ -108,6 +108,57 @@ html.lenis body { height: auto; }
 .is-dark .link:hover { color: var(--ink); }
 .is-dark .link::after { bottom: calc(50% - 0.7em); height: 1.3em; border-radius: 3px; }
 
+/* ---- Trait de marqueur qui se dessine (scaleX, jamais de largeur animée) --- */
+
+.has-motion .hl.is-marker::before {
+  transform: scaleX(0) rotate(-1.5deg);
+  transform-origin: left center;
+  transition: transform 0.9s var(--ease-expo);
+}
+
+/* Sur fond noir, le mot est noir sur le trait : il doit être lisible en 0,6 s */
+.has-motion .is-dark .hl.is-marker::before { transition-duration: 0.6s; }
+
+.has-motion .hl.is-marker.is-marked::before { transform: scaleX(1) rotate(-1.5deg); }
+
+/* Compteur : largeur finale réservée par motion.js, chiffres alignés à droite */
+[data-count] {
+  display: inline-block;
+  text-align: right;
+}
+
+/* ---- Décors street en parallaxe (core/parallax.js) ------------------------- */
+/* Placés dans les marges vides des sections (jamais sur un texte), sous le contenu,
+   et seulement là où il y a de la place (1024 px et plus). */
+
+.deco {
+  position: absolute;
+  z-index: 0;
+  top: var(--top, auto);
+  right: var(--right, auto);
+  bottom: var(--bottom, auto);
+  left: var(--left, auto);
+  display: none;
+  width: var(--size, 120px);
+  height: var(--size, 120px);
+  overflow: visible;
+  pointer-events: none;
+  transform: rotate(var(--rot, 0deg));
+}
+
+.deco--arrow { width: var(--size, 150px); height: calc(var(--size, 150px) * 0.69); }
+.deco--scribble { width: var(--size, 170px); height: calc(var(--size, 170px) * 0.41); }
+.deco--tape { width: var(--size, 150px); height: calc(var(--size, 150px) * 0.33); }
+.deco--zigzag { width: var(--size, 150px); height: calc(var(--size, 150px) * 0.27); }
+.deco--star { width: var(--size, 96px); height: var(--size, 96px); }
+
+.section > .wrap,
+.methode__stage > .wrap { position: relative; z-index: 1; }
+
+@media (min-width: 1024px) {
+  .deco { display: block; }
+}
+
 /* ---- Rideau de transition entre pages ------------------------------------ */
 
 .curtain {

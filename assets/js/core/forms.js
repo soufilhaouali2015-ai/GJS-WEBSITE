@@ -203,6 +203,20 @@ export async function submitRequest({ form, success, errors, submit, submitLabel
   }
 }
 
+/** La carte du formulaire change de hauteur (étapes, erreurs, succès) : les
+    déclencheurs d'animation placés plus bas dans la page sont recalculés. */
+export function refreshOnResize(el) {
+  if (!el || !window.ScrollTrigger || !('ResizeObserver' in window)) return;
+  let last = el.offsetHeight;
+  let timer = 0;
+  new ResizeObserver(() => {
+    if (el.offsetHeight === last) return;
+    last = el.offsetHeight;
+    clearTimeout(timer);
+    timer = setTimeout(() => window.ScrollTrigger.refresh(), 150);
+  }).observe(el);
+}
+
 /** Validation en direct : au changement pour les choix, à la frappe après un premier passage. */
 export function liveValidation(form, touched, counter) {
   form.addEventListener('change', (e) => {

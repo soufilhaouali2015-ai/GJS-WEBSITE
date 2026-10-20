@@ -1,6 +1,7 @@
 /* ==========================================================================
    GJS · CONTACT
-   Formulaire en 3 étapes · Autres moyens de contact (WhatsApp, rendez-vous)
+   Formulaire en 3 étapes · Autres moyens de contact (WhatsApp, rendez-vous) ·
+   Après l'envoi (3 temps)
    (carte, champs, erreurs et succès communs : components.css)
    ========================================================================== */
 
@@ -131,3 +132,8 @@
 .page-hero__inner + .contact__layout {
   margin-top: var(--s-block);
 }
+
+/* Après l'envoi : trois affichettes numérotées */
+.next__steps { list-style: none; padding: 0; }
+.next__num .sticker { font-size: 1.75rem; --tilt: -4deg; }
+.next__step:nth-child(2) .next__num .sticker { --tilt: 3deg; }

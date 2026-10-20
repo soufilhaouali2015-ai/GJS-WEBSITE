@@ -15,7 +15,7 @@
 import { $, $$, announce } from '../core/utils.js';
 import { isReduced } from '../core/profile.js';
 import { getLenis, scrollTo } from '../core/scroll.js';
-import { validate, showError, renderSummary, bindSummary, submitRequest, liveValidation } from '../core/forms.js';
+import { validate, showError, renderSummary, bindSummary, submitRequest, liveValidation, refreshOnResize } from '../core/forms.js';
 
 const { gsap } = window;
 const root = document.documentElement;
@@ -193,6 +193,7 @@ function initQuickForm() {
 
   liveValidation(form, touched, counter);
   bindSummary(form, errors);
+  refreshOnResize(form.closest('.form-card'));
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();

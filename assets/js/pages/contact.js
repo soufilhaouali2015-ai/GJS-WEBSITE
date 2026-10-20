@@ -7,7 +7,7 @@
    ========================================================================== */
 
 import { env, $, $$, announce } from '../core/utils.js';
-import { validate, showError, check, prefillBesoins, renderSummary, bindSummary, submitRequest, liveValidation } from '../core/forms.js';
+import { validate, showError, check, prefillBesoins, renderSummary, bindSummary, submitRequest, liveValidation, refreshOnResize } from '../core/forms.js';
 
 const TOTAL = 3;
 const STEP_NAMES = ['vos besoins', 'votre budget et votre délai', 'vos coordonnées'];
@@ -135,6 +135,8 @@ function initForm() {
 
   const filled = prefill(form);
   render();
+  refreshOnResize(card);
+  window.ScrollTrigger?.refresh();
   if (filled) announce('Formulaire pré-rempli avec vos choix.');
 }
 

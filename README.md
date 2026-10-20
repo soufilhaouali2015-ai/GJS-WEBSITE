@@ -191,7 +191,7 @@ ANALYTICS: { src: 'https://plausible.io/js/script.js', attrs: { 'data-domain': '
 | **Accueil** | Hero · Bandeau défilant · Services (9 cartes, 3 mises en avant) · Comment ça marche (cascade) · Pourquoi GJS (4 points) · Arcade (3 jeux) · FAQ · CTA final (noir) |
 | **Services** | Intro + index typographique · Le tour des 9 services (carrousel 3D) · 9 fiches détaillées (fenêtres ouvertes au clic, adresse `services.html#site`…) · Notre méthode de travail (cascade) · Votre devis gratuit (formulaire court) · CTA (noir) |
 | **À propos** | Intro G · J · S (portraits en stickers, les lettres se rassemblent en GJS au scroll) · Notre histoire · Vision (citation qui se corrige, question mise en avant) · L'équipe (3 associés) · Valeurs (4 cartes qui se retournent : survol, toucher, clavier) · Trajectoire (frise qui se remplit, dates d'exemple à remplacer) · CTA (noir) |
-| **Contact** | Formulaire en 3 étapes + WhatsApp, rendez-vous, email et téléphone |
+| **Contact** | Formulaire en 3 étapes + WhatsApp, rendez-vous, email et téléphone · Après l'envoi (3 temps : réponse sous 24 h ouvrées, échange en visio sans engagement, plan d'action clair) |
 | **Légal, 404** | Même identité, contenu juridique conservé |
 
 **Activer la section « Réalisations »** (accueil, masquée par défaut) : dans `index.html`, retirez l'attribut `hidden` de `<section id="realisations">`, puis remplacez les 3 cartes par vos projets réels (`assets/img/realisation-exemple.webp` est une image d'attente).

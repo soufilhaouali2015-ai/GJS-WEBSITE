@@ -12,7 +12,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { SERVICES, PRICE_NOTE, formatPrice } from '../assets/js/services.js';
+import { SERVICES } from '../assets/js/services.js';
 import { CONFIG } from '../assets/js/config.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -28,15 +28,6 @@ const icon = (name, cls = 'icon') => `<svg class="${cls}" aria-hidden="true" foc
 const featured = SERVICES.filter((s) => s.featured);
 const others = SERVICES.filter((s) => !s.featured);
 const contactHref = (s) => `contact.html?besoins=${s.id}#formulaire`;
-
-const priceHtml = (s, { tag = 'p' } = {}) => [
-  `<${tag} class="price">`,
-  '<span class="price__from">À partir de</span> ',
-  `<strong class="price__value" data-price="${s.id}">${esc(formatPrice(s))}</strong> `,
-  '<span class="price__tax">HT</span>',
-  s.price.note ? `<span class="price__note">${esc(s.price.note)}</span>` : '',
-  `</${tag}>`,
-].join('');
 
 /* Plus aucun prix affiché : chaque projet est chiffré sur devis gratuit */
 const quoteHtml = (depth) => `<p class="svc-card__quote" data-depth="${depth}">Sur devis gratuit</p>`;
@@ -133,9 +124,9 @@ const blocks = {
     ].join('\n');
   },
 
-  /* Page Services : sommaire cliquable */
-  /* Index typographique géant : au survol (ordinateur), l'affiche du service suit le curseur.
-     Sur mobile, une liste simple avec les pictogrammes. */
+  /* Page Services : index typographique géant. Au survol (ordinateur), l'affiche du
+     service suit le curseur ; un clic ouvre sa fiche détaillée. Sur mobile, une
+     liste simple avec les pictogrammes. */
   toc: () => [
     '<ol class="svc-index" data-svc-index>',
     ...SERVICES.map((s, i) => [
@@ -144,7 +135,6 @@ const blocks = {
       `      <span class="svc-index__num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>`,
       `      ${icon(s.icon, 'icon svc-index__icon')}`,
       `      <span class="svc-index__name">${esc(s.short)}</span>`,
-      `      <span class="svc-index__price"><span class="sr-only">, </span>dès <span data-price="${s.id}">${esc(formatPrice(s))}</span></span>`,
       '    </a>',
       '  </li>',
     ].join('\n')),
@@ -161,7 +151,7 @@ const blocks = {
       `      ${icon(s.icon)}`,
       `      <h3 class="t-h3" id="orbite-${s.id}">${esc(s.short)}</h3>`,
       `      <p class="orbit__tagline">${esc(s.tagline)}</p>`,
-      `      <p class="orbit__price">dès <span data-price="${s.id}">${esc(formatPrice(s))}</span> <small>HT</small></p>`,
+      `      <p class="orbit__quote">Sur devis gratuit</p>`,
       `      <a class="link link-arrow" href="#${s.id}">Voir le détail<span class="sr-only"> : ${esc(s.label)}</span></a>`,
       '    </article>',
       '  </li>',
@@ -169,12 +159,11 @@ const blocks = {
     '</ul>',
   ].join('\n'),
 
-  /* Page Services : fiches détaillées */
-  featured: () => `<div class="svc-details">\n${featured.map(detail).join('\n')}\n</div>`,
-  others: () => `<div class="svc-details svc-details--others">\n${others.map(detail).join('\n')}\n</div>\n<p class="price-legal">${esc(PRICE_NOTE)}</p>`,
+  /* Page Services : une fiche détaillée par service, ouverte depuis le tour */
+  sheets: () => SERVICES.map(sheet).join('\n'),
 
-  /* Choix des services : configurateur et formulaire de contact */
-  'choices-config': () => choices(false),
+  /* Choix des services : formulaire de la page Services et formulaire de contact */
+  'choices-quick': () => choices(false, 'qf-'),
   'choices-contact': () => choices(true),
 
   /* Données structurées */
@@ -182,50 +171,54 @@ const blocks = {
   'jsonld-catalog': () => `<script type="application/ld+json">${JSON.stringify(catalog())}</script>`,
 };
 
-function detail(s) {
-  const cls = ['svc-detail', s.featured ? 'svc-detail--featured' : ''].filter(Boolean).join(' ');
+/* Fiche détaillée (fenêtre ouverte au clic sur un service du tour) : tout ce qui
+   est utile pour décider, sans aucun prix. Sans JavaScript, la fiche s'affiche
+   dans la page quand on suit son lien (#site, #app…). */
+function sheet(s, i) {
   return [
-    `<article class="${cls}" id="${s.id}" aria-labelledby="titre-${s.id}" data-anim="fade" data-tilt="4">`,
-    s.badge ? `  <span class="sticker svc-detail__badge" data-badge="${s.id}">${esc(s.badge)}</span>` : '',
-    '  <div class="svc-detail__head">',
-    `    ${icon(s.icon)}`,
-    `    <h3 class="t-h3" id="titre-${s.id}">${esc(s.label)}</h3>`,
-    `    <p class="svc-detail__tagline">${esc(s.tagline)}</p>`,
-    `    <p class="t-intro">${esc(s.benefit)}</p>`,
+    `<dialog class="svc-sheet" id="${s.id}" aria-labelledby="fiche-${s.id}" data-sheet data-lenis-prevent>`,
+    '  <div class="svc-sheet__card">',
+    '    <div class="svc-sheet__bar">',
+    `      <p class="svc-sheet__crumb" aria-hidden="true"><span class="svc-sheet__num">N°${String(i + 1).padStart(2, '0')}</span>${esc(s.short)}</p>`,
+    `      <button class="svc-sheet__close" type="button" data-sheet-close><span aria-hidden="true">×</span><span class="sr-only">Fermer la fiche ${esc(s.label)}</span></button>`,
+    '    </div>',
+    '    <div class="svc-sheet__main">',
+    `      <div class="svc-sheet__visual"><img src="assets/img/services/poster-${s.id}.webp" width="640" height="800" alt="" loading="lazy" decoding="async"></div>`,
+    '      <div class="svc-sheet__body">',
+    `        <p class="svc-sheet__kicker">${icon(s.icon)}${s.badge ? `<span class="sticker" data-badge="${s.id}">${esc(s.badge)}</span>` : ''}</p>`,
+    `        <h2 class="t-h2 svc-sheet__title" id="fiche-${s.id}">${esc(s.label)}</h2>`,
+    `        <p class="svc-sheet__tagline">${esc(s.tagline)}</p>`,
+    `        <p class="t-intro">${esc(s.benefit)}</p>`,
+    '        <div class="svc-sheet__cols">',
+    `          <div><h3 class="svc-sheet__label">Ce qui est inclus</h3>${list(s.includes)}</div>`,
+    `          <div><h3 class="svc-sheet__label">Ce qu’on fait</h3>${list(s.does)}</div>`,
+    `          <div><h3 class="svc-sheet__label">Ce que vous obtenez</h3>${list(s.gets)}</div>`,
+    '        </div>',
+    '        <div class="svc-sheet__foot">',
+    `          <p class="svc-sheet__delay"><strong>Délai indicatif</strong>${esc(s.delay)}</p>`,
+    '          <p class="svc-sheet__quote">Sur devis gratuit</p>',
+    `          <a class="btn btn--lime" href="#demande" data-pick="${s.id}">Je veux ça<span class="sr-only"> : ${esc(s.label)}</span></a>`,
+    '        </div>',
+    '      </div>',
+    '    </div>',
     '  </div>',
-    '  <div class="svc-detail__body">',
-    `    <div><h4 class="svc-detail__label">Ce qu’on fait</h4>${list(s.does)}</div>`,
-    `    <div><h4 class="svc-detail__label">Ce que vous obtenez</h4>${list(s.gets)}</div>`,
-    '  </div>',
-    '  <div class="price-box" data-anim="stamp" data-stamp-from="1.3" data-stamp-spin="5">',
-    `    ${priceHtml(s)}`,
-    `    <p class="price-box__delay"><strong>Délai indicatif</strong>${esc(s.delay)}</p>`,
-    `    <a class="btn btn--block" href="${contactHref(s)}">Je veux ça<span class="sr-only"> : ${esc(s.label)}</span></a>`,
-    '  </div>',
-    '</article>',
-  ].filter(Boolean).join('\n');
+    '</dialog>',
+  ].join('\n');
 }
 
-function choices(withUnknown) {
-  const items = SERVICES.map((s) => `  <label class="choice"><input type="checkbox" name="besoins" value="${s.id}"><span class="choice__box"><span class="choice__mark" aria-hidden="true"></span>${esc(s.label)}</span></label>`);
+function choices(withUnknown, idPrefix = '') {
+  const described = idPrefix ? ` aria-describedby="${idPrefix}besoins-error"` : '';
+  const items = SERVICES.map((s) => `  <label class="choice"><input type="checkbox" name="besoins" value="${s.id}"${described}><span class="choice__box"><span class="choice__mark" aria-hidden="true"></span>${esc(s.label)}</span></label>`);
   if (withUnknown) items.push('  <label class="choice"><input type="checkbox" name="besoins" value="autre"><span class="choice__box"><span class="choice__mark" aria-hidden="true"></span>Je ne sais pas encore</span></label>');
   return items.join('\n');
 }
 
-function priceSpecs(s) {
-  const specs = [];
-  if (s.price.setup) specs.push({ '@type': 'PriceSpecification', minPrice: s.price.setup, priceCurrency: 'EUR', valueAddedTaxIncluded: false });
-  if (s.price.monthly) specs.push({ '@type': 'UnitPriceSpecification', minPrice: s.price.monthly, priceCurrency: 'EUR', unitText: 'mois', valueAddedTaxIncluded: false });
-  return specs;
-}
-
+// Aucune donnée de prix : chaque service est proposé sur devis gratuit
 function offer(s) {
   return {
     '@type': 'Offer',
-    priceCurrency: 'EUR',
-    price: s.price.setup || s.price.monthly,
-    priceSpecification: priceSpecs(s),
     url: `${SITE}/${contactHref(s)}`,
+    description: 'Sur devis gratuit, après un premier échange.',
   };
 }
 

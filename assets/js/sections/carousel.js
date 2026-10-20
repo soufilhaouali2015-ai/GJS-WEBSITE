@@ -9,7 +9,7 @@
      réduit, sans JS, écran trop bas : simple grille (CSS)
    Si la fenêtre change de taille (ou de zoom), le cylindre se démonte et se
    remonte proprement : aucune transformation ne reste sur la grille.
-   Tout est en transform (et opacity pour le voile).
+   Tout est en transform (et opacity pour le voile et les cartes de profil).
    ========================================================================== */
 
 import { isDesktop, isReduced } from '../core/profile.js';
@@ -33,6 +33,8 @@ function cylinder(orbit, ring, cards) {
     return gsap.quickSetter(v, 'opacity');
   });
   const setRing = gsap.quickSetter(ring, 'rotationY', 'deg');
+  const fades = cards.map((card) => gsap.quickSetter(card, 'opacity'));
+  const edge = cards.map(() => false);
 
   const layout = () => {
     const w = ring.offsetWidth;
@@ -47,9 +49,12 @@ function cylinder(orbit, ring, cards) {
     const angle = -p * step * (n - 1);
     setRing(angle);
     cards.forEach((card, i) => {
-      let d = Math.abs(((i * step + angle) % 360 + 540) % 360 - 180); // écart à la face, en degrés
-      d = clamp(d / 110, 0, 1);
-      veils[i](d * 0.72);
+      const deg = Math.abs(((i * step + angle) % 360 + 540) % 360 - 180); // écart à la face, en degrés
+      veils[i](clamp(deg / 110, 0, 1) * 0.72);
+      // Une carte qui passe de profil s'efface (lien trop étroit pour être visé), puis se masque
+      fades[i](1 - clamp((deg - 55) / 20, 0, 1));
+      const hide = deg >= 75;
+      if (hide !== edge[i]) { edge[i] = hide; card.style.visibility = hide ? 'hidden' : ''; }
     });
     const c = Math.round(p * (n - 1));
     if (c !== center) {
@@ -94,7 +99,7 @@ function cylinder(orbit, ring, cards) {
     ac.abort();
     st.kill();
     gsap.set(ring, { clearProps: 'transform' });
-    cards.forEach((card) => { card.style.transform = ''; card.classList.remove('is-center'); });
+    cards.forEach((card) => { card.style.transform = ''; card.style.visibility = ''; card.style.opacity = ''; card.classList.remove('is-center'); });
     orbit.querySelectorAll('.orbit__veil').forEach((v) => v.remove());
   };
 }

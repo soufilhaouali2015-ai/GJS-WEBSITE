@@ -1,6 +1,7 @@
 /* ==========================================================================
    GJS · SERVICES
-   Intro + sommaire · 3 services phares · 6 autres services · Configurateur · CTA
+   Intro + index typographique · Tour des 9 services (carrousel) · Fiches
+   (<dialog>) · Méthode en cascade · Formulaire de demande · CTA
    ========================================================================== */
 
 .page-hero .toc {
@@ -16,7 +17,7 @@
 }
 
 /* ---- Index typographique géant (sommaire) --------------------------------- */
-/* Une ligne par service : numéro, pictogramme, nom en grand, prix.
+/* Une ligne par service : numéro, pictogramme, nom en grand (ouvre sa fiche).
    Au survol, un aplat citron se déroule (scaleX) et le nom glisse ; sur
    ordinateur l'affiche du service suit le curseur (sections/services-index.js). */
 
@@ -28,7 +29,7 @@
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 4px 14px;
   min-height: 64px;
@@ -67,13 +68,6 @@
   transition: transform 0.6s var(--ease-expo);
 }
 
-.svc-index__price {
-  grid-column: 2 / -1;
-  font-size: var(--fs-small);
-  font-weight: 600;
-  white-space: nowrap;
-}
-
 .svc-index__item.is-featured .svc-index__num { color: var(--ink); }
 
 .svc-index__link:hover::before,
@@ -89,13 +83,12 @@
 
 @media (min-width: 720px) {
   .svc-index__link {
-    grid-template-columns: 3ch auto minmax(0, 1fr) auto;
+    grid-template-columns: 3ch auto minmax(0, 1fr);
     gap: 18px;
     padding: 12px 10px;
   }
   .svc-index__num { display: block; }
   .svc-index__icon { width: 36px; height: 36px; }
-  .svc-index__price { grid-column: auto; font-size: var(--fs-body); }
 }
 
 @media (min-width: 1024px) {
@@ -169,22 +162,21 @@
 .orbit__tagline { font-size: var(--fs-small); font-weight: 500; color: var(--ink-2); }
 .orbit__card.is-featured .orbit__tagline { color: var(--ink); }
 
-.orbit__price {
+.orbit__quote {
   margin-top: auto;
   padding-top: 12px;
   border-top: var(--border-thin) solid currentColor;
   font-family: var(--font-display);
   font-size: 1.75rem;
   line-height: 1;
+  text-transform: uppercase;
 }
-
-.orbit__price small { font-family: var(--font-text); font-size: 0.75rem; font-weight: 600; }
 
 @media (min-width: 1024px) and (min-height: 720px) {
   .has-motion[data-motion="desktop"] .orbit__face { padding: 32px 26px 26px; gap: 14px; }
   .has-motion[data-motion="desktop"] .orbit__face .icon { width: 56px; height: 56px; }
   .has-motion[data-motion="desktop"] .orbit__face .t-h3 { font-size: clamp(2rem, 1.2rem + 1.2vw, 2.75rem); }
-  .has-motion[data-motion="desktop"] .orbit__price { font-size: 2rem; }
+  .has-motion[data-motion="desktop"] .orbit__quote { font-size: 2rem; }
 }
 
 .orbit__veil {
@@ -288,74 +280,253 @@
   .has-motion[data-motion="desktop"] .orbit__card.is-center { cursor: auto; }
 }
 
-/* ---- Configurateur ------------------------------------------------------- */
+/* ---- Fiches des services (<dialog>) --------------------------------------- */
+/* La boîte de dialogue couvre l'écran (voile noir) et défile elle-même ;
+   la fiche est un panneau qui monte du bas sur mobile, une carte posée au
+   centre à partir de 720 px. Animations en transform et opacity (pages/services.js). */
 
-.configurator {
+.svc-sheets { display: contents; }
+
+.svc-sheet {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: color-mix(in srgb, var(--ink) 74%, transparent);
+  color: var(--ink);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.svc-sheet::backdrop { background: transparent; }
+
+/* Marge haute (et non padding de la boîte) : la barre collante se cale tout en haut */
+.svc-sheet__card {
+  --sheet-top: max(40px, 7vh);
+  position: relative;
+  min-height: calc(100% - var(--sheet-top));
+  margin-top: var(--sheet-top);
+  background: var(--cream);
+  border: var(--border) solid var(--ink);
+  border-bottom: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* Barre collée en haut de la fiche pendant la lecture : numéro, nom, bouton × */
+.svc-sheet__bar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 68px;
+  padding: 8px 10px 8px var(--gutter);
+  background: var(--cream);
+  border-bottom: var(--border) solid var(--ink);
+}
+
+.svc-sheet__crumb {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: 1.625rem;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.svc-sheet__num {
+  padding: 5px 8px 3px;
+  background: var(--ink);
+  color: var(--lime);
+  border-radius: var(--radius);
+  font-size: 1.125rem;
+  letter-spacing: 0.04em;
+}
+
+.svc-sheet__close {
+  flex: none;
   display: grid;
-  gap: 40px;
-  padding: 32px 22px;
-  background: var(--card);
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  background: var(--lime);
+  border: var(--border) solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 3px 3px 0 var(--ink);
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  line-height: 1;
+  color: var(--ink);
+  transition: transform 0.4s var(--ease-expo);
+}
+
+.svc-sheet__close:hover { transform: rotate(90deg); }
+.svc-sheet__close:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+/* Mobile : l'affiche en bandeau, recadrée sur son grand mot */
+.svc-sheet__visual {
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  border-bottom: var(--border) solid var(--ink);
+  background: var(--ink);
+}
+
+.svc-sheet__visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 15%;
+}
+
+.svc-sheet__body {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  padding: 28px var(--gutter) 40px;
+}
+
+.svc-sheet__kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+}
+
+.svc-sheet__kicker .icon { width: 48px; height: 48px; }
+
+.svc-sheet__title { overflow-wrap: anywhere; }
+
+.svc-sheet__tagline {
+  margin-top: -6px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.svc-sheet__cols {
+  display: grid;
+  gap: 28px;
+  margin-top: 8px;
+}
+
+.svc-sheet__label {
+  margin-bottom: 12px;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.svc-sheet__foot {
+  display: grid;
+  gap: 14px;
+  margin-top: 8px;
+  padding: 22px;
+  background: var(--lime);
   border: var(--border) solid var(--ink);
   border-radius: var(--radius);
-  box-shadow: 6px 6px 0 var(--shadow-color);
+  box-shadow: 6px 6px 0 var(--ink);
 }
 
-.configurator fieldset {
-  border: 0;
-  min-width: 0;
-}
+.svc-sheet__delay { font-size: var(--fs-small); font-weight: 500; }
+.svc-sheet__delay strong { display: block; font-size: var(--fs-body); font-weight: 600; }
 
-.configurator legend {
-  margin-bottom: 16px;
+.svc-sheet__quote {
   font-family: var(--font-display);
   font-size: var(--fs-h3);
   line-height: 1;
   text-transform: uppercase;
 }
 
-.configurator__result {
-  display: grid;
-  gap: 14px;
-  align-content: start;
-  padding: 24px;
-  background: var(--lime);
-  border: var(--border) solid var(--ink);
-  border-radius: var(--radius);
-}
+.svc-sheet__foot .btn { justify-self: start; --btn-bg: var(--cream); }
 
-.configurator__estimate {
-  font-family: var(--font-display);
-  font-size: var(--fs-h3);
-  line-height: 1.05;
-  text-transform: uppercase;
-}
+@media (min-width: 720px) {
+  .svc-sheet { padding: 0 var(--gutter) max(32px, 6vh); }
 
-.configurator__hint {
-  font-size: var(--fs-small);
-  font-weight: 500;
-}
-
-@media (min-width: 1024px) {
-  .configurator {
-    grid-template-columns: minmax(0, 1fr) 340px;
-    column-gap: 40px;
-    padding: 44px 40px;
+  .svc-sheet__card {
+    --sheet-top: max(32px, 6vh);
+    width: min(100%, 1180px);
+    min-height: 0;
+    margin-inline: auto;
+    border-bottom: var(--border) solid var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 10px 10px 0 var(--lime);
   }
 
-  .configurator__fields {
+  .svc-sheet__bar { padding: 8px 14px 8px 28px; }
+
+  .svc-sheet__main {
     display: grid;
-    gap: 40px;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
   }
 
-  .configurator__result {
-    align-self: start;
+  /* L'affiche entière, collée sous la barre pendant que le texte défile */
+  .svc-sheet__visual {
     position: sticky;
-    top: calc(var(--header-h) + 24px);
+    top: 68px;
+    aspect-ratio: 4 / 5;
+    border-bottom: 0;
+    border-right: var(--border) solid var(--ink);
   }
+
+  .svc-sheet__visual img { object-position: center; }
+
+  .svc-sheet__body { padding: 40px 40px 44px; }
+
+  .svc-sheet__foot {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 24px;
+  }
+
+  .svc-sheet__delay { grid-column: 1 / -1; }
+  .svc-sheet__foot .btn { justify-self: end; }
 }
 
-/* Impression : le carrousel s'imprime en grille, à plat */
+@media (min-width: 1100px) {
+  .svc-sheet__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 36px; }
+  .svc-sheet__cols > :first-child { grid-column: 1 / -1; }
+}
+
+/* Sans le module de la page (sans JS) : la fiche visée par l'ancre s'affiche
+   à sa place, à plat, sous le carrousel */
+html:not(.has-sheets) .svc-sheet:target {
+  position: relative;
+  display: block;
+  height: auto;
+  padding: var(--s-block) var(--gutter);
+  background: none;
+  overflow: visible;
+  scroll-margin-top: var(--header-h);
+}
+
+html:not(.has-sheets) .svc-sheet:target .svc-sheet__card { width: min(100%, 1180px); margin-inline: auto; border-bottom: var(--border) solid var(--ink); }
+html:not(.has-sheets) .svc-sheet__close { display: none; }
+html:not(.has-sheets) .svc-sheet__bar { position: static; }
+
+/* Fiche ouverte : la page derrière ne défile plus */
+html.is-sheet-open { overflow: hidden; }
+
+/* ---- Formulaire de demande (même logique que Contact) ---------------------- */
+
+.quick-card { max-width: 980px; }
+.quick-card .form__nav [data-form-submit] { margin-left: auto; }
+
+/* Impression : le carrousel s'imprime en grille, à plat ; les fiches ne s'impriment pas */
 @media print {
+  .svc-sheet { display: none !important; }
   .svc-orbit { height: auto !important; }
   .svc-orbit__stage { position: static !important; height: auto !important; overflow: visible !important; }
   .orbit__ring { position: static !important; display: grid !important; width: auto !important; height: auto !important; transform: none !important; }

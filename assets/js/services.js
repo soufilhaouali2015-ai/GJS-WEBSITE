@@ -1,19 +1,14 @@
 /* ==========================================================================
-   GJS · LES 9 SERVICES : SOURCE UNIQUE (prix, badges, textes)
+   GJS · LES 9 SERVICES : SOURCE UNIQUE (badges, textes, délais)
 
-   ➜ Pour changer un prix, un badge ou un texte : modifiez CE fichier, puis lancez
+   ➜ Pour changer un badge, un texte ou un délai : modifiez CE fichier, puis lancez
         npm run services        (ou : node scripts/sync-services.mjs)
-     La commande réécrit les cartes, les fiches détaillées, les choix du formulaire
-     et les données structurées dans les pages HTML (le contenu reste dans le HTML
-     pour le SEO).
-   ➜ Filet de sécurité : si vous oubliez la commande, les prix et badges affichés
-     sont quand même corrigés au chargement de la page (mais Google verra l'ancien
-     texte tant que la commande n'est pas lancée).
-
-   Prix : montants HORS TAXES, en euros.
-     setup   = montant unique « à partir de » (0 si aucun)
-     monthly = abonnement mensuel « à partir de » (0 si aucun)
-     note    = précision affichée sous le prix (facultatif)
+     La commande réécrit les cartes, le tour des services, les fiches détaillées,
+     les choix des formulaires et les données structurées dans les pages HTML
+     (le contenu reste dans le HTML pour le SEO).
+   ➜ Aucun prix n'est affiché sur le site : chaque projet est sur devis gratuit.
+   ➜ Filet de sécurité : si vous oubliez la commande, les badges affichés sont
+     quand même corrigés au chargement de la page.
    ========================================================================== */
 
 export const SERVICES = [
@@ -32,7 +27,6 @@ export const SERVICES = [
       'Textes, photos et référencement de base',
       'Mise en ligne, nom de domaine et hébergement configurés',
     ],
-    price: { setup: 800, monthly: 0, note: '' },
     delay: '2 à 4 semaines pour un site vitrine, 4 à 8 semaines pour un e-commerce',
     does: [
       'On définit ensemble vos pages, votre message et vos objectifs.',
@@ -63,7 +57,6 @@ export const SERVICES = [
       'Application iPhone et Android',
       'Publication sur l’App Store et Google Play',
     ],
-    price: { setup: 4000, monthly: 0, note: '' },
     delay: '8 à 12 semaines',
     does: [
       'On garde les fonctionnalités vraiment utiles, sans superflu.',
@@ -92,7 +85,6 @@ export const SERVICES = [
       'Prospection automatisée par email et LinkedIn',
       'Techniques de growth hacking testées chaque mois',
     ],
-    price: { setup: 650, monthly: 500, note: '' },
     delay: 'Mise en place en 2 semaines, puis suivi chaque mois',
     does: [
       'On définit votre client idéal : secteur, taille, zone, décideur.',
@@ -121,7 +113,6 @@ export const SERVICES = [
       'Création des visuels et des textes',
       'Optimisation de vos profils',
     ],
-    price: { setup: 0, monthly: 350, note: '' },
     delay: 'Premières publications sous 2 semaines',
     does: [
       'On choisit avec vous les réseaux qui comptent pour votre activité.',
@@ -150,7 +141,6 @@ export const SERVICES = [
       'Connexion de vos outils entre eux',
       'IA pour trier, rédiger et relancer',
     ],
-    price: { setup: 500, monthly: 0, note: '' },
     delay: '1 à 3 semaines',
     does: [
       'On repère avec vous les tâches qui vous font perdre du temps.',
@@ -179,7 +169,6 @@ export const SERVICES = [
       'Prise de rendez-vous dans votre agenda',
       'Ton et informations adaptés à votre activité',
     ],
-    price: { setup: 1000, monthly: 100, note: '' },
     delay: '2 à 4 semaines',
     does: [
       'On rassemble vos infos : services, prix, horaires, questions fréquentes.',
@@ -208,7 +197,6 @@ export const SERVICES = [
       'Optimisations techniques et contenus',
       'Suivi de vos positions chaque mois',
     ],
-    price: { setup: 0, monthly: 200, note: '' },
     delay: 'Premiers effets en 3 à 6 mois',
     does: [
       'On identifie ce que vos futurs clients tapent sur Google.',
@@ -237,7 +225,6 @@ export const SERVICES = [
       'Annonces et visuels',
       'Suivi et optimisation chaque mois',
     ],
-    price: { setup: 0, monthly: 150, note: 'Budget publicitaire en plus' },
     delay: 'Campagnes en ligne sous 7 jours',
     does: [
       'On définit vos cibles et votre budget.',
@@ -266,7 +253,6 @@ export const SERVICES = [
       'Import de vos contacts',
       'Relances et suivi automatisés',
     ],
-    price: { setup: 800, monthly: 0, note: '' },
     delay: '2 à 4 semaines',
     does: [
       'On choisit avec vous l’outil adapté (HubSpot, Pipedrive, Brevo…).',
@@ -281,26 +267,5 @@ export const SERVICES = [
     ],
   },
 ];
-
-/** Phrase affichée sous chaque grille de prix. */
-export const PRICE_NOTE = 'Prix hors taxes. Chaque projet est chiffré précisément après un premier échange gratuit.';
-
-/* ---- Mise en forme (partagée entre le navigateur et le script de synchro) ---- */
-
-const NBSP = ' ';
-
-/** 4000 → « 4 000 € » (espaces insécables). */
-export function formatEuros(amount) {
-  return `${String(amount).replace(/\B(?=(\d{3})+(?!\d))/g, NBSP)}${NBSP}€`;
-}
-
-/** Prix de départ : « 800 € », « 350 €/mois » ou « 650 € + 500 €/mois ». */
-export function formatPrice(service) {
-  const { setup, monthly } = service.price;
-  const parts = [];
-  if (setup) parts.push(formatEuros(setup));
-  if (monthly) parts.push(`${formatEuros(monthly)}/mois`);
-  return parts.join(`${NBSP}+ `);
-}
 
 export const getService = (id) => SERVICES.find((s) => s.id === id);

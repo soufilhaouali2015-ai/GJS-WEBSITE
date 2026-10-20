@@ -1,13 +1,12 @@
 /* ==========================================================================
    GJS · AFFICHES DES SERVICES : COMPOSITIONS
    Une mise en page par service (clé = id dans assets/js/services.js).
-   Les textes (mot principal, accroche, prix, badge) viennent du contexte k :
+   Les textes (mot principal, accroche, mention « sur devis », badge) viennent du contexte k :
      k.n      numéro d'affiche (« 01 »)
      k.words  mots du nom court, en capitales (« SITE », « INTERNET »)
      k.tag    accroche
-     k.price  { lines: ['DÈS 650 €', '+ 500 €/MOIS'], sub: 'HT' }
+     k.quote  { lines: ['SUR DEVIS', 'GRATUIT'], sub: '' } (aucun prix sur les affiches)
      k.badge  badge en capitales (« BEST-SELLER ») ou ''
-     k.note   précision sous le prix (« Budget publicitaire en plus ») ou ''
      k.svg    pictogramme du service (<svg> en trait, couleur = currentColor)
    Fonds en alternance : citron, noir, crème. Toutes les positions sont en px
    sur une affiche de 640 x 800.
@@ -40,7 +39,7 @@ export const COMPOSITIONS = {
       }),
       tape({ x: 60, y: 92, w: 150, h: 40, rot: -7, seed: 3, color: 'ink' }),
       k.badge && sticker({ x: 612, y: 72, anchor: 'right', lines: [k.badge], variant: 'cream', rot: 4, size: 34, z: 9 }),
-      sticker({ x: 612, y: 504, anchor: 'right', lines: k.price.lines, sub: k.price.sub, variant: 'ink', rot: -3, size: 62 }),
+      sticker({ x: 612, y: 504, anchor: 'right', lines: k.quote.lines, sub: k.quote.sub, variant: 'ink', rot: -3, size: 62 }),
       tile({ x: 42, y: 618, w: 132, bg: 'cream', rot: -4, inner: icon(k.svg, { size: 94, strokeWidth: 2.3 }) }),
       tagline(k.tag, { x: 206, y: 642, w: 340, size: 27 }),
       marker([
@@ -68,7 +67,7 @@ export const COMPOSITIONS = {
       }),
       tape({ x: 70, y: 544, w: 116, h: 36, rot: -8, seed: 5, color: 'lime' }),
       tagline(k.tag, { x: 252, y: 572, w: 340, size: 30, color: 'cream' }),
-      sticker({ x: 252, y: 664, lines: k.price.lines, sub: k.price.sub, variant: 'lime', rot: -3, size: 64, shadow: 'cream' }),
+      sticker({ x: 252, y: 664, lines: k.quote.lines, sub: k.quote.sub, variant: 'lime', rot: -3, size: 64, shadow: 'cream' }),
       marker([
         burst(560, 696, 36, 64, { from: -1.2, to: 1.2, count: 4, seed: 6 }),
       ], { color: 'lime', width: 7 }),
@@ -92,7 +91,7 @@ export const COMPOSITIONS = {
       tape({ x: 546, y: 444, w: 120, h: 36, rot: -38, seed: 10 }),
       icon(k.svg, { x: 60, y: 540, size: 170, strokeWidth: 2.1, z: 4 }),
       tagline(k.tag, { x: 300, y: 536, w: 310, size: 24 }),
-      sticker({ x: 610, y: 646, anchor: 'right', lines: k.price.lines, sub: k.price.sub, variant: 'ink', rot: -2, size: 52 }),
+      sticker({ x: 610, y: 646, anchor: 'right', lines: k.quote.lines, sub: k.quote.sub, variant: 'ink', rot: -2, size: 52 }),
       marker([
         loop(146, 640, 118, 112, { seed: 12, start: -2.1 }),
       ], { width: 7 }),
@@ -119,7 +118,7 @@ export const COMPOSITIONS = {
       }),
       tape({ x: 478, y: 220, w: 130, rot: 8, seed: 11 }),
       tape({ x: 24, y: 584, w: 116, rot: -10, seed: 17 }),
-      sticker({ x: 612, y: 664, anchor: 'right', lines: k.price.lines, sub: k.price.sub, variant: 'cream', rot: 3, size: 56, shadow: 'lime' }),
+      sticker({ x: 612, y: 664, anchor: 'right', lines: k.quote.lines, sub: k.quote.sub, variant: 'cream', rot: 3, size: 56, shadow: 'lime' }),
       marker([
         burst(114, 130, 92, 120, { from: -0.7, to: 0.8, count: 4, seed: 14 }),
         arrow([60, 760], [150, 770], [236, 716], { seed: 15, head: 24 }),
@@ -143,7 +142,7 @@ export const COMPOSITIONS = {
       box(262, 96, word(k.words.slice(1).join(' '), { fit: 300, max: 400 })),
       icon(k.svg, { x: 250, y: 488, size: 120, strokeWidth: 2.3, rot: -4 }),
       tagline(k.tag, { x: 392, y: 496, w: 220, size: 23 }),
-      sticker({ x: 262, y: 652, lines: k.price.lines, sub: k.price.sub, variant: 'ink', rot: -3, size: 62 }),
+      sticker({ x: 262, y: 652, lines: k.quote.lines, sub: k.quote.sub, variant: 'ink', rot: -3, size: 62 }),
       marker([
         loop(392, 246, 178, 188, { seed: 16, start: -2.5 }),
       ], { width: 8 }),
@@ -166,7 +165,7 @@ export const COMPOSITIONS = {
           <span style="position:absolute;left:146px;top:-28px;width:54px;height:32px;background:var(--ink);clip-path:polygon(100% 0,72% 100%,0 100%)"></span>
         </div></div>`,
       tape({ x: 300, y: 548, w: 104, h: 34, rot: -24, seed: 19, z: 7 }),
-      sticker({ x: 34, y: 640, lines: k.price.lines, sub: k.price.sub, variant: 'lime', rot: 3, size: 54 }),
+      sticker({ x: 34, y: 640, lines: k.quote.lines, sub: k.quote.sub, variant: 'lime', rot: 3, size: 54 }),
       marker([
         burst(488, 418, 102, 130, { from: -1.0, to: -0.15, count: 3, seed: 18 }),
       ], { width: 7 }),
@@ -198,7 +197,7 @@ export const COMPOSITIONS = {
         tape({ x: 268, y: 124, w: 110, rot: 6, seed: 14 }),
         icon(k.svg, { x: 44, y: 470, size: 124, color: 'lime', strokeWidth: 2.2 }),
         tagline(k.tag, { x: 196, y: 478, w: 400, size: 26, color: 'cream' }),
-        sticker({ x: 610, y: 646, anchor: 'right', lines: k.price.lines, sub: k.price.sub, variant: 'lime', rot: -3, size: 60, shadow: 'cream' }),
+        sticker({ x: 610, y: 646, anchor: 'right', lines: k.quote.lines, sub: k.quote.sub, variant: 'lime', rot: -3, size: 60, shadow: 'cream' }),
         marker([
           arrow([48, 760], [150, 720], [250, 640], { seed: 19, head: 26 }),
         ], { color: 'lime', width: 8 }),
@@ -215,14 +214,13 @@ export const COMPOSITIONS = {
       box(0, 120, word(k.words.join(' '), { fit: 560, max: 420, style: 'text-shadow:10px 10px 0 var(--cream)' }), 'width:640px;display:flex;justify-content:center;z-index:3'),
       paper({
         x: 24, y: 540, w: 592, h: 232, rot: -1.5, seed: 81, color: 'cream', rim: 'cream-2', z: 4,
-        innerStyle: 'align-items:flex-start;justify-content:flex-start;padding:62px 30px 0 30px',
+        innerStyle: 'align-items:flex-start;justify-content:flex-start;padding:86px 30px 0 30px',
         inner: `<div style="display:flex;gap:22px;align-items:flex-start">
           ${icon(k.svg, { size: 104, strokeWidth: 2.3 })}
-          <div><p style="font:600 25px/1.22 Poppins;color:var(--ink);text-wrap:balance">${text_(k.tag)}</p>
-          ${k.note ? `<p style="margin-top:10px;font:500 18px/1.2 Poppins;color:var(--grey)">${text_(k.note)}</p>` : ''}</div></div>`,
+          <div><p style="font:600 25px/1.22 Poppins;color:var(--ink);text-wrap:balance">${text_(k.tag)}</p></div></div>`,
       }),
       tape({ x: 40, y: 524, w: 130, rot: -7, seed: 15 }),
-      sticker({ x: 610, y: 498, anchor: 'right', lines: k.price.lines, sub: k.price.sub, variant: 'ink', rot: 3, size: 54 }),
+      sticker({ x: 610, y: 498, anchor: 'right', lines: k.quote.lines, sub: k.quote.sub, variant: 'ink', rot: 3, size: 54 }),
       marker([
         underline(150, 470, 470, { seed: 20, passes: 2, gap: 15, slope: -4 }),
       ], { width: 9, z: 3 }),
@@ -239,7 +237,7 @@ export const COMPOSITIONS = {
       paper({ x: 0, y: 420, w: 640, h: 128, rot: -2.5, seed: 91, color: 'lime', rim: 'cream-2', sides: 'tb', amp: 8, shadow: null, z: 2 }),
       box(0, 232, word(k.words.join(' '), { fit: 572, max: 420 }), 'width:640px;display:flex;justify-content:center;z-index:3'),
       tagline(k.tag, { x: 40, y: 610, w: 300, size: 25 }),
-      sticker({ x: 610, y: 640, anchor: 'right', lines: k.price.lines, sub: k.price.sub, variant: 'ink', rot: -3, size: 62 }),
+      sticker({ x: 610, y: 640, anchor: 'right', lines: k.quote.lines, sub: k.quote.sub, variant: 'ink', rot: -3, size: 62 }),
       tape({ x: 470, y: 600, w: 120, rot: 10, seed: 16, z: 9 }),
       marker([
         check(260, 120, 46, { seed: 21 }),

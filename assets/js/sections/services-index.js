@@ -104,7 +104,7 @@ export function initServicesIndex(root = document) {
     if (!link || !link.matches(':focus-visible')) return;
     load();
     const r = link.getBoundingClientRect();
-    // Même règle qu'à la souris : au-dessus de la ligne (en dessous près du haut), jamais sur son prix
+    // Même règle qu'à la souris : au-dessus de la ligne (en dessous près du haut)
     const above = r.top - frame.offsetHeight - 16;
     x.jump(Math.min(r.left + r.width * 0.45, window.innerWidth - frame.offsetWidth - 24));
     y.jump(above > 8 ? above : r.bottom + 16);
@@ -116,6 +116,7 @@ export function initServicesIndex(root = document) {
     if (!list.contains(e.relatedTarget)) { pick(-1); show.set(0); start(); }
   });
 
-  // Un clic sur un nom fait défiler jusqu'à sa fiche : l'affiche s'efface
+  // Un clic sur un nom ouvre sa fiche : l'affiche s'efface
+  list.addEventListener('click', () => { pick(-1); show.set(0); start(); });
   window.addEventListener('scroll', () => { if (active >= 0 && !list.matches(':hover')) { pick(-1); show.set(0); start(); } }, { passive: true });
 }

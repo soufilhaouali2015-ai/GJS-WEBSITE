@@ -72,6 +72,7 @@ export function initScroll() {
   // Arrivée sur une ancre (ex. services.html#site) : on recale après la mise en page
   if (window.location.hash.length > 1) {
     const target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
-    if (target) window.addEventListener('load', () => scrollTo(target, { immediate: true }), { once: true });
+    // Une fiche service (<dialog>) s'ouvre par-dessus la page : pas de défilement
+    if (target && target.tagName !== 'DIALOG') window.addEventListener('load', () => scrollTo(target, { immediate: true }), { once: true });
   }
 }

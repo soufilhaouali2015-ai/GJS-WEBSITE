@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* ==========================================================================
    GJS · GÉNÉRATION DES AFFICHES DES SERVICES
-   Lit assets/js/services.js (nom court, accroche, prix, badge, pictogramme),
+   Lit assets/js/services.js (nom court, accroche, badge, pictogramme),
    compose une affiche par service (compositions.mjs + poster.html), la rend
    dans Chromium (Playwright) en 640 x 800 et l'enregistre en WebP dans
    assets/img/services/poster-{id}.webp.
@@ -22,7 +22,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { SERVICES, formatPrice } from '../../assets/js/services.js';
+import { SERVICES } from '../../assets/js/services.js';
 import { COMPOSITIONS } from './compositions.mjs';
 import { esc, W, H } from './elements.mjs';
 
@@ -78,22 +78,16 @@ function iconReader(sprite) {
 
 /* ---- Textes --------------------------------------------------------------- */
 
-/** « 650 € + 500 €/mois » → ['DÈS 650 €', '+ 500 €/MOIS'] (espace fine entre milliers). */
-function priceLines(service) {
-  return formatPrice(service)
-    .split(`${NBSP}+ `)
-    .map((part, i) => `${i ? '+ ' : 'DÈS '}${part.toUpperCase()}`)
-    .map((line) => esc(line).replace(/(\d) (?=\d)/g, '$1<span class="nnbsp"></span>'));
-}
+/** Aucun prix sur les affiches : chaque service est sur devis gratuit. */
+const QUOTE = { lines: ['SUR DEVIS', 'GRATUIT'], sub: '' };
 
 function context(service, index, svgFor) {
   return {
     n: String(index + 1).padStart(2, '0'),
     words: service.short.toUpperCase().split(/\s+/),
     tag: service.tagline,
-    price: { lines: priceLines(service), sub: 'HT' },
+    quote: QUOTE,
     badge: service.badge ? esc(service.badge.toUpperCase()) : '',
-    note: service.price.note || '',
     svg: svgFor(service.icon),
   };
 }

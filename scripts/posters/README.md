@@ -38,9 +38,10 @@ Si Playwright est déjà installé ailleurs, indiquez son chemin :
 
 ## Que modifier, et où
 
-- **Textes et prix** : rien à faire ici. Le grand mot (nom court), l'accroche,
-  le prix (« DÈS 650 € + 500 €/MOIS », montants HT), le badge et le
-  pictogramme viennent de `assets/js/services.js`. Modifiez ce fichier, puis
+- **Textes** : rien à faire ici. Le grand mot (nom court), l'accroche, le
+  badge et le pictogramme viennent de `assets/js/services.js`. Aucun prix
+  n'apparaît : chaque affiche porte la mention « Sur devis gratuit »
+  (`QUOTE` dans `build-posters.mjs`). Modifiez ce fichier, puis
   relancez la commande ci-dessus.
 - **Mise en page d'une affiche** : `compositions.mjs` (une fonction par
   service, positions en pixels sur 640 x 800).

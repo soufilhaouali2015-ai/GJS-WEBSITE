@@ -1,6 +1,6 @@
 /* ==========================================================================
    GJS · CONFIGURATION CENTRALE
-   Tout ce qui se personnalise (hors services et prix : voir services.js) est ici.
+   Tout ce qui se personnalise (hors services : voir services.js) est ici.
    Les éléments [data-config="…"] des pages sont synchronisés au chargement.
    Pensez aussi à rechercher/remplacer ces valeurs dans les fichiers HTML : le
    contenu doit rester présent sans JavaScript pour le SEO (voir README).

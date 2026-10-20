@@ -1,6 +1,7 @@
 /* ==========================================================================
    GJS · CONTACT
    Formulaire en 3 étapes · Autres moyens de contact (WhatsApp, rendez-vous)
+   (carte, champs, erreurs et succès communs : components.css)
    ========================================================================== */
 
 .contact__layout {
@@ -14,28 +15,6 @@
     grid-template-columns: minmax(0, 1fr) 360px;
     gap: 56px;
   }
-}
-
-.form-card {
-  padding: 28px 20px;
-  background: var(--card);
-  border: var(--border) solid var(--ink);
-  border-radius: var(--radius);
-  box-shadow: 6px 6px 0 var(--shadow-color);
-  scroll-margin-top: calc(var(--header-h) + 24px);
-}
-
-@media (min-width: 720px) {
-  .form-card { padding: 40px 36px; }
-}
-
-.form > * + * {
-  margin-top: 28px;
-}
-
-.form__intro {
-  font-size: var(--fs-small);
-  color: var(--fg-2);
 }
 
 /* Progression : 3 étapes */
@@ -103,74 +82,9 @@
   text-transform: uppercase;
 }
 
-.form__sub {
-  border: 0;
-  min-width: 0;
-}
-
-.form__sub legend {
-  margin-bottom: 12px;
-  font-weight: 600;
-}
-
-.form__fields {
-  display: grid;
-  gap: 20px;
-}
-
-@media (min-width: 720px) {
-  .form__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .field--full { grid-column: 1 / -1; }
-}
-
-.form__nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 14px;
-  padding-top: 24px;
-  border-top: var(--border-thin) solid var(--ink);
-}
-
 .form__nav [data-form-next],
 .form__nav [data-form-submit] {
   margin-left: auto;
-}
-
-.form__errors {
-  padding: 16px 18px;
-  background: var(--cream);
-  border: 4px dashed var(--ink);
-  border-radius: var(--radius);
-}
-
-.form__errors ul {
-  margin-top: 8px;
-  padding-left: 20px;
-  list-style: square;
-}
-
-.form__errors a {
-  font-weight: 600;
-  text-decoration: underline;
-}
-
-.form__honeypot input {
-  background: var(--cream);
-  border: 1px solid var(--ink);
-}
-
-.form__honeypot {
-  position: absolute;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-
-.form.is-sending {
-  opacity: 0.7;
-  pointer-events: none;
 }
 
 /* Sans JS : toutes les étapes visibles, la progression est inutile */
@@ -178,26 +92,6 @@
 .no-js .form__nav [data-form-next],
 .no-js .form__nav [data-form-prev] {
   display: none;
-}
-
-/* Succès */
-.success {
-  padding: 48px 24px;
-  text-align: center;
-}
-
-.success > * + * {
-  margin-top: 20px;
-}
-
-.success .sticker {
-  font-size: var(--fs-h2);
-  --tilt: -4deg;
-}
-
-.success p {
-  margin-inline: auto;
-  max-width: 46ch;
 }
 
 /* Autres moyens de contact */

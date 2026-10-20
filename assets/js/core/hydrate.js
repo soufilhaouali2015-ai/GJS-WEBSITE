@@ -1,7 +1,7 @@
 /* ==========================================================================
    GJS · SYNCHRONISATION AVEC LA CONFIG ET LES DONNÉES SERVICES
    Coordonnées, WhatsApp, rendez-vous, réseaux (config.js) et filet de sécurité
-   pour les prix et badges (services.js). Le HTML contient déjà les bonnes
+   pour les badges (services.js). Le HTML contient déjà les bonnes
    valeurs : ceci ne fait que corriger un oubli de `npm run services`.
    ========================================================================== */
 
@@ -29,17 +29,9 @@ export function hydrateConfig(root = document) {
 }
 
 export async function hydrateServices(root = document) {
-  const prices = $$('[data-price]', root);
   const badges = $$('[data-badge]', root);
-  if (!prices.length && !badges.length) return;
-  const { getService, formatPrice } = await import('../services.js');
-  prices.forEach((el) => {
-    const s = getService(el.dataset.price);
-    if (s) {
-      const text = formatPrice(s);
-      if (el.textContent !== text) el.textContent = text;
-    }
-  });
+  if (!badges.length) return;
+  const { getService } = await import('../services.js');
   badges.forEach((el) => {
     const s = getService(el.dataset.badge);
     if (s && s.badge && el.textContent !== s.badge) el.textContent = s.badge;

@@ -21,7 +21,7 @@ import { initCookies } from './core/cookies.js';
 import { hydrateConfig, hydrateServices } from './core/hydrate.js';
 
 const PAGES = {
-  services: () => import('./pages/configurateur.js'),
+  services: () => import('./pages/services.js'),
   contact: () => import('./pages/contact.js'),
 };
 

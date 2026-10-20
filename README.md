@@ -44,18 +44,20 @@ Requête `POST`, en-têtes `Content-Type: application/json` et `Accept: applicat
 }
 ```
 
+Le formulaire court de la page Services (`#demande`) utilise le même endpoint, les mêmes règles de validation, le même anti-spam et le même écran de succès (code commun : `assets/js/core/forms.js`). Il envoie le même JSON, avec `budget`, `delai` et `entreprise` vides.
+
 Anti-spam : champ piège invisible (`website`). S'il est rempli, rien n'est envoyé. Le consentement RGPD est obligatoire et jamais pré-coché. Pensez à indiquer le prestataire choisi dans la politique de confidentialité (section 4).
 
 ---
 
-## 2. Modifier un prix, un badge ou un service
+## 2. Modifier un badge, un texte ou un service
 
-**Tout est dans un seul fichier : `assets/js/services.js`.** Chaque service y a son nom, sa phrase de bénéfice, ses 3 points inclus, son prix de départ, son badge, son délai indicatif et son détail.
+**Tout est dans un seul fichier : `assets/js/services.js`.** Chaque service y a son nom, sa phrase de bénéfice, ses 3 points inclus, son badge, son délai indicatif et son détail (ce qu'on fait, ce que vous obtenez). **Aucun prix n'est affiché sur le site** : partout, la mention est « Sur devis gratuit ».
 
 ```js
-price: { setup: 650, monthly: 500, note: '' },   // « À partir de 650 € + 500 €/mois HT »
 badge: 'Le plus demandé',                        // sticker (laisser '' pour aucun)
 featured: true,                                  // carte mise en avant (fond citron)
+delay: '8 à 12 semaines',                        // délai indicatif (fiche du service)
 ```
 
 Après modification, lancez :
@@ -64,11 +66,11 @@ Après modification, lancez :
 npm run services        # ou : node scripts/sync-services.mjs   (Node 18+, aucune dépendance)
 ```
 
-La commande réécrit, dans les pages HTML, tout ce qui se trouve entre les marqueurs `<!-- @services:… -->` : les cartes de l'accueil, le flyer du hero, le sommaire et les fiches de la page Services, les choix du configurateur et du formulaire de contact, et les données structurées (Service, OfferCatalog). Le contenu reste donc **écrit dans le HTML** pour le SEO.
+La commande réécrit, dans les pages HTML, tout ce qui se trouve entre les marqueurs `<!-- @services:… -->` : les cartes de l'accueil, l'index et le tour des services, les 9 fiches détaillées de la page Services, les choix des deux formulaires (Services et Contact), les stickers du footer et les données structurées (Service, OfferCatalog, sans prix). Le contenu reste donc **écrit dans le HTML** pour le SEO.
 
-Filet de sécurité : si vous oubliez la commande, les prix et badges **affichés** sont corrigés au chargement de la page. Mais Google verra l'ancien texte : lancez toujours la commande.
+Filet de sécurité : si vous oubliez la commande, les badges **affichés** sont corrigés au chargement de la page. Mais Google verra l'ancien texte : lancez toujours la commande.
 
-La phrase sous les grilles (« Prix hors taxes. Chaque projet est chiffré… ») est la constante `PRICE_NOTE` du même fichier. Les délais cités dans la FAQ de l'accueil sont écrits à la main dans `index.html` (et dans le JSON-LD FAQPage du `<head>`) : mettez-les à jour si vous changez les délais.
+Les délais cités dans la FAQ de l'accueil sont écrits à la main dans `index.html` (et dans le JSON-LD FAQPage du `<head>`) : mettez-les à jour si vous changez les délais.
 
 ---
 
@@ -187,14 +189,16 @@ ANALYTICS: { src: 'https://plausible.io/js/script.js', attrs: { 'data-domain': '
 | Page | Sections (dans l'ordre) |
 |---|---|
 | **Accueil** | Hero · Bandeau défilant · Services (9 cartes, 3 mises en avant) · Comment ça marche (cascade) · Pourquoi GJS (4 points) · Arcade (3 jeux) · FAQ · CTA final (noir) |
-| **Services** | Intro + sommaire cliquable · 3 services phares (détail) · 6 autres services (détail) · Configurateur · CTA (noir) |
+| **Services** | Intro + index typographique · Le tour des 9 services (carrousel 3D) · 9 fiches détaillées (fenêtres ouvertes au clic, adresse `services.html#site`…) · Notre méthode de travail (cascade) · Votre devis gratuit (formulaire court) · CTA (noir) |
 | **À propos** | Notre histoire · L'équipe (3 associés) · Nos 4 valeurs · CTA (noir) |
 | **Contact** | Formulaire en 3 étapes + WhatsApp, rendez-vous, email et téléphone |
 | **Légal, 404** | Même identité, contenu juridique conservé |
 
 **Activer la section « Réalisations »** (accueil, masquée par défaut) : dans `index.html`, retirez l'attribut `hidden` de `<section id="realisations">`, puis remplacez les 3 cartes par vos projets réels (`assets/img/realisation-exemple.webp` est une image d'attente).
 
-**Pré-remplissage du contact** : `contact.html?besoins=site,seo&budget=mensuel&delai=urgent#formulaire`. Les boutons « Je veux ça » et le configurateur s'en servent.
+**Pré-remplissage du contact** : `contact.html?besoins=site,seo&budget=mensuel&delai=urgent#formulaire`. Les boutons « Je veux ça » de l'accueil s'en servent ; ceux des fiches de la page Services cochent le service dans le formulaire de la page.
+
+**Fiches des services** : chaque fiche est une fenêtre (`<dialog>`) qui s'ouvre depuis l'index, le carrousel ou un lien `services.html#seo` venu d'une autre page. Échap, le bouton ×, un clic à côté ou le bouton retour du téléphone la ferment. Sans JavaScript, la fiche s'affiche dans la page à son ancre.
 
 ---
 
@@ -214,7 +218,8 @@ assets/js/   main.js · config.js · services.js
                     marquee · header · transition · pause · menu · cookies · hydrate · utils
              hero/  hero.js (scroll, repli DOM) · webgl.js (shaders)
              sections/ steps · faq · stickers (footer) · services-index · carousel
-             pages/ contact (formulaire) · configurateur
+             pages/ contact (formulaire en 3 étapes) · services (fiches et formulaire court)
+             core/forms.js : validation, anti-spam et envoi communs aux deux formulaires
 assets/vendor/ gsap (gsap, ScrollTrigger, SplitText) · lenis · three · matter, avec leurs licences
 assets/video/  hero.mp4 · hero.webm · hero-mobile.mp4 · hero-mobile.webm · hero-poster.jpg
                source/ vidéo originale + encode-hero.sh (non déployé)
@@ -245,7 +250,7 @@ assets/fonts/ Bebas Neue + Poppins (woff2, OFL)
 | Débordement horizontal à 320, 360, 375, 390, 768, 1024, 1440 px | Aucun ; titre du hero jamais sous le bouton pause, le header ou l'étiquette ; décors jamais sur un texte (vérifié de 1280 à 1920 px) |
 | Mouvement réduit | Ni épinglage, ni Lenis, ni WebGL, ni 3D ; vidéo en pause sur le poster et non téléchargée |
 | Rideau entre les pages | Levé en CSS 0,04 s après le premier affichage : jamais bloqué par le JavaScript, même en 4G lente |
-| Parcours testés | Cookies ; menu mobile ; « Je veux ça » → service pré-coché ; 3 étapes du formulaire ; envoi simulé → écran de succès ; configurateur → contact pré-rempli ; rendu sans JS ; retour arrière (WebGL recréé) ; rechargement (position conservée) ; lecture automatique refusée (pas de carte noire) |
+| Parcours testés | Cookies ; menu mobile ; « Je veux ça » → service pré-coché ; 3 étapes du formulaire ; envoi simulé → écran de succès ; fiches des services (index, carrousel, adresse, Échap, retour) ; formulaire court de la page Services ; rendu sans JS ; retour arrière (WebGL recréé) ; rechargement (position conservée) ; lecture automatique refusée (pas de carte noire) |
 
 Refaites une mesure Lighthouse sur l'hébergement final, avec les vraies photos.
 

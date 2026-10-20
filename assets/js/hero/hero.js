@@ -16,7 +16,9 @@ import { spring, SPRING } from '../core/spring.js';
 
 const { gsap, ScrollTrigger } = window;
 
-const VEIL_DESKTOP = [0.6, 0.52, 0.2]; // identique au dégradé CSS .hero__veil
+// Voile du titre crème (opacité, rayons de l'ellipse) : identique au dégradé CSS .hero__veil,
+// calculé sur les 288 images de la boucle pour un contraste ≥ 4,5:1 sous chaque ligne
+const VEIL_DESKTOP = [0.63, 0.82, 1.08];
 const S_END = isDesktop ? 0.56 : 0.88; // échelle finale de la carte
 const RADIUS_END = 22;
 const BORDER = 3;

@@ -101,10 +101,10 @@ const CARD_FRAGMENT = /* glsl */`
       col = mix(col, uInk, clamp((l - ld) * 3.5, 0.0, 1.0) * k * 0.85);
     }
 
-    // Voile calculé pour la lisibilité du titre (bas-gauche → haut-droite)
-    float t = clamp((vUv.x + vUv.y) * 0.5, 0.0, 1.0);
-    float a = t < 0.5 ? mix(uVeil.x, uVeil.y, t / 0.5) : mix(uVeil.y, uVeil.z, (t - 0.5) / 0.5);
-    col = mix(col, uInk, a);
+    // Voile elliptique ancré en bas à gauche, sous le titre seulement (le logo
+    // de la vidéo reste lumineux) : x = opacité, y et z = rayons en largeur et hauteur
+    float dv = length(vec2(vUv.x / uVeil.y, vUv.y / uVeil.z));
+    col = mix(col, uInk, uVeil.x * (1.0 - smoothstep(0.62, 1.0, dv)));
 
     // Titre crème (espace écran : se superpose exactement au titre noir de la page)
     if (uTitleOn > 0.5) {

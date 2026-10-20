@@ -64,10 +64,12 @@
   object-position: 50% 40%;
 }
 
-/* Voile calculé image par image : contraste du titre crème ≥ 4,2:1 sur le pixel
-   le plus clair de toute la boucle (≥ 4,5:1 sur 99 % des pixels). */
+/* Voile calculé image par image : contraste du titre crème ≥ 4,5:1 sur le pixel
+   le plus clair de toute la boucle, sous chaque ligne. Ellipse ancrée en bas à
+   gauche (le logo GJS de la vidéo reste lumineux), même profil que le shader
+   (paliers qui reproduisent son smoothstep). */
 .hero__veil {
-  background: linear-gradient(to top right, rgba(20, 20, 20, 0.6) 0%, rgba(20, 20, 20, 0.52) 50%, rgba(20, 20, 20, 0.2) 100%);
+  background: radial-gradient(82% 108% at 0% 100%, rgba(20, 20, 20, 0.63) 62%, rgba(20, 20, 20, 0.53) 71.5%, rgba(20, 20, 20, 0.315) 81%, rgba(20, 20, 20, 0.1) 90.5%, rgba(20, 20, 20, 0) 100%);
 }
 
 .hero__border {

@@ -1,7 +1,7 @@
 /* ==========================================================================
    GJS · STICKERS DU FOOTER
    Une zone au-dessus des colonnes du footer, où tombent une quinzaine de
-   stickers (logo, badges, -40 %, services). Ce sont de vrais éléments HTML
+   stickers (logo, badges, services). Ce sont de vrais éléments HTML
    (texte net en Bebas), déplacés en transform.
      ordinateur : physique Matter.js, chargée à l'approche du footer ; on peut
                   attraper et lancer les stickers ; pause hors de l'écran
@@ -44,7 +44,7 @@ function physics(zone, items, Matter) {
   const T = 200; // épaisseur des murs invisibles
 
   zone.classList.add('is-physics');
-  const sizes = items.map((el) => ({ w: el.offsetWidth, h: el.offsetHeight, round: el.classList.contains('drop--round') }));
+  const sizes = items.map((el) => ({ w: el.offsetWidth, h: el.offsetHeight }));
   const setters = items.map((el) => ({
     x: gsap.quickSetter(el, 'x', 'px'),
     y: gsap.quickSetter(el, 'y', 'px'),
@@ -60,7 +60,7 @@ function physics(zone, items, Matter) {
     const x = rand(s.w / 2 + 12, Math.max(s.w / 2 + 13, W - s.w / 2 - 12));
     const y = -s.h - i * 60 - rand(0, 80);
     const opts = { restitution: 0.32, friction: 0.5, frictionAir: 0.012, density: 0.0016, angle: rand(-0.5, 0.5) };
-    return s.round ? Bodies.circle(x, y, s.w / 2, opts) : Bodies.rectangle(x, y, s.w, s.h, { ...opts, chamfer: { radius: 6 } });
+    return Bodies.rectangle(x, y, s.w, s.h, { ...opts, chamfer: { radius: 6 } });
   });
   Composite.add(engine.world, [...walls, ...bodies]);
 

@@ -1,7 +1,7 @@
 /* ==========================================================================
    GJS · ACCUEIL
-   Hero · Services · Offre de lancement · Comment ça marche · Pourquoi GJS
-   · (Réalisations, masquée) · FAQ · CTA final
+   Hero · Bandeau · Services · Comment ça marche · Pourquoi GJS
+   · (Réalisations, masquée) · Arcade · FAQ · CTA final
    ========================================================================== */
 
 /* ---- Hero vidéo ----------------------------------------------------------
@@ -277,52 +277,6 @@
   .hero__kicker .sticker { font-size: 0.95rem; }
 }
 
-/* ---- Offre de lancement (section noire n° 1) ----------------------------- */
-
-.offer__grid {
-  position: relative;
-  display: grid;
-  gap: 32px;
-}
-
-.offer__title {
-  position: relative;
-}
-
-.offer__title > * + * {
-  margin-top: 24px;
-}
-
-.offer__body > * + * {
-  margin-top: 20px;
-}
-
-.offer__body .btn {
-  margin-top: 32px;
-}
-
-.offer .sticker-round {
-  width: 120px;
-  margin-left: auto;
-  transform: rotate(8deg);
-}
-
-@media (min-width: 1024px) {
-  .offer__grid {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: 64px;
-    align-items: center;
-  }
-
-  .offer .sticker-round {
-    position: absolute;
-    top: -56px;
-    right: 0;
-    width: 150px;
-    margin: 0;
-  }
-}
-
 /* ---- Réalisations (masquée tant qu'il n'y a pas de vrais projets) -------- */
 
 .projects {
@@ -336,6 +290,565 @@
 
 @media (min-width: 1100px) {
   .projects { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* ---- Arcade : la borne ----------------------------------------------------
+   Cartouches (onglets) · écran en mode démo · pupitre · fiche du jeu.
+   La démo n'anime que l'écran visible (.is-on), et s'arrête avec « Pause démo »
+   (.is-demo-paused) ou le bouton pause du hero. Mouvement réduit : image fixe. */
+
+.borne {
+  display: grid;
+  gap: 28px clamp(24px, 3vw, 48px);
+}
+
+.borne__hint {
+  margin-bottom: 14px;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.borne__tabs {
+  display: grid;
+  gap: 14px;
+}
+
+.borne__tab {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 72px;
+  padding: 12px 16px;
+  background: var(--cream-2);
+  color: var(--ink);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 4px 4px 0 var(--ink);
+  text-align: left;
+  transform: rotate(var(--tilt, -0.6deg));
+  transition: transform 0.6s var(--ease-expo), background-color 0.2s, box-shadow 0.6s var(--ease-expo);
+}
+
+.borne__tab:nth-child(even) { --tilt: 0.6deg; }
+
+.borne__tab:hover { transform: translate(-2px, -2px) rotate(var(--tilt, -0.6deg)); box-shadow: 6px 6px 0 var(--ink); }
+
+.borne__tab.is-active {
+  background: var(--lime);
+  transform: translateX(8px) rotate(0deg);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.borne__tab-num {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  line-height: 1;
+}
+
+.borne__tab-body { display: grid; gap: 2px; }
+
+.borne__tab-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.borne__tab-meta {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+.borne__tab-led {
+  width: 14px;
+  height: 14px;
+  background: var(--cream);
+  border: var(--border-thin) solid var(--ink);
+  border-radius: 50%;
+}
+
+.borne__tab.is-active .borne__tab-led { background: var(--ink); box-shadow: 0 0 0 3px var(--lime), 0 0 0 5px var(--ink); }
+
+/* Le meuble : encre, ombre dure citron */
+.borne__cabinet {
+  padding: clamp(12px, 1.6vw, 22px);
+  background: var(--ink);
+  border: var(--border) solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 8px 8px 0 var(--lime), 11px 11px 0 var(--ink);
+}
+
+.borne__screen {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--ink);
+  border-radius: 6px;
+}
+
+.borne__tube {
+  position: absolute;
+  inset: 0;
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--cream);
+  border-radius: 6px;
+  transform-origin: 50% 50%;
+}
+
+.borne__flash {
+  position: absolute;
+  inset: 0;
+  background: var(--lime);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.borne__scene {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+}
+
+.borne__scene.is-active { visibility: visible; }
+
+.borne__hud {
+  position: absolute;
+  bottom: 3cqi;
+  font-size: 2.6cqi;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.borne__hud--left { left: 4cqi; }
+.borne__hud--right { right: 4cqi; }
+
+/* Toutes les animations de la démo partagent cet interrupteur */
+.borne .borne__scene * { animation-play-state: paused; }
+.borne .borne__screen.is-on .borne__scene.is-active * { animation-play-state: running; }
+.borne__insert { animation: borne-blink 1.2s steps(2, jump-none) infinite paused; }
+.borne__screen.is-on .borne__insert { animation-play-state: running; }
+.borne.is-demo-paused .borne__scene *,
+.borne.is-demo-paused .borne__insert,
+html.is-paused .borne__scene *,
+html.is-paused .borne__insert { animation-play-state: paused !important; }
+
+@keyframes borne-blink { 50% { opacity: 0; } }
+
+/* Démo 1 : la meilleure agence */
+.sb__q {
+  position: absolute;
+  top: 9cqi;
+  left: 6cqi;
+  right: 6cqi;
+  font-family: var(--font-display);
+  font-size: 7.6cqi;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.sb__yes {
+  position: absolute;
+  left: 10cqi;
+  top: 34cqi;
+  padding: 2cqi 6cqi 0.6cqi;
+  background: var(--lime);
+  border: 0.8cqi solid var(--ink);
+  border-radius: 1cqi;
+  box-shadow: 1.6cqi 1.6cqi 0 var(--ink);
+  font-family: var(--font-display);
+  font-size: 12cqi;
+  line-height: 1;
+  animation: sb-yes 1.6s var(--ease-expo) infinite;
+}
+
+.sb__no {
+  position: absolute;
+  left: 58cqi;
+  top: 40cqi;
+  padding: 1.4cqi 2.4cqi 1cqi;
+  background: var(--cream-2);
+  border: 0.5cqi solid var(--ink);
+  border-radius: 0.8cqi;
+  font-size: 2.8cqi;
+  font-weight: 600;
+  text-transform: uppercase;
+  animation: sb-no 3.6s steps(1, end) infinite;
+}
+
+@keyframes sb-yes { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(-2deg) scale(1.06); } }
+@keyframes sb-no {
+  0% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(8cqi, -14cqi) scale(0.85) rotate(6deg); }
+  50% { transform: translate(-6cqi, 12cqi) scale(0.72) rotate(-5deg); }
+  75% { transform: translate(14cqi, 6cqi) scale(0.6) rotate(4deg); }
+}
+
+/* Démo 2 : Bad Practices Highway */
+.borne__scene--race { background: var(--cream-2); }
+
+.sr__road {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 24%;
+  width: 52%;
+  overflow: hidden;
+  background: var(--ink);
+  border-inline: 0.8cqi solid var(--cream);
+}
+
+.sr__lines {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -20cqi;
+  height: calc(100% + 40cqi);
+  background:
+    repeating-linear-gradient(to bottom, var(--cream) 0 6cqi, transparent 6cqi 12cqi) 33.3% 0 / 0.7cqi 100% no-repeat,
+    repeating-linear-gradient(to bottom, var(--cream) 0 6cqi, transparent 6cqi 12cqi) 66.6% 0 / 0.7cqi 100% no-repeat;
+  opacity: 0.75;
+  animation: sr-lines 0.6s linear infinite;
+}
+
+@keyframes sr-lines { to { transform: translateY(12cqi); } }
+
+.sr__item {
+  position: absolute;
+  top: -12cqi;
+  width: 14cqi;
+  display: grid;
+  place-items: center;
+  height: 8cqi;
+  border: 0.5cqi solid var(--ink);
+  border-radius: 0.8cqi;
+  font-size: 2.6cqi;
+  font-weight: 600;
+  text-transform: uppercase;
+  animation: sr-fall 2.4s linear infinite;
+}
+
+.sr__item--bad {
+  background:
+    repeating-linear-gradient(135deg, var(--ink) 0 1cqi, transparent 1cqi 2cqi) left / 2.4cqi 100% no-repeat,
+    repeating-linear-gradient(135deg, var(--ink) 0 1cqi, transparent 1cqi 2cqi) right / 2.4cqi 100% no-repeat,
+    var(--cream);
+}
+
+.sr__item--good { background: var(--lime); border-radius: 4cqi; }
+
+.sr__item--1 { left: 27%; animation-delay: 0s; }
+.sr__item--2 { left: 43%; animation-delay: -0.8s; }
+.sr__item--3 { left: 59%; animation-delay: -1.6s; }
+.sr__item--4 { left: 43%; animation-delay: -2s; animation-duration: 2.8s; }
+
+@keyframes sr-fall { to { transform: translateY(98cqi); } }
+
+.sr__car {
+  position: absolute;
+  bottom: 9cqi;
+  left: 45%;
+  display: grid;
+  place-items: center;
+  width: 10cqi;
+  height: 16cqi;
+  background: var(--lime);
+  border: 0.6cqi solid var(--ink);
+  border-radius: 5cqi 5cqi 1.4cqi 1.4cqi;
+  box-shadow: 1cqi 1cqi 0 var(--cream);
+  font-family: var(--font-display);
+  font-size: 3.6cqi;
+  line-height: 1;
+  animation: sr-car 4.8s var(--ease-expo) infinite;
+}
+
+@keyframes sr-car {
+  0%, 18% { transform: translateX(0); }
+  25%, 43% { transform: translateX(-16cqi); }
+  50%, 68% { transform: translateX(0); }
+  75%, 93% { transform: translateX(16cqi); }
+  100% { transform: translateX(0); }
+}
+
+/* Démo 3 : Lead Rush */
+.sm__board {
+  position: absolute;
+  inset: 7cqi 5cqi 10cqi;
+}
+
+.sm__maze {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sm__walls {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sm__leads { fill: var(--ink); }
+
+.sm__actor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sm__player,
+.sm__enemy,
+.sm__power {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 7.5cqi;
+  height: 7.5cqi;
+  margin: -3.75cqi 0 0 -3.75cqi;
+}
+
+.sm__player {
+  background: var(--lime);
+  border: 0.6cqi solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 0.6cqi 0.6cqi 0 var(--ink);
+  font-family: var(--font-display);
+  font-size: 4cqi;
+  line-height: 1;
+  padding-top: 0.4cqi;
+  animation: sm-player 6s linear infinite;
+}
+
+.sm__enemy {
+  width: 6cqi;
+  height: 6cqi;
+  margin: -3cqi 0 0 -3cqi;
+  background: var(--ink);
+  transform: rotate(45deg);
+  animation: sm-enemy 6s linear infinite;
+}
+
+.sm__power {
+  left: 89%;
+  top: 16%;
+  width: 5cqi;
+  height: 5cqi;
+  margin: -2.5cqi 0 0 -2.5cqi;
+  background: var(--lime);
+  border: 0.5cqi solid var(--ink);
+  border-radius: 50%;
+  animation: sm-power 0.9s ease-in-out infinite alternate;
+}
+
+/* Le joueur fait le tour du couloir extérieur, l'ennemi le suit */
+@keyframes sm-player {
+  0% { left: 11%; top: 16%; }
+  25% { left: 89%; top: 16%; }
+  50% { left: 89%; top: 84%; }
+  75% { left: 11%; top: 84%; }
+  100% { left: 11%; top: 16%; }
+}
+
+@keyframes sm-enemy {
+  0% { left: 11%; top: 84%; }
+  25% { left: 11%; top: 16%; }
+  50% { left: 89%; top: 16%; }
+  75% { left: 89%; top: 84%; }
+  100% { left: 11%; top: 84%; }
+}
+
+@keyframes sm-power { to { transform: scale(1.3); } }
+
+/* Pupitre : joystick, boutons, pause de la démo, fente à pièces */
+.borne__deck {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 22px;
+  margin-top: clamp(12px, 1.6vw, 20px);
+  color: var(--cream);
+}
+
+.borne__stick {
+  --tilt: 0deg;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.borne__stick::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 6px;
+  height: 30px;
+  margin-left: -3px;
+  background: var(--cream-2);
+  border-radius: 3px;
+  transform-origin: 50% 100%;
+  transform: rotate(var(--tilt));
+  transition: transform 0.4s var(--ease-expo);
+}
+
+.borne__stick::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 36px;
+  height: 10px;
+  margin-left: -18px;
+  background: var(--cream-2);
+  border-radius: 50%;
+}
+
+.borne__stick-ball {
+  position: absolute;
+  left: 50%;
+  bottom: 30px;
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  background: var(--lime);
+  border: var(--border-thin) solid var(--cream);
+  border-radius: 50%;
+  transform-origin: 50% 160%;
+  transform: rotate(var(--tilt));
+  transition: transform 0.4s var(--ease-expo);
+}
+
+.borne__buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.borne__buttons span {
+  width: 22px;
+  height: 22px;
+  background: var(--lime);
+  border: var(--border-thin) solid var(--cream);
+  border-radius: 50%;
+}
+
+.borne__buttons span:nth-child(2) { background: var(--cream); }
+.borne__buttons span:nth-child(3) { background: var(--ink); }
+
+.borne__pause {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 6px 16px 6px 12px;
+  background: var(--ink);
+  color: var(--cream);
+  border: var(--border-thin) solid var(--cream);
+  border-radius: 999px;
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+.borne__pause:hover { background: var(--lime); color: var(--ink); border-color: var(--lime); }
+.borne__pause:focus-visible { outline-color: var(--lime); }
+
+.borne__pause-icon {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border-inline: 4px solid currentColor;
+}
+
+.borne.is-demo-paused .borne__pause-icon {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 0 6px 11px;
+  border-color: transparent transparent transparent currentColor;
+}
+
+.borne__coin {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.borne__coin-slot {
+  width: 8px;
+  height: 26px;
+  background: var(--ink);
+  border: var(--border-thin) solid var(--lime);
+  border-radius: 4px;
+}
+
+/* Fiche du jeu */
+.borne__panels { margin-top: 28px; }
+
+.borne__panel {
+  display: grid;
+  gap: 18px;
+  align-items: center;
+  padding: 22px 22px 24px;
+  background: var(--cream-2);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.borne__rules { font-weight: 500; max-width: 52ch; }
+
+.borne__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  margin-top: 10px;
+  font-size: var(--fs-small);
+}
+
+.borne__meta-key {
+  margin-right: 6px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.borne__play { justify-self: start; }
+
+/* Sans JavaScript : pas de jeu, les trois fiches restent lisibles */
+.no-js .borne__play,
+.no-js .borne__pause { display: none; }
+.borne:not(.is-enhanced) .borne__panel + .borne__panel { margin-top: 16px; }
+
+/* Mouvement réduit : une image fixe et lisible de chaque démo */
+[data-motion="reduced"] .borne__scene *,
+[data-motion="reduced"] .borne__insert { animation: none !important; }
+
+@media (min-width: 720px) {
+  .borne__panel { grid-template-columns: minmax(0, 1fr) auto; padding: 24px 28px; }
+  .borne__play { justify-self: end; }
+}
+
+@media (min-width: 1024px) {
+  .borne {
+    grid-template-columns: minmax(280px, 4fr) minmax(0, 8fr);
+    align-items: start;
+  }
 }
 
 /* L'accueil commence par le hero plein écran : il gère lui-même la hauteur du header. */

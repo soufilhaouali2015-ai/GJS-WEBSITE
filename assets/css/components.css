@@ -245,37 +245,6 @@
 
 .is-dark .sticker { box-shadow: 3px 3px 0 var(--cream); }
 
-/* Gros sticker rond (offre de lancement) */
-.sticker-round {
-  display: grid;
-  place-items: center;
-  width: 150px;
-  aspect-ratio: 1;
-  padding: 18px;
-  background: var(--lime);
-  color: var(--ink);
-  border: var(--border) solid var(--ink);
-  border-radius: 50%;
-  box-shadow: 4px 4px 0 var(--shadow-color);
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  line-height: 0.95;
-  text-align: center;
-  text-transform: uppercase;
-  text-decoration: none;
-  transform: rotate(-8deg);
-}
-
-.sticker-round strong {
-  display: block;
-  font-size: 2.75rem;
-  font-weight: 400;
-}
-
-/* Tampon « 5 places seulement » de l'offre */
-.sticker-round--stamp { font-size: 1.25rem; }
-.sticker-round--stamp strong { font-size: 3rem; line-height: 0.85; }
-
 /* ---- Ruban adhésif (décor, sur les éléments « collés ») ----------------- */
 
 .taped {
@@ -381,6 +350,18 @@
   font-size: var(--fs-small);
   font-weight: 500;
   color: var(--fg-2);
+}
+
+/* Mention « Sur devis gratuit » (à la place d'un prix) */
+.svc-card__quote {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: var(--border-thin) solid currentColor;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
 }
 
 /* ---- Cartes services (accueil) ------------------------------------------ */
@@ -710,28 +691,32 @@
   .svc-details--others .svc-detail__body { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-/* ---- Étapes « Comment ça marche » ---------------------------------------- */
-/* Moins de 1024 px : une colonne, numéro à gauche, trait vertical qui relie les numéros.
-   1024 px et plus : 4 colonnes, trait ondulé horizontal (voir sections/steps.js). */
+/* ---- Étapes « Comment ça marche » en cascade ----------------------------- */
+/* Les marches descendent vers la droite : chaque étape est décalée de --shift
+   par rapport à la précédente (léger sur mobile, marqué sur ordinateur).
+   Le trait citron qui les relie est dessiné par sections/steps.js. */
 
-.steps-track {
-  --steps-axis: y;
+.cascade {
+  --shift: 6%;
+  --step-w: calc(100% - 3 * var(--shift));
+  --num: 52px;
   position: relative;
 }
 
-.steps {
+.cascade__steps {
   position: relative;
   z-index: 1;
   display: grid;
-  gap: 40px 32px;
-  counter-reset: step;
+  gap: clamp(36px, 2rem + 2vw, 64px);
 }
 
 .step {
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr);
-  column-gap: 20px;
+  grid-template-columns: var(--num, 64px) minmax(0, 1fr);
+  column-gap: clamp(14px, 2vw, 20px);
   align-items: start;
+  width: var(--step-w);
+  margin-left: calc(var(--i, 0) * var(--shift));
 }
 
 .step > :not(.step__num) { grid-column: 2; }
@@ -744,14 +729,14 @@
   grid-row: 1 / span 3;
   display: inline-grid;
   place-items: center;
-  width: 64px;
-  height: 64px;
+  width: var(--num, 64px);
+  height: var(--num, 64px);
   background: var(--lime);
   border: var(--border) solid var(--ink);
   border-radius: var(--radius);
   box-shadow: 4px 4px 0 var(--shadow-color);
   font-family: var(--font-display);
-  font-size: 2.5rem;
+  font-size: calc(var(--num, 64px) * 0.62);
   line-height: 1;
   padding-top: 4px;
   transform: rotate(var(--tilt, var(--tilt-left)));
@@ -759,12 +744,12 @@
 
 .step:nth-child(even) .step__num { --tilt: var(--tilt-right); }
 
-.step__text { max-width: 36ch; }
+.step__text { max-width: 40ch; }
 
 /* Avec le JS : le numéro attend le trait sur fond crème, le citron arrive en couche (scale) */
-.steps-track.is-armed .step__num { background: var(--cream); }
+.cascade.is-armed .step__num { background: var(--cream); }
 
-.steps-track.is-armed .step__num::before {
+.cascade.is-armed .step__num::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -775,68 +760,44 @@
   transition: transform 0.6s var(--ease-expo);
 }
 
-.steps-track.is-armed .step.is-reached .step__num::before { transform: none; }
+.cascade.is-armed .step.is-reached .step__num::before { transform: none; }
 
-/* Le trait : un masque qui avance (translation) sur un dessin qui ne bouge pas */
-.steps__line {
+/* Le trait : des fenêtres qui avancent (translation) sur un dessin qui ne bouge pas */
+.cascade__line {
   position: absolute;
+  inset: 0;
   z-index: 0;
-  display: none;
-  overflow: hidden;
   pointer-events: none;
-  width: 40px;
 }
 
-.steps__line-in {
-  width: 100%;
-  height: 100%;
+.cascade__win {
+  position: absolute;
+  overflow: hidden;
 }
 
-.steps-track.is-armed .steps__line,
-.steps-track.is-drawn .steps__line { display: block; }
+.cascade__win-in {
+  position: absolute;
+  inset: 0;
+}
 
-.steps__wave {
-  display: block;
-  width: 100%;
-  height: 100%;
+.cascade__svg {
+  position: absolute;
+  max-width: none; /* le dessin garde sa taille : chaque fenêtre n'en montre qu'une portion */
   overflow: visible;
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.steps__wave-edge { stroke: var(--ink); stroke-width: 13px; vector-effect: non-scaling-stroke; }
-.steps__wave-ink { stroke: var(--lime); stroke-width: 7px; vector-effect: non-scaling-stroke; }
-.steps__wave--x { display: none; }
+.cascade__edge { stroke: var(--ink); stroke-width: 13px; }
+.cascade__ink { stroke: var(--lime); stroke-width: 7px; }
 
-@media (min-width: 1024px) {
-  .steps-track { --steps-axis: x; }
-  .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .step { display: block; }
-  .step__num { display: inline-grid; }
-  .steps__line { width: auto; height: 40px; }
-  .steps__wave--x { display: block; }
-  .steps__wave--y { display: none; }
+@media (min-width: 720px) {
+  .cascade { --shift: 12%; --step-w: 64%; --num: 64px; }
 }
 
-/* Ordinateur avec animations : la scène reste à l'écran sur ~1,6 écran pendant que le trait avance.
-   La hauteur est réservée en CSS dès le premier affichage (la page ne s'allonge pas avec le JS). */
 @media (min-width: 1024px) {
-  .has-motion[data-motion="desktop"] .methode {
-    height: 260vh;
-    height: 260svh;
-    padding-block: 0;
-  }
-
-  .has-motion[data-motion="desktop"] .methode__stage {
-    position: sticky;
-    top: 0;
-    display: grid;
-    align-content: center;
-    min-height: 100vh;
-    min-height: 100svh;
-    padding-top: var(--header-h);
-  }
+  .cascade { --shift: 21%; --step-w: 37%; }
 }
 
 /* ---- Affichettes collées (Pourquoi GJS, valeurs) -------------------------- */
@@ -867,11 +828,16 @@
 .poster .icon { width: 52px; height: 52px; }
 
 @media (min-width: 720px) {
-  .posters--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .posters--2,
+  .posters--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (min-width: 1024px) {
   .posters--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1200px) {
+  .posters--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 /* ---- FAQ en accordéon (<details> natif, animé en FLIP par sections/faq.js) -- */

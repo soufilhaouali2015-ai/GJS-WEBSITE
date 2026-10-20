@@ -37,7 +37,6 @@ Requête `POST`, en-têtes `Content-Type: application/json` et `Accept: applicat
   "besoins_libelles": ["Création de site internet", "SEO (référencement naturel)"],
   "budget": "1000-3000", "budget_libelle": "1 000 à 3 000 €",
   "delai": "1-3-mois", "delai_libelle": "D’ici 1 à 3 mois",
-  "offre_lancement": true,
   "nom": "…", "email": "…", "telephone": "…", "entreprise": "…", "message": "…",
   "consentement": true,
   "page": "https://www.gjs-agence.fr/contact.html", "date": "2026-10-16T09:30:00.000Z",
@@ -187,15 +186,15 @@ ANALYTICS: { src: 'https://plausible.io/js/script.js', attrs: { 'data-domain': '
 
 | Page | Sections (dans l'ordre) |
 |---|---|
-| **Accueil** (7) | Hero · Services (9 cartes, 3 mises en avant) · Offre de lancement (noire) · Comment ça marche · Pourquoi GJS · FAQ · CTA final (noir) |
+| **Accueil** | Hero · Bandeau défilant · Services (9 cartes, 3 mises en avant) · Comment ça marche (cascade) · Pourquoi GJS (4 points) · Arcade (3 jeux) · FAQ · CTA final (noir) |
 | **Services** | Intro + sommaire cliquable · 3 services phares (détail) · 6 autres services (détail) · Configurateur · CTA (noir) |
 | **À propos** | Notre histoire · L'équipe (3 associés) · Nos 4 valeurs · CTA (noir) |
 | **Contact** | Formulaire en 3 étapes + WhatsApp, rendez-vous, email et téléphone |
 | **Légal, 404** | Même identité, contenu juridique conservé |
 
-**Activer la section « Réalisations »** (accueil, masquée par défaut) : dans `index.html`, retirez l'attribut `hidden` de `<section id="realisations">`, remplacez les 3 cartes par vos projets réels (`assets/img/realisation-exemple.webp` est une image d'attente), puis **retirez la section « Offre de lancement »** pour rester à 7 sections. Pensez aussi à la question « Comment marche l'offre de lancement ? » de la FAQ.
+**Activer la section « Réalisations »** (accueil, masquée par défaut) : dans `index.html`, retirez l'attribut `hidden` de `<section id="realisations">`, puis remplacez les 3 cartes par vos projets réels (`assets/img/realisation-exemple.webp` est une image d'attente).
 
-**Pré-remplissage du contact** : `contact.html?besoins=site,seo&budget=mensuel&delai=urgent&offre=lancement#formulaire`. Les boutons « Je veux ça » et le configurateur s'en servent.
+**Pré-remplissage du contact** : `contact.html?besoins=site,seo&budget=mensuel&delai=urgent#formulaire`. Les boutons « Je veux ça » et le configurateur s'en servent.
 
 ---
 

@@ -1,7 +1,7 @@
 /* ==========================================================================
    GJS · DÉMARRAGE
    Ordre : défilement (Lenis) → header, rideau, pause → boutons, cartes 3D,
-   bandeaux → hero → animations au scroll → sections animées → modules de page.
+   bandeau défilant → hero → animations au scroll → sections animées → modules de page.
    Les librairies (GSAP, ScrollTrigger, SplitText, Lenis) sont chargées en
    local avant ce module ; Three.js est importé à la demande par le hero.
    ========================================================================== */
@@ -13,7 +13,7 @@ import { initTransitions } from './core/transition.js';
 import { initPause } from './core/pause.js';
 import { initButtons } from './core/magnetic.js';
 import { initTilt } from './core/tilt.js';
-import { initBands } from './core/marquee.js';
+import { initMarquees } from './core/marquee.js';
 import { initMotion } from './core/motion.js';
 import { initDepth } from './core/parallax.js';
 import { initMenu } from './core/menu.js';
@@ -32,6 +32,7 @@ const SECTIONS = [
   ['[data-stickers]', () => import('./sections/stickers.js'), 'initStickers'],
   ['[data-svc-index]', () => import('./sections/services-index.js'), 'initServicesIndex'],
   ['[data-carousel]', () => import('./sections/carousel.js'), 'initCarousel'],
+  ['[data-borne]', () => import('./sections/borne.js'), 'initBorne'],
 ];
 
 async function initSections() {
@@ -62,7 +63,7 @@ async function boot() {
   safe('pause', initPause);
   safe('buttons', initButtons);
   safe('tilt', initTilt);
-  safe('bands', initBands);
+  safe('marquees', initMarquees);
 
   if (document.querySelector('[data-hero]')) {
     try {

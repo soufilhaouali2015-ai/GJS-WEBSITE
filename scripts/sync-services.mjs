@@ -38,6 +38,9 @@ const priceHtml = (s, { tag = 'p' } = {}) => [
   `</${tag}>`,
 ].join('');
 
+/* Plus aucun prix affiché : chaque projet est chiffré sur devis gratuit */
+const quoteHtml = (depth) => `<p class="svc-card__quote" data-depth="${depth}">Sur devis gratuit</p>`;
+
 const list = (items, cls = 'checklist') => `<ul class="${cls}">${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
 
 /* ---- Accueil : grille de cartes courtes --------------------------------- */
@@ -66,7 +69,7 @@ function card(s) {
       `      <p class="t-small svc-card__tagline">${esc(s.tagline)}</p>`,
       `      <p>${esc(s.benefit)}</p>`,
       `      ${list(s.includes)}`,
-      `      ${priceHtml(s).replace('<p class="price">', '<p class="price" data-depth="48">')}`,
+      `      ${quoteHtml(48)}`,
       ...actions(' btn--lime').map((l) => `      ${l}`),
       '    </div>',
       '  </div>',
@@ -84,13 +87,12 @@ function card(s) {
     `        ${title}`,
     `        <p class="t-small svc-card__tagline">${esc(s.tagline)}</p>`,
     `        <p class="svc-card__benefit">${esc(s.benefit)}</p>`,
-    `        ${priceHtml(s).replace('<p class="price">', '<p class="price" data-depth="52">')}`,
+    `        ${quoteHtml(52)}`,
     `        <button class="svc-card__flip-btn" type="button" data-flip-toggle aria-expanded="false" aria-controls="verso-${s.id}">Ce qui est inclus<span class="sr-only"> : ${esc(s.label)}</span></button>`,
     '      </div>',
     `      <div class="svc-card__face svc-card__face--back" id="verso-${s.id}">`,
     `        <p class="svc-card__back-title" data-depth="30">Ce qui est inclus<span class="sr-only"> : ${esc(s.label)}</span></p>`,
     `        ${list(s.includes).replace('<ul class="checklist">', '<ul class="checklist" data-depth="22">')}`,
-    `        ${priceHtml(s).replace('<p class="price">', '<p class="price" data-depth="44">')}`,
     ...actions('').map((l) => `        ${l}`),
     '      </div>',
     '    </div>',
@@ -99,9 +101,11 @@ function card(s) {
   ].filter(Boolean).join('\n');
 }
 
-/* Double bandeau (décor) : les 9 services, répétés */
-const STAR = '<svg class="band__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>';
-const bandGroup = (list) => `<div class="band__group">${list.map((n) => `<span class="band__item">${esc(n)}</span>${STAR}`).join('')}</div>`;
+/* Bandeau défilant : les 9 services en grand (rangée lisible), puis en contour
+   avec les mots qui nous définissent (rangée décorative, masquée aux lecteurs d'écran) */
+const MARQUEE_WORDS = ['sur-mesure', 'mesuré', 'rentable', 'rapide', 'utile', 'vivant'];
+const DOT = '<span class="marquee__dot" aria-hidden="true"></span>';
+const marqueeRow = (attrs, items) => `<div class="marquee${attrs.cls || ''}" data-marquee data-speed="${attrs.speed}" data-direction="${attrs.dir}"${attrs.hidden ? ' aria-hidden="true"' : ''}><div class="marquee__track"><div class="marquee__group">${items}</div></div></div>`;
 
 const blocks = {
   cards: () => [
@@ -110,13 +114,12 @@ const blocks = {
     '<p class="svc-grid__label">Et aussi</p>',
     ...others.map(card),
     '</div>',
-    `<p class="price-legal">${esc(PRICE_NOTE)}</p>`,
   ].join('\n'),
 
-  /* Double bandeau entre le hero et les services */
+  /* Bandeau défilant entre le hero et les services */
   bands: () => [
-    `<div class="band band--lime" data-band data-speed="60" data-dir="-1"><div class="band__track" data-band-track>${bandGroup(SERVICES.map((x) => x.short))}</div></div>`,
-    `<div class="band band--ink" data-band data-speed="48" data-dir="1"><div class="band__track" data-band-track>${bandGroup([...SERVICES].reverse().map((x) => x.name))}</div></div>`,
+    marqueeRow({ speed: 70, dir: -1 }, SERVICES.map((x) => `<span class="marquee__item">${esc(x.short)}</span>${DOT}`).join('')),
+    marqueeRow({ cls: ' marquee--reverse', speed: 55, dir: 1, hidden: true }, SERVICES.map((x, i) => `<span class="marquee__item marquee__item--outline">${esc(x.short)}</span><span class="marquee__item marquee__item--accent">${esc(MARQUEE_WORDS[i % MARQUEE_WORDS.length])}</span>`).join('')),
   ].join('\n'),
 
   /* Footer de l'accueil : stickers qui tombent (décor, aria-hidden sur la zone) */
@@ -125,7 +128,6 @@ const blocks = {
     return [
       '<span class="drop drop--logo">GJS</span>',
       ...SERVICES.filter((x) => x.badge).map((x) => `<span class="drop sticker sticker--ink">${esc(x.badge)}</span>`),
-      '<span class="drop drop--round"><strong>-40&nbsp;%</strong></span>',
       '<span class="drop sticker sticker--cream drop--wide">Fait en Île-de-France</span>',
       ...SERVICES.map((x, i) => `<span class="drop sticker${tones[i % tones.length]}">${esc(x.short)}</span>`),
     ].join('\n');

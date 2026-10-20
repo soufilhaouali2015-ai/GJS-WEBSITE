@@ -1,0 +1,16 @@
+{
+  "name": "gjs-hero-video",
+  "private": true,
+  "type": "module",
+  "description": "Génération hors ligne de la vidéo du hero (Three.js rendu image par image, puis ffmpeg).",
+  "scripts": {
+    "glyphs": "node glyphs.mjs",
+    "render": "node render.mjs",
+    "encode": "sh encode.sh"
+  },
+  "dependencies": {
+    "opentype.js": "2.0.0",
+    "three": "0.186.1",
+    "wawoff2": "2.0.1"
+  }
+}

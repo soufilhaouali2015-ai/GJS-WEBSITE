@@ -1,7 +1,7 @@
 /* ==========================================================================
    GJS · PAGE CONTACT
    Formulaire en 3 étapes : progression, validation accessible, pré-remplissage
-   depuis l'URL (?besoins=site,seo&budget=…&delai=…&offre=lancement), honeypot,
+   depuis l'URL (?besoins=site,seo&budget=…&delai=…), honeypot,
    consentement RGPD, envoi POST JSON vers CONFIG.FORM_ENDPOINT (Formspree, Make…)
    ou repli « mailto » si aucun endpoint n'est configuré.
    ========================================================================== */
@@ -78,7 +78,6 @@ function prefill(form) {
   if (budget) filled = check(form, `input[name="budget"][value="${CSS.escape(budget)}"]`) || filled;
   const delai = HORIZON_TO_DELAI[params.get('horizon')] || params.get('delai');
   if (delai) filled = check(form, `input[name="delai"][value="${CSS.escape(delai)}"]`) || filled;
-  if (params.get('offre') === 'lancement') filled = check(form, 'input[name="offre_lancement"]') || filled;
   return filled;
 }
 
@@ -99,7 +98,6 @@ function collect(form) {
     budget_libelle: data.get('budget') ? labelOf(form, 'budget', data.get('budget')) : '',
     delai: data.get('delai') || '',
     delai_libelle: data.get('delai') ? labelOf(form, 'delai', data.get('delai')) : '',
-    offre_lancement: data.get('offre_lancement') === 'oui',
     nom,
     email: (data.get('email') || '').trim(),
     telephone: (data.get('telephone') || '').trim(),
@@ -117,7 +115,6 @@ function mailtoFallback(data) {
     `Services : ${data.besoins_libelles.join(', ')}`,
     `Budget : ${data.budget_libelle}`,
     `Délai : ${data.delai_libelle}`,
-    data.offre_lancement ? 'Intéressé(e) par l’offre de lancement (-40 %)' : '',
     '',
     `Nom : ${data.nom}`,
     `Email : ${data.email}`,
@@ -257,7 +254,7 @@ function initForm() {
   // Validation en direct : au changement pour les choix, à la frappe après un premier passage
   form.addEventListener('change', (e) => {
     const { name, type } = e.target;
-    if (!name || name === 'website' || name === 'offre_lancement') return;
+    if (!name || name === 'website') return;
     if (type === 'checkbox' || type === 'radio' || touched.has(name)) showError(form, name, validate(form, name));
   });
   form.addEventListener('input', (e) => {

@@ -176,8 +176,7 @@ html.lenis body { height: auto; }
 .deco--zigzag { width: var(--size, 150px); height: calc(var(--size, 150px) * 0.27); }
 .deco--star { width: var(--size, 96px); height: var(--size, 96px); }
 
-.section > .wrap,
-.methode__stage > .wrap { position: relative; z-index: 1; }
+.section > .wrap { position: relative; z-index: 1; }
 
 @media (min-width: 1280px) {
   .deco { display: block; }
@@ -238,67 +237,113 @@ html.lenis body { height: auto; }
   to { transform: translateY(-60%) rotate(-4deg); opacity: 0; }
 }
 
-/* ---- Double bandeau ------------------------------------------------------ */
+/* ---- Bandeau défilant (deux rangées) -------------------------------------- */
+/* Sans le bouton pause (mouvement réduit, sans JS), la marge du bas se resserre */
+html:not(.has-motion) .marquees,
+[data-motion="reduced"] .marquees { padding-bottom: clamp(40px, 6vw, 96px); }
 
-.bands {
+/* Rangée 1 : les services en grand, séparés par des pastilles citron.
+   Rangée 2 (décor) : les services en contour et nos mots, collés en stickers.
+   core/marquee.js les fait défiler au rythme du scroll et ajoute le bouton pause. */
+
+.marquees {
   position: relative;
   z-index: 2;
   display: grid;
-  padding-block: clamp(56px, 6vw, 96px);
+  gap: clamp(4px, 1vw, 14px);
+  padding-block: clamp(40px, 6vw, 96px) clamp(76px, 2rem + 4vw, 104px);
   overflow: clip;
+  background: var(--cream);
+  border-block: var(--border) solid var(--ink);
 }
 
-.band {
-  grid-area: 1 / 1;
-  width: 112%;
-  margin-left: -6%;
-  border-block: var(--border) solid var(--ink);
+.marquee {
+  position: relative;
   overflow: hidden;
   white-space: nowrap;
+  user-select: none;
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 1.5rem + 9vw, 12rem);
+  line-height: 1;
+  text-transform: uppercase;
 }
 
-.band--lime {
-  background: var(--lime);
-  color: var(--ink);
-  transform: rotate(2deg);
-  z-index: 2;
-}
-
-.band--ink {
-  background: var(--ink);
-  color: var(--cream);
-  transform: rotate(-2deg);
-  z-index: 1;
-}
-
-.band__track {
+.marquee__track {
   display: flex;
   width: max-content;
   will-change: transform;
 }
 
-.band__group {
+.marquee__group {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
-  flex-shrink: 0;
 }
 
-.band__item {
-  padding: 0.3em 0.45em 0.12em;
-  font-family: var(--font-display);
-  font-size: clamp(2.25rem, 1.6rem + 2.6vw, 4.5rem);
-  line-height: 1;
-  text-transform: uppercase;
+.marquee__item {
+  padding: 0.06em 0.16em 0;
+  letter-spacing: 0.01em;
+  color: var(--ink);
 }
 
-.band__star {
-  width: clamp(22px, 1rem + 1vw, 40px);
-  height: auto;
+.marquee__item--outline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--ink);
+}
+
+/* Les mots qui nous définissent : un sticker citron, légèrement de travers */
+.marquee__item--accent {
+  margin-inline: 0.12em;
+  padding: 0.1em 0.2em 0.02em;
+  background: var(--lime);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--ink);
+  font-size: 0.62em;
+  transform: rotate(-2.5deg);
+}
+
+.marquee__item--accent:nth-child(4n) { transform: rotate(2deg); }
+
+.marquee__dot {
   flex-shrink: 0;
+  width: 0.28em;
+  height: 0.28em;
+  margin-inline: 0.2em;
+  background: var(--lime);
+  border: var(--border) solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+/* Bouton pause / lecture (ajouté par core/marquee.js), sur la marge droite */
+.marquee__toggle {
+  position: absolute;
+  bottom: clamp(14px, 1vw + 8px, 28px);
+  right: max(var(--gutter), calc((100% - var(--max)) / 2));
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  background: var(--cream);
+  color: var(--ink);
+  border: var(--border-thin) solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.6s var(--ease-expo), background-color 0.2s;
+}
+
+.marquee__toggle svg {
+  width: 14px;
+  height: 14px;
   fill: currentColor;
 }
 
-.band--ink .band__star { fill: var(--lime); }
+.marquee__toggle:hover {
+  background: var(--lime);
+  transform: scale(1.08) rotate(-6deg);
+}
 
 /* ---- Cartes 3D (inclinaison, relief, reflet, ombre opposée) ------------- */
 
@@ -392,7 +437,7 @@ html:not(.has-motion) .hero__pause { display: none; }
 
 /* ---- Mouvement réduit ---------------------------------------------------- */
 
-[data-motion="reduced"] .band__track { transform: none !important; }
+[data-motion="reduced"] .marquee__track { transform: none !important; }
 [data-motion="reduced"] .header { transition: none; }
 
 /* ---- Impression : tout le contenu, à sa place, sans effet ------------------ */
@@ -418,9 +463,8 @@ html:not(.has-motion) .hero__pause { display: none; }
     transform: none !important;
   }
 
-  .methode { height: auto !important; }
-  .methode__stage { position: static !important; min-height: 0 !important; }
-  .steps__line { display: none !important; }
+  .cascade__win,
+  .cascade__win-in { transform: none !important; }
   .footer__play,
   .deco,
   .svc-float { display: none !important; }
@@ -434,5 +478,5 @@ html:not(.has-motion) .hero__pause { display: none; }
   .curtain,
   .read-progress,
   .hero__pause,
-  .bands { display: none !important; }
+  .marquee__toggle { display: none !important; }
 }

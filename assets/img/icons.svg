@@ -76,6 +76,15 @@
   </symbol>
 
   <!-- Décors street (parallaxe) : couleurs de la palette en dur, aria-hidden à l'usage -->
+  <symbol id="i-devis" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 3h11l6 6v20H8z"/>
+    <path d="M19 3v6h6M12 14h9M12 18h9M12 22h4.5"/>
+    <path d="m18.5 23.5 2 2 4-4.5"/>
+  </symbol>
+  <symbol id="i-diagnostic" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="13.5" cy="13.5" r="9.5"/>
+    <path d="m20.5 20.5 7.5 7.5M7 14h3l2-4 3 7 2-3h3"/>
+  </symbol>
   <symbol id="d-arrow" viewBox="0 0 160 110" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path d="M10 92C38 70 52 34 92 26c22-4 40 4 52 16" stroke="#141414" stroke-width="7"/>
     <path d="M124 18l22 26-32 6" stroke="#141414" stroke-width="7"/>

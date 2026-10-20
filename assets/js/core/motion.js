@@ -16,7 +16,7 @@
    data-anim-delay="0.2" décalage en secondes
 
    Dans un titre « lines » ou « chars » :
-   <span data-count="40">40</span>  nombre qui défile de 0 à sa valeur (la vraie
+   <span data-count="24">24</span>  nombre qui défile de 0 à sa valeur (la vraie
                                     valeur reste écrite dans le HTML) ;
    <span class="hl">mot</span>      le trait de marqueur se dessine après le titre.
 

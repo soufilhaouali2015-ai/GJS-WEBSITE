@@ -190,7 +190,7 @@ ANALYTICS: { src: 'https://plausible.io/js/script.js', attrs: { 'data-domain': '
 |---|---|
 | **Accueil** | Hero · Bandeau défilant · Services (9 cartes, 3 mises en avant) · Comment ça marche (cascade) · Pourquoi GJS (4 points) · Arcade (3 jeux) · FAQ · CTA final (noir) |
 | **Services** | Intro + index typographique · Le tour des 9 services (carrousel 3D) · 9 fiches détaillées (fenêtres ouvertes au clic, adresse `services.html#site`…) · Notre méthode de travail (cascade) · Votre devis gratuit (formulaire court) · CTA (noir) |
-| **À propos** | Notre histoire · L'équipe (3 associés) · Nos 4 valeurs · CTA (noir) |
+| **À propos** | Intro G · J · S (portraits en stickers, les lettres se rassemblent en GJS au scroll) · Notre histoire · Vision (citation qui se corrige, question mise en avant) · L'équipe (3 associés) · Valeurs (4 cartes qui se retournent : survol, toucher, clavier) · Trajectoire (frise qui se remplit, dates d'exemple à remplacer) · CTA (noir) |
 | **Contact** | Formulaire en 3 étapes + WhatsApp, rendez-vous, email et téléphone |
 | **Légal, 404** | Même identité, contenu juridique conservé |
 
@@ -218,7 +218,7 @@ assets/js/   main.js · config.js · services.js
                     marquee · header · transition · pause · menu · cookies · hydrate · utils
              hero/  hero.js (scroll, repli DOM) · webgl.js (shaders)
              sections/ steps · faq · stickers (footer) · services-index · carousel
-             pages/ contact (formulaire en 3 étapes) · services (fiches et formulaire court)
+             pages/ contact (formulaire en 3 étapes) · services (fiches et formulaire court) · about (intro GJS, vision, valeurs, frise)
              core/forms.js : validation, anti-spam et envoi communs aux deux formulaires
 assets/vendor/ gsap (gsap, ScrollTrigger, SplitText) · lenis · three · matter, avec leurs licences
 assets/video/  hero.mp4 · hero.webm · hero-mobile.mp4 · hero-mobile.webm · hero-poster.jpg
@@ -300,6 +300,8 @@ Partout : `data-skew` sur un grand titre le fait s'incliner et s'étirer selon l
 | Stickers du footer (accueil) | `sections/stickers.js` | physique Matter.js (attraper, lancer), chargée à l'approche du footer | chute avec rebond, un toucher les fait sauter | posés |
 | Index des services | `sections/services-index.js` | l'affiche du service suit le curseur | liste simple | liste simple |
 | Le tour des 9 services | `sections/carousel.js` | cylindre 3D au fil du scroll, clic ou focus pour amener une carte au centre | glissé horizontal | grille |
+| Intro G · J · S (À propos) | `pages/about.js` | hero épinglé : les stickers se décollent, les lettres se rassemblent et GJS grandit | effet lié à la sortie du hero, sans épinglage | composition de départ, immobile |
+| Vision, Valeurs, Trajectoire | `pages/about.js` | citation barrée puis soulignée au scroll ; cartes qui se retournent ; frise qui se remplit | idem (cartes au toucher) | états finaux, faces échangées sur place |
 
 Les stickers du footer sont générés depuis `services.js` (badges et noms courts) par `npm run services`. Pour les ajouter à une autre page, copiez le bloc `<div class="footer__play" data-stickers>` de `index.html`.
 

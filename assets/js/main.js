@@ -23,6 +23,7 @@ import { hydrateConfig, hydrateServices } from './core/hydrate.js';
 const PAGES = {
   services: () => import('./pages/services.js'),
   contact: () => import('./pages/contact.js'),
+  about: () => import('./pages/about.js'),
 };
 
 /* Sections animées : chaque module n'est chargé que si la page contient sa section */

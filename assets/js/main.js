@@ -7,7 +7,7 @@
    ========================================================================== */
 
 import { profile } from './core/profile.js';
-import { initScroll } from './core/scroll.js';
+import { initScroll, getLenis } from './core/scroll.js';
 import { initHeader } from './core/header.js';
 import { initTransitions } from './core/transition.js';
 import { initPause } from './core/pause.js';
@@ -17,7 +17,8 @@ import { initMarquees } from './core/marquee.js';
 import { initMotion } from './core/motion.js';
 import { initDepth } from './core/parallax.js';
 import { initMenu } from './core/menu.js';
-import { initCookies } from './core/cookies.js';
+import { initCookies, maybeShowBanner } from './core/cookies.js';
+import { initLoader } from './core/loader.js';
 import { hydrateConfig, hydrateServices } from './core/hydrate.js';
 
 const PAGES = {
@@ -48,9 +49,14 @@ function safe(name, fn) {
 }
 
 async function boot() {
+  // Première visite : écran de chargement, puis le bandeau cookies
+  let loading = Promise.resolve(false);
+  safe('loader', () => { loading = initLoader(); });
+  const firstVisit = document.documentElement.classList.contains('is-loading');
   hydrateConfig();
   safe('menu', initMenu);
-  safe('cookies', initCookies);
+  safe('cookies', () => initCookies({ showBanner: !firstVisit }));
+  loading.then(() => safe('cookies', maybeShowBanner));
 
   if (!window.gsap || !window.ScrollTrigger) {
     // Librairies indisponibles : le site reste entièrement lisible et statique
@@ -60,6 +66,8 @@ async function boot() {
 
   window.__gjsMotion = true; // le JS répond : on garde les états initiaux d'animation
   safe('scroll', initScroll);
+  // Pas de défilement sous l'écran de chargement
+  if (firstVisit && getLenis()) { getLenis().stop(); loading.then(() => getLenis().start()); }
   safe('header', initHeader);
   safe('transitions', initTransitions);
   safe('pause', initPause);

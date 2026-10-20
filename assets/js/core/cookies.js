@@ -21,12 +21,17 @@ const loaded = new Set();
 
 function readConsent() {
   const saved = store.get(KEY);
-  if (!saved || saved.v !== CONFIG.CONSENT_VERSION) return null;
+  if (!saved) return null;
   const age = (Date.now() - new Date(saved.date).getTime()) / 86400000;
-  if (!Number.isFinite(age) || age > CONFIG.CONSENT_MAX_AGE_DAYS) return null;
+  // Choix périmé (6 mois) ou d'une ancienne version : on l'efface et on redemande
+  if (saved.v !== CONFIG.CONSENT_VERSION || !Number.isFinite(age) || age > CONFIG.CONSENT_MAX_AGE_DAYS) {
+    try { window.localStorage.removeItem(KEY); } catch { /* stockage bloqué */ }
+    return null;
+  }
   return saved;
 }
 
+export const getConsent = () => consent;
 export const hasConsent = (category) => Boolean(consent && consent[category]);
 
 /** Exécute cb dès que (et seulement si) la catégorie est acceptée. */
@@ -96,7 +101,7 @@ function hide() {
   lastFocus = null;
 }
 
-export function initCookies() {
+export function initCookies({ showBanner = true } = {}) {
   banner = document.getElementById('cookies');
   prefs = document.getElementById('cookies-prefs');
   // Choix existant : on ne le réécrit pas (sa date d'origine fait foi pour l'expiration)
@@ -145,5 +150,10 @@ export function initCookies() {
     if (e.key === 'Escape' && consent) hide();
   });
 
-  if (!consent) show();
+  if (!consent && showBanner) show();
+}
+
+/** Affiche le bandeau si aucun choix n'a encore été fait (appelé après l'écran de chargement). */
+export function maybeShowBanner() {
+  if (!consent && banner && banner.hidden) show();
 }

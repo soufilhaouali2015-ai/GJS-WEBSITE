@@ -28,7 +28,7 @@
   <link rel="icon" href="assets/img/icons/icon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/icons/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <script>(function(h){h.classList.replace('no-js','js');var m=function(q){return matchMedia(q).matches};var p=m('(prefers-reduced-motion: reduce)')?'reduced':(m('(min-width: 1024px) and (hover: hover) and (pointer: fine)')?'desktop':'mobile');h.setAttribute('data-motion',p);h.classList.add('has-motion');try{if(sessionStorage.getItem('gjs-curtain')){sessionStorage.removeItem('gjs-curtain');if(p!=='reduced')h.classList.add('is-curtain-in')}}catch(e){}setTimeout(function(){if(!window.__gjsMotion)h.classList.remove('has-motion','is-curtain-in')},3000)})(document.documentElement);</script>
+  <script>(function(h){h.classList.replace('no-js','js');var m=function(q){return matchMedia(q).matches};var p=m('(prefers-reduced-motion: reduce)')?'reduced':(m('(min-width: 1024px) and (hover: hover) and (pointer: fine)')?'desktop':'mobile');h.setAttribute('data-motion',p);h.classList.add('has-motion');try{if(sessionStorage.getItem('gjs-curtain')){sessionStorage.removeItem('gjs-curtain');if(p!=='reduced')h.classList.add('is-curtain-in')}}catch(e){}try{if(!localStorage.getItem('gjs-visited'))h.classList.add('is-loading')}catch(e){}setTimeout(function(){if(!window.__gjsMotion)h.classList.remove('has-motion','is-curtain-in','is-loading')},3000)})(document.documentElement);</script>
   <link rel="preload" href="assets/fonts/BebasNeue-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Medium.woff2" as="font" type="font/woff2" crossorigin>
@@ -49,6 +49,15 @@
   <script type="module" src="assets/js/main.js"></script>
 </head>
 <body data-page="services">
+
+  <div class="loader" data-loader>
+    <div class="loader__stage" aria-hidden="true" data-loader-stage>
+      <span class="loader__sticker" data-loader-sticker>GJS</span>
+      <span class="loader__stamp" data-loader-stamp>Bienvenue&nbsp;!</span>
+    </div>
+    <p class="loader__count" aria-hidden="true"><span data-loader-count>000</span></p>
+    <button class="btn btn--sm loader__skip" type="button" data-loader-skip onclick="try{localStorage.setItem('gjs-visited','1')}catch(e){}this.parentNode.classList.add('is-skipped')">Passer</button>
+  </div>
 
   <a class="skip-link" href="#main">Aller au contenu</a>
   <div class="read-progress" aria-hidden="true"><span data-read-progress></span></div>
@@ -709,9 +718,10 @@
     </div>
   </footer>
 
-  <section class="cookies" id="cookies" aria-labelledby="cookies-title" hidden>
-    <h2 class="cookies__title" id="cookies-title">Des cookies&nbsp;? Seulement si vous voulez.</h2>
-    <p class="cookies__text">Aucun traceur n’est déposé sans votre accord. Seul votre choix est mémorisé. <a href="politique-confidentialite.html#cookies">En savoir plus</a></p>
+  <section class="cookies" id="cookies" aria-labelledby="cookies-title" hidden data-lenis-prevent>
+    <p class="cookies__label"><span class="sticker sticker--ink">Cookies</span></p>
+    <h2 class="cookies__title" id="cookies-title">Rien sans <span class="hl">votre accord.</span></h2>
+    <p class="cookies__text">Aucun traceur n’est déposé sans votre accord. Seuls les stockages indispensables au site sont actifs&nbsp;: vos choix, l’introduction déjà vue, vos records et le son de l’arcade. <a href="politique-cookies.html">Notre politique cookies</a></p>
     <div class="cookies__actions">
       <button class="btn" type="button" data-consent="reject">Tout refuser</button>
       <button class="btn" type="button" data-consent="customize" aria-expanded="false" aria-controls="cookies-prefs">Personnaliser</button>
@@ -720,9 +730,9 @@
     <form class="cookies__prefs" id="cookies-prefs" hidden>
       <fieldset>
         <legend>Catégories</legend>
-        <label class="toggle"><span class="toggle__name">Indispensables</span><span class="toggle__desc">Mémorisent votre choix de cookies. Toujours actifs.</span><input type="checkbox" checked disabled></label>
-        <label class="toggle"><span class="toggle__name">Mesure d’audience</span><span class="toggle__desc">Statistiques anonymes de fréquentation.</span><input type="checkbox" name="analytics"></label>
-        <label class="toggle"><span class="toggle__name">Marketing</span><span class="toggle__desc">Pixels publicitaires (Meta, Google Ads).</span><input type="checkbox" name="marketing"></label>
+        <label class="toggle"><span class="toggle__name">Indispensables</span><span class="toggle__desc">Vos choix, l’introduction déjà vue, vos records et le son de l’arcade. Toujours actifs.</span><input type="checkbox" checked disabled></label>
+        <label class="toggle"><span class="toggle__name">Mesure d’audience</span><span class="toggle__desc">Statistiques de fréquentation. Aucun outil n’est activé à ce jour.</span><input type="checkbox" name="analytics"></label>
+        <label class="toggle"><span class="toggle__name">Marketing</span><span class="toggle__desc">Pixels publicitaires. Aucun n’est utilisé à ce jour.</span><input type="checkbox" name="marketing"></label>
       </fieldset>
       <button class="btn btn--lime" type="submit">Enregistrer mes choix</button>
     </form>

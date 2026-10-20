@@ -1172,6 +1172,9 @@ textarea.field__input {
   transform: translateY(16px);
 }
 
+.cookies__label { margin-bottom: 12px; }
+.cookies__label .sticker { font-size: 1rem; }
+
 .cookies__title {
   font-family: var(--font-display);
   font-size: var(--fs-h3);
@@ -1270,3 +1273,108 @@ textarea.field__input {
 .btn.is-magnetic:hover,
 .btn.is-magnetic:active { transition: none; }
 .btn.is-magnetic .btn__label { will-change: transform; }
+
+/* ---- Écran de chargement (première visite, core/loader.js) --------------- */
+/* Tout le minutage est en CSS (transform et opacity, sur le compositeur) :
+   l'écran se lève à 1,8 s au plus après le premier affichage, même si la page
+   travaille encore. Le JS ne fait que le compteur, « Passer » et le rangement. */
+
+.loader { display: none; }
+
+html.is-loading { overflow: hidden; }
+
+@keyframes loader-exit { to { transform: translateY(-101%); } }
+@keyframes loader-fade { to { opacity: 0; visibility: hidden; } }
+@keyframes loader-stick {
+  0% { opacity: 0; transform: translateY(-40px) rotate(-18deg) scale(1.2); }
+  55% { opacity: 1; transform: translateY(6px) rotate(-2.8deg) scale(0.985); }
+  100% { opacity: 1; transform: rotate(-4deg); }
+}
+@keyframes loader-stamp {
+  from { opacity: 0; transform: scale(2.2) rotate(-10deg); }
+  to { opacity: 1; transform: scale(1) rotate(6deg); }
+}
+@keyframes loader-shake {
+  20% { transform: translateX(-6px); }
+  45% { transform: translateX(5px); }
+  70% { transform: translateX(-2px); }
+}
+
+.is-loading .loader {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: grid;
+  place-items: center;
+  background: var(--cream);
+  color: var(--ink);
+  animation: loader-exit 0.4s cubic-bezier(0.7, 0, 0.84, 0) 1.4s forwards;
+}
+
+/* « Passer » : l'écran se lève tout de suite */
+.is-loading .loader.is-skipped { animation: loader-exit 0.35s cubic-bezier(0.7, 0, 0.84, 0) forwards; }
+
+.loader__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  animation: loader-shake 0.5s var(--ease-expo) 0.78s;
+}
+
+.loader__sticker {
+  display: block;
+  padding: 0.1em 0.22em 0.02em;
+  background: var(--lime);
+  border: max(4px, 0.03em) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 0.06em 0.06em 0 var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(5.5rem, 22vw, 13rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  transform: rotate(-4deg);
+  animation: loader-stick 0.9s var(--ease-expo) 0.05s both;
+}
+
+.loader__stamp {
+  position: absolute;
+  right: -0.6em;
+  bottom: -0.9em;
+  padding: 0.38em 0.7em 0.22em;
+  background: var(--ink);
+  color: var(--lime);
+  border: var(--border-thin) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 4px 4px 0 var(--lime);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: rotate(6deg);
+  animation: loader-stamp 0.52s var(--ease-expo) 0.62s both;
+}
+
+.loader__count {
+  position: absolute;
+  left: var(--gutter);
+  bottom: clamp(16px, 3vh, 32px);
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 2rem + 4vw, 6rem);
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+.loader__skip {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(16px, 3vh, 32px);
+}
+
+/* Mouvement réduit : composition posée, l'écran s'efface presque aussitôt */
+[data-motion="reduced"] .loader__stage,
+[data-motion="reduced"] .loader__sticker,
+[data-motion="reduced"] .loader__stamp { animation: none; }
+
+.is-loading[data-motion="reduced"] .loader,
+.is-loading[data-motion="reduced"] .loader.is-skipped { animation: loader-fade 0.15s linear 0.15s forwards; }

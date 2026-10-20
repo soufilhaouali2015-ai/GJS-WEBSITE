@@ -132,6 +132,17 @@ html.lenis body { height: auto; }
   animation: marker-in 0.9s var(--ease-expo) 0.55s both;
 }
 
+/* Première visite : les arrivées attendent que l'écran de chargement se lève */
+html.is-loading .mask__in,
+html.is-loading .mask__in .hl::before,
+html.is-loading .hero__line-in,
+html.is-loading .hero__label,
+html.is-loading .hero__label > *,
+html.is-loading .hero__pause,
+html.is-loading .about-hero__letter,
+html.is-loading .about-hero__photo-in,
+html.is-loading .about-hero__scroll-line::after { animation-play-state: paused; }
+
 /* ---- Trait de marqueur qui se dessine (scaleX, jamais de largeur animée) --- */
 
 .has-motion .hl.is-marker::before {

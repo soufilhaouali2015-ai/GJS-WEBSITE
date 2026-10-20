@@ -292,7 +292,7 @@ html.is-menu-open {
 .footer__link {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 48px;
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 0.25em;
@@ -327,13 +327,51 @@ html.is-menu-open {
   text-align: left;
 }
 
+/* « Gérer les cookies » dans la colonne Légal : même taille que les liens voisins */
+.footer__col .footer__link { font-size: inherit; }
+
+/* Réseaux sociaux : pictogrammes au trait, noirs, qui passent au citron au survol */
+.socials {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 12px !important;
+  padding-top: 4px;
+}
+
+.footer__col a.social,
+.social {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  background: var(--cream);
+  border: var(--border-thin) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 3px 3px 0 var(--ink);
+  color: var(--ink);
+  transition: background-color 0.2s, transform 0.4s var(--ease-expo), box-shadow 0.4s var(--ease-expo);
+}
+
+.social .icon { width: 26px; height: 26px; }
+
+.social:hover,
+.social:focus-visible {
+  background: var(--lime);
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.footer__col a.social::after { display: none; }
+
 @media (min-width: 720px) {
-  .footer__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .footer__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .footer__brand { grid-column: 1 / -1; }
 }
 
-@media (min-width: 1024px) {
-  .footer__grid { grid-template-columns: 1.6fr 1fr 1fr 1fr; }
+@media (min-width: 1100px) {
+  /* La colonne « Nous joindre » est plus large : l'email tient sur une ligne */
+  .footer__grid { grid-template-columns: 1.3fr 0.8fr 1.25fr 0.85fr 1fr; }
   .footer__brand { grid-column: auto; }
 }
 

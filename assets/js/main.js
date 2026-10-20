@@ -24,6 +24,7 @@ const PAGES = {
   services: () => import('./pages/services.js'),
   contact: () => import('./pages/contact.js'),
   about: () => import('./pages/about.js'),
+  legal: () => import('./pages/legal.js'),
 };
 
 /* Sections animées : chaque module n'est chargé que si la page contient sa section */

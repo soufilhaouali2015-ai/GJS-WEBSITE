@@ -33,10 +33,15 @@ export const CONFIG = Object.freeze({
    */
   FORM_ENDPOINT: '',
 
-  /** Réseaux sociaux : supprimez une ligne pour masquer le lien partout. [À REMPLACER] */
+  /**
+   * Réseaux sociaux (icônes du footer et du menu) : supprimez une ligne pour masquer
+   * le lien partout. [À REMPLACER] par les adresses des comptes GJS, par exemple
+   * 'https://www.instagram.com/gjs.agence/'.
+   */
   SOCIALS: [
-    { label: 'Instagram', url: 'https://www.instagram.com/' },
-    { label: 'LinkedIn', url: 'https://www.linkedin.com/' },
+    { label: 'Instagram', url: 'https://www.instagram.com/' }, // [À REMPLACER]
+    { label: 'LinkedIn', url: 'https://www.linkedin.com/' }, // [À REMPLACER]
+    { label: 'TikTok', url: 'https://www.tiktok.com/' }, // [À REMPLACER]
   ],
 
   /**

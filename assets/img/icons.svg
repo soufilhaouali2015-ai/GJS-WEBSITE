@@ -75,6 +75,21 @@
     <path d="M4 12h24M10 3v6M22 3v6m-10 11 3 3 5-6"/>
   </symbol>
 
+  <!-- Réseaux sociaux (trait, même épaisseur que les pictogrammes) -->
+  <symbol id="i-instagram" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4.5" y="4.5" width="23" height="23" rx="6.5"/>
+    <circle cx="16" cy="16" r="5.5"/>
+    <path d="M22.6 9.4h.01"/>
+  </symbol>
+  <symbol id="i-linkedin" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4.5" y="4.5" width="23" height="23" rx="3"/>
+    <path d="M10.5 14v8M10.5 10v.01M15 22v-8M15 17.8c0-2.2 1.6-3.8 3.6-3.8s3.4 1.4 3.4 3.8V22"/>
+  </symbol>
+  <symbol id="i-tiktok" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17.5 4.5v15.2a4.8 4.8 0 1 1-4.8-4.8"/>
+    <path d="M17.5 4.5c.5 3.8 3 6.4 7 6.9"/>
+  </symbol>
+
   <!-- Décors street (parallaxe) : couleurs de la palette en dur, aria-hidden à l'usage -->
   <symbol id="i-devis" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M8 3h11l6 6v20H8z"/>

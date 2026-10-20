@@ -124,7 +124,7 @@ convert portrait.jpg -resize 480x600^  -gravity center -extent 480x600  -quality
 | `WHATSAPP`, `WHATSAPP_MESSAGE` | Numéro (format international, chiffres seuls) et message pré-rempli des boutons WhatsApp |
 | `BOOKING_URL` | Lien de prise de rendez-vous (Calendly, Cal.com…) |
 | `FORM_ENDPOINT` | URL de réception du formulaire (POST JSON). Vide = repli mailto |
-| `SOCIALS` | Réseaux `{ label, url }` ; supprimer une ligne masque le lien partout |
+| `SOCIALS` | Réseaux `{ label, url }` (Instagram, LinkedIn, TikTok : icônes du footer et du menu, adresses [À REMPLACER]) ; supprimer une ligne masque le lien partout |
 | `ANALYTICS` | Script de mesure chargé **uniquement après consentement** : `{ src, attrs }` |
 | `CONSENT_VERSION` | À incrémenter quand vous ajoutez un traceur (le choix est redemandé) |
 | `CONSENT_MAX_AGE_DAYS` | Validité du choix cookies : 182 jours (6 mois, CNIL) |
@@ -192,7 +192,8 @@ ANALYTICS: { src: 'https://plausible.io/js/script.js', attrs: { 'data-domain': '
 | **Services** | Intro + index typographique · Le tour des 9 services (carrousel 3D) · 9 fiches détaillées (fenêtres ouvertes au clic, adresse `services.html#site`…) · Notre méthode de travail (cascade) · Votre devis gratuit (formulaire court) · CTA (noir) |
 | **À propos** | Intro G · J · S (portraits en stickers, les lettres se rassemblent en GJS au scroll) · Notre histoire · Vision (citation qui se corrige, question mise en avant) · L'équipe (3 associés) · Valeurs (4 cartes qui se retournent : survol, toucher, clavier) · Trajectoire (frise qui se remplit, dates d'exemple à remplacer) · CTA (noir) |
 | **Contact** | Formulaire en 3 étapes + WhatsApp, rendez-vous, email et téléphone · Après l'envoi (3 temps : réponse sous 24 h ouvrées, échange en visio sans engagement, plan d'action clair) |
-| **Légal, 404** | Même identité, contenu juridique conservé |
+| **Légal, 404** | Mentions légales, Confidentialité, Cookies (traceurs du site, choix en cours et effacement des données du navigateur), Exercer vos droits (email de demande préparé, droits un par un) · 404 |
+| **Footer (toutes les pages)** | Le site · Nous joindre · Nous suivre (icônes Instagram, LinkedIn, TikTok) · Légal & RGPD (Mentions légales, Confidentialité, Cookies, Exercer vos droits, Gérer les cookies) |
 
 **Activer la section « Réalisations »** (accueil, masquée par défaut) : dans `index.html`, retirez l'attribut `hidden` de `<section id="realisations">`, puis remplacez les 3 cartes par vos projets réels (`assets/img/realisation-exemple.webp` est une image d'attente).
 

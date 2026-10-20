@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GJS · PAGES LÉGALES (mentions, confidentialité)
+   GJS · PAGES LÉGALES (mentions, confidentialité, cookies, exercer vos droits)
    ========================================================================== */
 
 .legal__layout {
@@ -28,13 +28,27 @@
   display: grid;
   gap: 2px;
   margin-top: 12px;
-  list-style: decimal inside;
+  list-style: none;
+  counter-reset: toc;
   font-weight: 500;
+}
+
+/* Numéro à gauche, intitulé à droite (même sur deux lignes) */
+.legal__toc li {
+  counter-increment: toc;
+  display: grid;
+  grid-template-columns: 2.4ch minmax(0, 1fr);
+  align-items: center;
+}
+
+.legal__toc li::before {
+  content: counter(toc) ".";
+  font-size: var(--fs-small);
 }
 
 .legal__toc a {
   display: inline-flex;
-  min-height: 44px;
+  min-height: 48px;
   align-items: center;
   font-size: var(--fs-small);
   text-decoration: underline;
@@ -132,3 +146,237 @@ code {
 .legal__intro {
   margin-bottom: 56px;
 }
+
+.legal__actions { margin-top: 24px; }
+
+/* L'essentiel en 30 secondes : une affichette citron */
+.legal__content > .legal__essentials {
+  padding: 26px 24px 28px;
+  background: var(--lime);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--ink);
+  transform: rotate(-0.6deg);
+}
+
+.legal__content > .legal__essentials + section { margin-top: 64px; }
+
+.legal__essentials h2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+}
+
+.legal__essentials-note {
+  font-family: var(--font-text);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.legal__content .legal__essentials ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+.legal__essentials .checklist li::before { background: var(--cream); }
+
+/* Cellule « nom et stockage » : le type de stockage en dessous */
+.legal__cell-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  color: var(--fg-2);
+}
+
+/* Panneaux qui lisent le navigateur (choix de cookies, données du site) */
+.legal__panel {
+  padding: 22px 20px;
+  background: var(--card);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.legal__panel > * + * { margin-top: 12px; }
+
+.legal__panel-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.legal__panel-note,
+.legal__panel-status { font-size: var(--fs-small); }
+
+.legal__panel-status:empty { display: none; }
+
+.legal__content .legal__device-list {
+  padding-left: 0;
+  list-style: none;
+  font-size: var(--fs-small);
+}
+
+.legal__consent {
+  display: grid;
+  gap: 8px;
+}
+
+.legal__consent > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding-bottom: 8px;
+  border-bottom: var(--border-thin) solid var(--ink);
+}
+
+.legal__consent dt { font-weight: 600; }
+
+.legal__state {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--cream);
+  border: var(--border-thin) solid var(--ink);
+  border-radius: var(--radius);
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+.legal__state.is-on { background: var(--lime); }
+
+/* Coordonnées en liste de définitions */
+.legal__facts {
+  display: grid;
+  gap: 12px;
+  max-width: var(--measure);
+}
+
+.legal__facts > div {
+  padding: 14px 16px;
+  border-left: 6px solid var(--lime);
+  background: var(--card);
+}
+
+.legal__facts dt {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.legal__facts dd { margin-top: 4px; }
+
+/* Accordéon des droits : la FAQ du site, références d'article à droite */
+.legal__accordion .faq__q { gap: 8px 14px; }
+.legal__acc-ref {
+  margin-left: auto;
+  font-family: var(--font-text);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Formulaire « Préparer votre demande » */
+.rights-form > * + * { margin-top: 24px; }
+
+.rights-form__choices { grid-template-columns: minmax(0, 1fr); }
+
+@media (min-width: 720px) {
+  .rights-form__choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rights-form__choices .choice:last-child { grid-column: 1 / -1; }
+}
+
+.rights-choice__text { display: grid; gap: 2px; }
+.rights-choice__name { font-weight: 600; }
+.rights-choice__hint { font-size: var(--fs-small); font-weight: 400; }
+
+.rights-form__step {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 2px 6px 0;
+  background: var(--ink);
+  color: var(--lime);
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  vertical-align: 0.08em;
+}
+
+.rights-form__preview {
+  padding: 18px;
+  background: var(--cream);
+  border: var(--border-thin) dashed var(--ink);
+  border-radius: var(--radius);
+  font-size: var(--fs-small);
+}
+
+.rights-form__preview > * + * { margin-top: 6px; }
+
+.rights-form__preview-title {
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.rights-form__preview-key { font-weight: 600; }
+
+.rights-form__preview-body {
+  margin-top: 12px;
+  font-family: var(--font-text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.rights-form .form__nav { justify-content: flex-start; }
+.rights-form__status { font-weight: 600; }
+.rights-form__status:empty { display: none; }
+
+/* Page suivante */
+.legal__content > .legal__next { margin-top: 72px; max-width: none; }
+
+.legal__next-link {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 26px 76px 26px 24px;
+  background: var(--ink);
+  color: var(--cream);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--lime);
+  text-decoration: none !important;
+  transition: transform 0.4s var(--ease-expo), box-shadow 0.4s var(--ease-expo);
+}
+
+.legal__next-link:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--lime); }
+
+.legal__next-label {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cream-2);
+}
+
+.legal__next-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--lime);
+}
+
+.legal__next-arrow {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  font-size: 2rem;
+  transform: translateY(-50%);
+  transition: transform 0.4s var(--ease-expo);
+}
+
+.legal__next-link:hover .legal__next-arrow { transform: translate(6px, -50%); }

@@ -193,6 +193,7 @@ ANALYTICS: { src: 'https://plausible.io/js/script.js', attrs: { 'data-domain': '
 | **À propos** | Intro G · J · S (portraits en stickers, les lettres se rassemblent en GJS au scroll) · Notre histoire · Vision (citation qui se corrige, question mise en avant) · L'équipe (3 associés) · Valeurs (4 cartes qui se retournent : survol, toucher, clavier) · Trajectoire (frise qui se remplit, dates d'exemple à remplacer) · CTA (noir) |
 | **Contact** | Formulaire en 3 étapes + WhatsApp, rendez-vous, email et téléphone · Après l'envoi (3 temps : réponse sous 24 h ouvrées, échange en visio sans engagement, plan d'action clair) |
 | **Légal, 404** | Mentions légales, Confidentialité, Cookies (traceurs du site, choix en cours et effacement des données du navigateur), Exercer vos droits (email de demande préparé, droits un par un) · 404 |
+| **Header (toutes les pages)** | Logo · navigation (ordinateur) · Devis gratuit (toujours visible) · bouton « Menu » : menu plein écran avec les liens numérotés en grand (Accueil, Services, À propos, Arcade, Contact), l'aperçu de la page au survol (`assets/img/menu/`, ordinateur), et en bas les coordonnées, les réseaux et les pages légales |
 | **Footer (toutes les pages)** | Le site · Nous joindre · Nous suivre (icônes Instagram, LinkedIn, TikTok) · Légal & RGPD (Mentions légales, Confidentialité, Cookies, Exercer vos droits, Gérer les cookies) |
 
 **Activer la section « Réalisations »** (accueil, masquée par défaut) : dans `index.html`, retirez l'attribut `hidden` de `<section id="realisations">`, puis remplacez les 3 cartes par vos projets réels (`assets/img/realisation-exemple.webp` est une image d'attente).
@@ -235,7 +236,7 @@ assets/fonts/ Bebas Neue + Poppins (woff2, OFL)
 
 - **Bandeau cookies** : « Tout refuser » et « Tout accepter » côte à côte, même style ; « Personnaliser » juste en dessous. Aucun script de mesure avant consentement. Choix conservé 6 mois. Lien « Gérer les cookies » dans le footer et sur la page Confidentialité. Stockages actifs par défaut, tous deux indispensables et sans donnée personnelle : `gjs-consent` (vos choix, 6 mois) et `gjs-curtain` (stockage de session, effacé dès la page suivante, sert à la transition entre les pages).
 - **Aucun transfert vers des tiers au chargement** : polices, librairies d'animation (`assets/vendor/`) et vidéo sont servies par votre hébergeur. Aucun CDN.
-- **Accessibilité** : lien d'évitement, navigation clavier complète, menu mobile avec focus piégé et Échap, régions `aria-live`, erreurs de formulaire annoncées et reliées aux champs, cibles tactiles de 48 px, bouton « Mettre en pause » qui arrête vidéo, bandeaux et effets (WCAG 2.2.2), `prefers-reduced-motion` respecté (voir section 11), site lisible sans JavaScript (le formulaire part alors en `mailto:`).
+- **Accessibilité** : lien d'évitement, navigation clavier complète, menu plein écran (bouton « Menu ») avec focus piégé, Échap et `aria-expanded`, régions `aria-live`, erreurs de formulaire annoncées et reliées aux champs, cibles tactiles de 48 px, bouton « Mettre en pause » qui arrête vidéo, bandeaux et effets (WCAG 2.2.2), `prefers-reduced-motion` respecté (voir section 11), site lisible sans JavaScript (le formulaire part alors en `mailto:`).
 
 ---
 
@@ -251,7 +252,7 @@ assets/fonts/ Bebas Neue + Poppins (woff2, OFL)
 | Débordement horizontal à 320, 360, 375, 390, 768, 1024, 1440 px | Aucun ; titre du hero jamais sous le bouton pause, le header ou l'étiquette ; décors jamais sur un texte (vérifié de 1280 à 1920 px) |
 | Mouvement réduit | Ni épinglage, ni Lenis, ni WebGL, ni 3D ; vidéo en pause sur le poster et non téléchargée |
 | Rideau entre les pages | Levé en CSS 0,04 s après le premier affichage : jamais bloqué par le JavaScript, même en 4G lente |
-| Parcours testés | Cookies ; menu mobile ; « Je veux ça » → service pré-coché ; 3 étapes du formulaire ; envoi simulé → écran de succès ; fiches des services (index, carrousel, adresse, Échap, retour) ; formulaire court de la page Services ; rendu sans JS ; retour arrière (WebGL recréé) ; rechargement (position conservée) ; lecture automatique refusée (pas de carte noire) |
+| Parcours testés | Cookies ; menu plein écran (ouverture, aperçu au survol, focus piégé, Échap) ; « Je veux ça » → service pré-coché ; 3 étapes du formulaire ; envoi simulé → écran de succès ; fiches des services (index, carrousel, adresse, Échap, retour) ; formulaire court de la page Services ; rendu sans JS ; retour arrière (WebGL recréé) ; rechargement (position conservée) ; lecture automatique refusée (pas de carte noire) |
 
 Refaites une mesure Lighthouse sur l'hébergement final, avec les vraies photos.
 

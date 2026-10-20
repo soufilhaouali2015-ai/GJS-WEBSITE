@@ -62,27 +62,39 @@
         </ul>
       </nav>
       <a class="btn btn--lime btn--sm header__cta" href="contact.html#formulaire">Devis gratuit</a>
-      <button class="burger" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle><span class="burger__lines" aria-hidden="true"></span><span class="sr-only" data-menu-label>Ouvrir le menu</span></button>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle><span class="burger__lines" aria-hidden="true"></span><span class="burger__text" aria-hidden="true"><span>Menu</span><span>Fermer</span></span><span class="sr-only" data-menu-label>Ouvrir le menu</span></button>
     </div>
-    <div class="menu" id="menu" hidden data-menu>
-      <div class="wrap">
-        <nav aria-label="Menu mobile">
-          <ul class="menu__list">
-            <li><a class="menu__link" href="index.html"><span>Accueil</span></a></li>
-            <li><a class="menu__link" href="services.html"><span>Services</span></a></li>
-            <li><a class="menu__link" href="a-propos.html"><span>À propos</span></a></li>
-            <li><a class="menu__link" href="index.html#arcade"><span>Arcade</span></a></li>
-            <li><a class="menu__link" href="contact.html"><span>Contact</span></a></li>
-          </ul>
-        </nav>
-        <div class="menu__foot">
-          <a class="btn btn--lime" href="contact.html#formulaire">Devis gratuit</a>
-          <a class="link" href="mailto:bonjour@gjs-agence.fr" data-config="email">bonjour@gjs-agence.fr</a>
-          <a class="link" href="tel:+33100000000" data-config="phone">01 00 00 00 00</a>
+  </header>
+
+  <div class="menu" id="menu" role="region" aria-label="Menu" hidden data-menu data-lenis-prevent>
+    <div class="menu__bg" aria-hidden="true"></div>
+    <div class="wrap menu__inner">
+      <nav class="menu__nav" aria-label="Menu principal">
+        <ol class="menu__list">
+          <li class="menu__item"><a class="menu__link" href="index.html" data-preview="0"><span class="menu__num" aria-hidden="true">01</span><span class="menu__text"><span>Accueil</span></span><span class="menu__arrow" aria-hidden="true">→</span></a></li>
+          <li class="menu__item"><a class="menu__link" href="services.html" data-preview="1"><span class="menu__num" aria-hidden="true">02</span><span class="menu__text"><span>Services</span></span><span class="menu__arrow" aria-hidden="true">→</span></a></li>
+          <li class="menu__item"><a class="menu__link" href="a-propos.html" data-preview="2"><span class="menu__num" aria-hidden="true">03</span><span class="menu__text"><span>À propos</span></span><span class="menu__arrow" aria-hidden="true">→</span></a></li>
+          <li class="menu__item"><a class="menu__link" href="index.html#arcade" data-preview="3"><span class="menu__num" aria-hidden="true">04</span><span class="menu__text"><span>Arcade</span></span><span class="menu__arrow" aria-hidden="true">→</span></a></li>
+          <li class="menu__item"><a class="menu__link" href="contact.html" data-preview="4"><span class="menu__num" aria-hidden="true">05</span><span class="menu__text"><span>Contact</span></span><span class="menu__arrow" aria-hidden="true">→</span></a></li>
+        </ol>
+      </nav>
+      <div class="menu__preview" aria-hidden="true"><img src="assets/img/menu/menu-accueil.webp" alt="" width="640" height="800" loading="lazy" decoding="async" data-preview-img="0" class="is-active"><img src="assets/img/menu/menu-services.webp" alt="" width="640" height="800" loading="lazy" decoding="async" data-preview-img="1"><img src="assets/img/menu/menu-a-propos.webp" alt="" width="640" height="800" loading="lazy" decoding="async" data-preview-img="2"><img src="assets/img/menu/menu-arcade.webp" alt="" width="640" height="800" loading="lazy" decoding="async" data-preview-img="3"><img src="assets/img/menu/menu-contact.webp" alt="" width="640" height="800" loading="lazy" decoding="async" data-preview-img="4"></div>
+      <div class="menu__foot">
+        <div>
+          <p class="menu__foot-title">Écrire</p>
+          <ul><li><a href="mailto:bonjour@gjs-agence.fr" data-config="email">bonjour@gjs-agence.fr</a></li><li><a href="tel:+33100000000" data-config="phone">01 00 00 00 00</a></li></ul>
+        </div>
+        <div>
+          <p class="menu__foot-title" id="menu-social-title">Suivre</p>
+          <ul class="socials" aria-labelledby="menu-social-title"><li><a class="social" href="https://www.instagram.com/" data-social="Instagram" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-instagram"></use></svg><span class="sr-only">Instagram (nouvel onglet)</span></a></li><li><a class="social" href="https://www.linkedin.com/" data-social="LinkedIn" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-linkedin"></use></svg><span class="sr-only">LinkedIn (nouvel onglet)</span></a></li><li><a class="social" href="https://www.tiktok.com/" data-social="TikTok" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/img/icons.svg#i-tiktok"></use></svg><span class="sr-only">TikTok (nouvel onglet)</span></a></li></ul>
+        </div>
+        <div>
+          <p class="menu__foot-title">Légal &amp; RGPD</p>
+          <ul><li><a href="mentions-legales.html">Mentions légales</a></li><li><a href="politique-confidentialite.html">Confidentialité</a></li><li><a href="politique-cookies.html">Cookies</a></li><li><a href="exercer-vos-droits.html">Exercer vos droits</a></li></ul>
         </div>
       </div>
     </div>
-  </header>
+  </div>
 
   <p class="sr-only" id="a11y-status" aria-live="polite"></p>
   <p class="sr-only" id="a11y-alert" aria-live="assertive"></p>

@@ -277,5 +277,9 @@ export function initMotion(root = document) {
     }
   });
   document.addEventListener('focusin', revealOnFocus);
+  // Impression avant d'avoir fait défiler : les compteurs affichent leur vraie valeur
+  window.addEventListener('beforeprint', () => {
+    document.querySelectorAll('[data-count]').forEach((c) => { c.textContent = c.dataset.count; });
+  });
   window.__gjsMotion = true;
 }

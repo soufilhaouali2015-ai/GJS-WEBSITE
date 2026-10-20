@@ -17,15 +17,17 @@ const { gsap, ScrollTrigger } = window;
 
 function bump(num) {
   // Le numéro grossit puis se pose, avec le ressort « rebond » commun au site
-  const s = spring(SPRING.bouncy, 0.7);
-  s.set(1);
+  const s = spring(SPRING.bouncy, 1);
+  s.set(1.24);
+  let back = false;
   const setX = gsap.quickSetter(num, 'scaleX');
   const setY = gsap.quickSetter(num, 'scaleY');
   run((dt) => {
     s.step(dt);
+    if (!back && s.value > 1.2) { back = true; s.set(1); }
     setX(s.value);
     setY(s.value);
-    return !s.settled;
+    return !(back && s.settled);
   });
 }
 

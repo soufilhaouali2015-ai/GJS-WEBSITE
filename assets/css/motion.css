@@ -153,7 +153,7 @@ html.lenis body { height: auto; }
 
 /* ---- Décors street en parallaxe (core/parallax.js) ------------------------- */
 /* Placés dans les marges vides des sections (jamais sur un texte), sous le contenu,
-   et seulement là où il y a de la place (1024 px et plus). */
+   et seulement là où les marges sont vraiment libres (1280 px et plus). */
 
 .deco {
   position: absolute;
@@ -179,7 +179,7 @@ html.lenis body { height: auto; }
 .section > .wrap,
 .methode__stage > .wrap { position: relative; z-index: 1; }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .deco { display: block; }
 }
 
@@ -410,6 +410,20 @@ html:not(.has-motion) .hero__pause { display: none; }
   }
 
   .tilt-glare { display: none !important; }
+
+  /* Contenus de la phase 2 qui attendent le scroll */
+  [data-steps] .step > *,
+  [data-anim="photo"] img {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .methode { height: auto !important; }
+  .methode__stage { position: static !important; min-height: 0 !important; }
+  .steps__line { display: none !important; }
+  .footer__play,
+  .deco,
+  .svc-float { display: none !important; }
 
   /* Cartes phares : recto puis verso, à plat */
   .svc-card.is-flippable .svc-card__inner,

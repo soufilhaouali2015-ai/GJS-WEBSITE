@@ -104,8 +104,10 @@ export function initServicesIndex(root = document) {
     if (!link || !link.matches(':focus-visible')) return;
     load();
     const r = link.getBoundingClientRect();
-    x.jump(Math.min(r.right - frame.offsetWidth - 120, window.innerWidth - frame.offsetWidth - 24));
-    y.jump(r.top + r.height / 2 - frame.offsetHeight / 2);
+    // Même règle qu'à la souris : au-dessus de la ligne (en dessous près du haut), jamais sur son prix
+    const above = r.top - frame.offsetHeight - 16;
+    x.jump(Math.min(r.left + r.width * 0.45, window.innerWidth - frame.offsetWidth - 24));
+    y.jump(above > 8 ? above : r.bottom + 16);
     pick(links.indexOf(link));
     show.set(1);
     start();

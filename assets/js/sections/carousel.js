@@ -1,12 +1,14 @@
 /* ==========================================================================
    GJS · CARROUSEL EN CYLINDRE (page Services)
-     ordinateur : scène collante sur ~2,2 écrans ; les 9 cartes tournent autour
+     ordinateur (≥ 1024 × 720 px) : scène collante sur ~2,2 écrans ; les 9 cartes tournent autour
                   d'un cylindre au fil du scroll. La carte de face est nette,
                   les autres reculent et pâlissent (voile crème). Un clic, ou le
                   focus clavier, amène une carte au centre.
      mobile     : glissé horizontal (défilement natif aimanté), chaque carte
                   pivote un peu selon sa position
-     réduit et sans JS : simple grille (CSS)
+     réduit, sans JS, écran trop bas : simple grille (CSS)
+   Si la fenêtre change de taille (ou de zoom), le cylindre se démonte et se
+   remonte proprement : aucune transformation ne reste sur la grille.
    Tout est en transform (et opacity pour le voile).
    ========================================================================== */
 
@@ -73,14 +75,28 @@ function cylinder(orbit, ring, cards) {
     if (lenis) lenis.scrollTo(y, { duration: 1.1 });
     else window.scrollTo({ top: y, behavior: 'smooth' });
   };
+  const ac = new AbortController(); // écouteurs retirés au démontage
   cards.forEach((card, i) => {
     card.addEventListener('click', (e) => {
-      if (card.classList.contains('is-center')) return; // la carte de face : son lien marche normalement
+      if (!orbit.classList.contains('is-3d') || card.classList.contains('is-center')) return; // la carte de face : son lien marche normalement
       e.preventDefault();
       goTo(i);
-    });
-    card.addEventListener('focusin', () => { if (!card.classList.contains('is-center')) goTo(i); });
+    }, { signal: ac.signal });
+    // Navigation au clavier dans la page seulement (pas le retour sur l'onglet, qui redonne le focus)
+    card.addEventListener('focusin', (e) => {
+      if (!orbit.classList.contains('is-3d') || !e.relatedTarget || !e.target.matches(':focus-visible') || card.classList.contains('is-center')) return;
+      goTo(i);
+    }, { signal: ac.signal });
   });
+
+  // Démontage : on rend la grille telle qu'elle était
+  return () => {
+    ac.abort();
+    st.kill();
+    gsap.set(ring, { clearProps: 'transform' });
+    cards.forEach((card) => { card.style.transform = ''; card.classList.remove('is-center'); });
+    orbit.querySelectorAll('.orbit__veil').forEach((v) => v.remove());
+  };
 }
 
 function swipe(ring, cards) {
@@ -113,12 +129,33 @@ export function initCarousel(root = document) {
   const ring = orbit.querySelector('[data-orbit-ring]');
   const cards = [...orbit.querySelectorAll('[data-orbit-card]')];
   if (!ring || !cards.length) return;
-  // La mise en page (cylindre ou glissé) est choisie en CSS selon le profil
-  if (isDesktop && getComputedStyle(orbit.closest('section').querySelector('.svc-orbit__stage')).position === 'sticky') {
-    orbit.classList.add('is-3d');
-    cylinder(orbit, ring, cards);
-  } else if (!isDesktop) {
+  const stage = orbit.closest('section').querySelector('.svc-orbit__stage');
+
+  if (!isDesktop) {
     orbit.classList.add('is-swipe');
     swipe(ring, cards);
+    return;
+  }
+
+  // Ordinateur : le cylindre n'existe que si la CSS a mis la scène en collant
+  // (≥ 1024 × 720 px) ; on suit les changements de taille de fenêtre et de zoom
+  const mq = matchMedia('(min-width: 1024px) and (min-height: 720px)');
+  let destroy = null;
+  const sync = () => {
+    const want = mq.matches && getComputedStyle(stage).position === 'sticky';
+    if (want && !destroy) {
+      orbit.classList.add('is-3d');
+      destroy = cylinder(orbit, ring, cards);
+    } else if (!want && destroy) {
+      destroy();
+      destroy = null;
+      orbit.classList.remove('is-3d');
+    }
+    ScrollTrigger.refresh();
+  };
+  mq.addEventListener('change', sync);
+  if (mq.matches && getComputedStyle(stage).position === 'sticky') {
+    orbit.classList.add('is-3d');
+    destroy = cylinder(orbit, ring, cards);
   }
 }

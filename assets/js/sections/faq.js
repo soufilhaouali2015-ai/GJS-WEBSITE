@@ -39,6 +39,12 @@ export function initFaq(root = document) {
   const icons = new Map(items.map((it) => [it, iconSpring(it.querySelector('.faq__cross'))]));
   list.classList.add('is-enhanced');
   items.forEach((it) => icons.get(it)(it.open));
+  // Le navigateur peut ouvrir ou fermer une question lui-même (recherche Ctrl+F,
+  // lien vers un passage, attribut name exclusif) : l'icône suit toujours l'état réel
+  items.forEach((it) => it.addEventListener('toggle', () => {
+    icons.get(it)(it.open);
+    gsap.delayedCall(DUR, () => ScrollTrigger.refresh());
+  }));
 
   // Tout ce qui suit la FAQ dans la section bouge aussi : on anime les questions
   const flip = (change) => {
@@ -53,8 +59,7 @@ export function initFaq(root = document) {
       if (Math.abs(dy) < 0.5 && Math.abs(sy - 1) < 0.002) return;
       gsap.fromTo(it, { y: dy, '--sy': sy }, { y: 0, '--sy': 1, duration: DUR, ease: EASE, clearProps: 'transform' });
     });
-    // Les déclencheurs plus bas dans la page ont bougé
-    gsap.delayedCall(DUR, () => ScrollTrigger.refresh());
+    // Les déclencheurs plus bas dans la page sont recalculés par l'écouteur « toggle »
   };
 
   const toggle = (item, open) => {

@@ -6,8 +6,8 @@
    présentes ignorées).
 
    Usage :
-     node render.mjs --format desktop --w 1920 --h 1080 --spp 20
-     node render.mjs --format mobile  --w 720  --h 1280 --spp 20
+     node render.mjs --format desktop --w 1920 --h 1080 --spp 16
+     node render.mjs --format mobile  --w 720  --h 1280 --spp 16
    Options : --from 0 --to 287 (bornes incluses), --frames 0,72,144 (liste),
              --steps 40 (pas de la fumée), --out out
    Playwright : variable PLAYWRIGHT_MODULE ou paquet « playwright » installé.
@@ -30,7 +30,7 @@ const args = Object.fromEntries(process.argv.slice(2).reduce((acc, v, i, all) =>
 const format = args.format || 'desktop';
 const w = Number(args.w || (format === 'mobile' ? 720 : 1920));
 const h = Number(args.h || (format === 'mobile' ? 1280 : 1080));
-const spp = Number(args.spp || 20);
+const spp = Number(args.spp || 16);
 const steps = Number(args.steps || 40);
 const outDir = join(here, args.out || 'out', format);
 const TOTAL = 288;

@@ -743,9 +743,11 @@ async function setup() {
     // repère de la caméra : le mot garde sa place à l'image pendant tout le plan
     const mobile = FORMAT === 'mobile';
     const az = THREE.MathUtils.degToRad(mobile ? -8 + 6 * Math.sin(a) : -12 + 6 * Math.sin(a));
-    const dist = mobile ? 5.0 + 0.14 * Math.cos(a) : 5.2 + 0.16 * Math.cos(a);
+    // Mobile : plan plus large et plus plongeant, le mot reste dans le haut de l'image
+    // (le titre du hero se pose dessous, sur le sol sombre)
+    const dist = mobile ? 6.5 + 0.14 * Math.cos(a) : 5.2 + 0.16 * Math.cos(a);
     const offset = mobile ? 0 : 0.1;
-    const pivot = mobile ? -0.62 : 0.11;
+    const pivot = mobile ? -1.45 : 0.11;
     const height = mobile ? 1.05 : 0.85;
     camPos.set(Math.sin(az) * dist, height + 0.05 * Math.sin(a + 1.1), Math.cos(az) * dist);
     camTarget.set(-Math.cos(az) * offset, pivot, Math.sin(az) * offset);

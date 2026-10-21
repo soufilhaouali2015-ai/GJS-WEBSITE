@@ -208,25 +208,30 @@ ANALYTICS: { src: 'https://plausible.io/js/script.js', attrs: { 'data-domain': '
 
 ```
 index.html  services.html  a-propos.html  contact.html
-mentions-legales.html  politique-confidentialite.html  404.html
+mentions-legales.html  politique-confidentialite.html  politique-cookies.html  exercer-vos-droits.html  404.html
 favicon.svg  site.webmanifest  robots.txt  sitemap.xml  serve.json  package.json  .vercelignore
 scripts/sync-services.mjs          synchronise services.js → HTML (cartes, bandeaux, détails)
 scripts/vendor/                    recette du paquet Three.js du hero (non déployé)
 scripts/posters/                   générateur des 9 affiches de services (non déployé)
+scripts/hero-video/                vidéo du hero créée en code : scène Three.js, rendu image par image, assemblage ffmpeg (non déployé)
 assets/css/  tokens.css · base.css · layout.css · components.css · motion.css
              pages/ home · services · about · contact · legal · error
 assets/js/   main.js · config.js · services.js
              core/  profile · scroll (Lenis) · motion · spring · tilt · magnetic
-                    marquee · header · transition · pause · menu · cookies · hydrate · utils
+                    marquee · header · transition · pause · menu (plein écran) · cookies · loader (première visite)
+                    hydrate · forms · utils
              hero/  hero.js (scroll, repli DOM) · webgl.js (shaders)
              sections/ steps · faq · stickers (footer) · services-index · carousel
+             sections/ borne (Arcade) · games/ arcade (coque) + 3 jeux, chargés au lancement d'une partie
              pages/ contact (formulaire en 3 étapes) · services (fiches et formulaire court) · about (intro GJS, vision, valeurs, frise)
+                    legal (email « Exercer vos droits », données du navigateur sur la page Cookies)
              core/forms.js : validation, anti-spam et envoi communs aux deux formulaires
 assets/vendor/ gsap (gsap, ScrollTrigger, SplitText) · lenis · three · matter, avec leurs licences
-assets/video/  hero.mp4 · hero.webm · hero-mobile.mp4 · hero-mobile.webm · hero-poster.jpg
-               source/ vidéo originale + encode-hero.sh (non déployé)
-assets/img/  icons.svg (14 pictogrammes + 6 décors street) · og-image.jpg · icons/ · equipe/
+assets/video/  gjs-metal.mp4 · gjs-metal.webm · gjs-metal-mobile.mp4 · gjs-metal-mobile.webm
+               gjs-metal-poster.jpg · gjs-metal-poster-mobile.jpg (générés par scripts/hero-video)
+assets/img/  icons.svg (19 pictogrammes dont Instagram, LinkedIn, TikTok + 6 décors street) · og-image.jpg · icons/ · equipe/
              services/ 9 affiches des services (générées par scripts/posters)
+             menu/ 5 aperçus de pages pour le menu plein écran (640 x 800)
 assets/fonts/ Bebas Neue + Poppins (woff2, OFL)
 ```
 
@@ -310,13 +315,27 @@ Les stickers du footer sont générés depuis `services.js` (badges et noms cour
 
 ### Vidéo du hero
 
-La vidéo originale est dans `assets/video/source/` (exclue du déploiement par `.vercelignore` et de l'indexation par `robots.txt`). Pour régénérer les fichiers (ffmpeg requis) :
+Créée entièrement en code, sans aucune image ni vidéo extérieure : les trois lettres G, J, S en acier brossé (tracées depuis la police Bebas Neue du site), posées sur un sol de béton, dans la fumée et le contre-jour. Noir et blanc, sans son, boucle parfaite de 12 s à 24 images par seconde (caméra, lumières et fumée sont périodiques : l'image 288 serait identique à l'image 0).
+
+| Fichier (`assets/video/`) | Format | Poids |
+|---|---|---|
+| `gjs-metal.mp4` · `gjs-metal.webm` | 1920 × 1080, H.264 · VP9 | 2,3 Mo · 1,5 Mo |
+| `gjs-metal-mobile.mp4` · `gjs-metal-mobile.webm` | 720 × 1280, plan recadré pour les téléphones tenus en portrait (le mot en haut, le titre dessous) | 0,9 Mo · 0,7 Mo |
+| `gjs-metal-poster.jpg` · `gjs-metal-poster-mobile.jpg` | première image de chaque version | 64 Ko · 32 Ko |
+
+Pour la régénérer (dossier `scripts/hero-video/`, non déployé ; Node 20+ et ffmpeg avec libx264 et libvpx-vp9) :
 
 ```bash
-cd assets/video && bash source/encode-hero.sh
+cd scripts/hero-video && npm install
+node glyphs.mjs                                              # 1. contours de G, J, S (glyphs.json, déjà fourni)
+node render.mjs --format desktop --w 1920 --h 1080 --spp 16  # 2 et 3. scène (scene.js) rendue image par image dans out/desktop
+node render.mjs --format mobile  --w 720  --h 1280 --spp 16  #         version portrait dans out/mobile
+bash encode.sh                                               # 4. assemblage dans assets/video/ (ou : bash encode.sh mobile)
 ```
 
-Le script choisit l'extrait (0:31 → 0:44), le passe en noir et blanc contrasté, rend la boucle invisible (fondu de 0,6 s), produit les versions ordinateur 1280×720 (MP4 H.264 2,0 Mo, WebM VP9 1,2 Mo), mobile 406×720 (0,6 Mo et 0,4 Mo) et le poster (38 Ko). Le voile sombre qui garantit la lisibilité du titre est réglé dans `assets/js/hero/hero.js` (`VEIL_DESKTOP`) et `assets/css/pages/home.css` (`.hero__veil`).
+Le rendu tourne dans Chromium sans écran (WebGL logiciel, aucune carte graphique requise) : environ 50 s par image en 1920 × 1080 et 20 s en 720 × 1280 sur 4 cœurs, soit 4 h et 1 h 30. Il reprend là où il s'était arrêté (videz `out/<format>/` après avoir modifié la scène). Pour essayer un réglage : `node render.mjs --format mobile --frames 0,96 --spp 4 --out preview`.
+
+Le voile sombre garantit la lisibilité du titre crème (contraste ≥ 4,5:1 sur le pixel le plus clair de toute la boucle, mesuré image par image) : ellipse ancrée en bas à gauche sur ordinateur (`VEIL_DESKTOP` dans `assets/js/hero/hero.js`, et `.hero__veil` dans `assets/css/pages/home.css` sans WebGL) ; sous 1024 px, voile calé sur le titre (`.hero__veil`, même fichier). Si vous modifiez la scène, refaites cette mesure.
 
 ### Librairies (toutes en local)
 

@@ -6,7 +6,7 @@
   "scripts": {
     "glyphs": "node glyphs.mjs",
     "render": "node render.mjs",
-    "encode": "sh encode.sh"
+    "encode": "bash encode.sh"
   },
   "dependencies": {
     "opentype.js": "2.0.0",

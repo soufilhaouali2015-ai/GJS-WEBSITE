@@ -33,8 +33,8 @@
   <link rel="preload" href="assets/fonts/Poppins-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Medium.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/video/gjs-metal-poster.jpg" as="image" fetchpriority="high" media="(min-width: 768px)">
-  <link rel="preload" href="assets/video/gjs-metal-poster-mobile.jpg" as="image" fetchpriority="high" media="(max-width: 767px)">
+  <link rel="preload" href="assets/video/gjs-metal-poster.jpg" as="image" fetchpriority="high" media="(min-width: 768px), (orientation: landscape)">
+  <link rel="preload" href="assets/video/gjs-metal-poster-mobile.jpg" as="image" fetchpriority="high" media="(max-width: 767px) and (orientation: portrait)">
   <link rel="stylesheet" href="assets/css/tokens.css">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/layout.css">
@@ -129,12 +129,12 @@
             <div class="hero__card" data-hero-card>
               <div class="hero__media">
                 <video class="hero__video" data-hero-video muted loop playsinline preload="none" poster="assets/video/gjs-metal-poster.jpg" width="1920" height="1080" aria-hidden="true" tabindex="-1">
-                  <source src="assets/video/gjs-metal-mobile.webm" type="video/webm" media="(max-width: 767px)">
-                  <source src="assets/video/gjs-metal-mobile.mp4" type="video/mp4" media="(max-width: 767px)">
+                  <source src="assets/video/gjs-metal-mobile.webm" type="video/webm" media="(max-width: 767px) and (orientation: portrait)">
+                  <source src="assets/video/gjs-metal-mobile.mp4" type="video/mp4" media="(max-width: 767px) and (orientation: portrait)">
                   <source src="assets/video/gjs-metal.webm" type="video/webm">
                   <source src="assets/video/gjs-metal.mp4" type="video/mp4">
                 </video>
-                <script>if(matchMedia('(max-width: 767px)').matches)document.currentScript.previousElementSibling.poster='assets/video/gjs-metal-poster-mobile.jpg'</script>
+                <script>if(matchMedia('(max-width: 767px) and (orientation: portrait)').matches)document.currentScript.previousElementSibling.poster='assets/video/gjs-metal-poster-mobile.jpg'</script>
                 <div class="hero__veil"></div>
               </div>
               <div class="hero__counter" data-hero-counter aria-hidden="true">

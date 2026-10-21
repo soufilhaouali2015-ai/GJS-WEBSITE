@@ -253,7 +253,14 @@
      sous le bouton pause ou le header (pause 14 + 48 px + marge, titre 3 × 0,88 em,
      étiquette mesurée par hero.js ; 400 px sans JS) */
   .hero__stage { min-height: calc(var(--header-h) + 96px + var(--fs-h1) * 2.64 + 40px + var(--label-h, 400px) + 20px); }
-  .hero__veil { background: linear-gradient(to top, rgba(20, 20, 20, 0.62) 0%, rgba(20, 20, 20, 0.55) 60%, rgba(20, 20, 20, 0.3) 100%); }
+  /* Voile calé sur le titre : plein jusqu'à 16 px au-dessus de sa première ligne,
+     puis il s'efface (le logo de la vidéo, en haut de l'image, reste lumineux).
+     Calculé sur les 288 images, de 320 à 1023 px : contraste du titre crème
+     ≥ 4,5:1 sur le pixel le plus clair de toute la boucle (0,62 requis au plus). */
+  .hero__veil {
+    --veil-top: calc(var(--title-bottom) + var(--fs-h1) * 2.64 + 16px);
+    background: linear-gradient(to top, rgba(20, 20, 20, 0.64) var(--veil-top), rgba(20, 20, 20, 0.3) calc(var(--veil-top) + 70px), rgba(20, 20, 20, 0) calc(var(--veil-top) + 200px));
+  }
   .hero__label {
     right: auto;
     left: var(--gutter);
@@ -267,11 +274,6 @@
   .hero__label .btn-row { gap: 10px; }
   .hero__reassure { gap: 2px 14px; }
   .hero__pause { top: calc(var(--header-h) + 14px); }
-}
-
-/* Mobile : recadrage portrait de la vidéo mobile (déjà recadrée par plan) */
-@media (max-width: 767px) {
-  .hero__video { object-position: 21% 50%; }
 }
 
 /* Très petits écrans (320 px) : le sticker tient dans l'étiquette */

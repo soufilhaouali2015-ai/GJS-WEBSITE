@@ -138,6 +138,52 @@
   border-bottom: 0;
 }
 
+/* Mobile : chaque ligne devient une fiche (nom sur fond citron, puis chaque
+   valeur sous le titre de sa colonne). Rien à faire défiler de côté.
+   Les rôles ARIA du HTML gardent la lecture en tableau. */
+@media (max-width: 719px) {
+  .table-wrap { overflow: visible; }
+
+  .table-wrap table { min-width: 0; }
+
+  .table-wrap thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .table-wrap tr,
+  .table-wrap td { display: block; }
+
+  .table-wrap tr { border-bottom: var(--border-thin) solid var(--ink); }
+
+  .table-wrap tbody tr:last-child { border-bottom: 0; }
+
+  .table-wrap td {
+    padding: 4px 14px;
+    border-bottom: 0;
+  }
+
+  .table-wrap td:first-child {
+    padding-block: 10px;
+    margin-bottom: 6px;
+    background: var(--lime);
+    border-bottom: var(--border-thin) solid var(--ink);
+  }
+
+  .table-wrap td:last-child { padding-bottom: 14px; }
+
+  .table-wrap td:not(:first-child)::before {
+    content: attr(data-label);
+    content: attr(data-label) / "";
+    display: block;
+    font-weight: 600;
+  }
+}
+
 code {
   font-family: var(--font-text);
   font-weight: 600;

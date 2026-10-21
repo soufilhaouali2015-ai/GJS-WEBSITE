@@ -25,6 +25,12 @@ html.lenis body { height: auto; }
   margin: -0.14em -0.16em -0.06em;
 }
 
+/* Masques des lettres : la même marge en haut, sinon l'accent de « sûr » est rogné */
+.anim-char-mask {
+  padding: 0.14em 0.08em 0.06em;
+  margin: -0.14em -0.08em -0.06em;
+}
+
 .anim-line { will-change: transform; }
 
 /* ---- Barre de progression de lecture ------------------------------------ */

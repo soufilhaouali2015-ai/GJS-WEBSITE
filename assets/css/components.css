@@ -1200,10 +1200,9 @@ textarea.field__input {
   margin-top: 16px;
 }
 
-/* Refuser et accepter côte à côte, même poids ; Personnaliser en dessous */
-.cookies__actions [data-consent="reject"] { order: 1; }
-.cookies__actions [data-consent="accept"] { order: 2; }
-.cookies__actions [data-consent="customize"] { order: 3; grid-column: 1 / -1; }
+/* Refuser et accepter côte à côte, même poids ; Personnaliser en dessous
+   (même ordre dans le HTML : le clavier suit l'ordre affiché) */
+.cookies__actions [data-consent="customize"] { grid-column: 1 / -1; }
 
 .cookies__actions .btn {
   min-height: 48px;
@@ -1277,7 +1276,8 @@ textarea.field__input {
 /* ---- Écran de chargement (première visite, core/loader.js) --------------- */
 /* Tout le minutage est en CSS (transform et opacity, sur le compositeur) :
    l'écran se lève à 1,8 s au plus après le premier affichage, même si la page
-   travaille encore. Le JS ne fait que le compteur, « Passer » et le rangement. */
+   travaille encore. Le compteur aussi est en CSS : il part du premier affichage,
+   sans attendre le JS (qui ne fait que « Passer », l'annonce et le rangement). */
 
 .loader { display: none; }
 
@@ -1299,6 +1299,18 @@ html.is-loading { overflow: hidden; }
   45% { transform: translateX(5px); }
   70% { transform: translateX(-2px); }
 }
+
+/* Compteur 000 → 100 : un nombre entier animé, affiché sur 3 chiffres */
+@property --loader-n {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+@counter-style loader-pad {
+  system: extends decimal;
+  pad: 3 "0";
+}
+@keyframes loader-count { to { --loader-n: 100; } }
 
 .is-loading .loader {
   position: fixed;
@@ -1363,6 +1375,19 @@ html.is-loading { overflow: hidden; }
   font-size: clamp(3rem, 2rem + 4vw, 6rem);
   line-height: 0.9;
   font-variant-numeric: tabular-nums;
+}
+
+.loader__count span {
+  counter-reset: loader var(--loader-n);
+  animation: loader-count 1.4s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+.loader__count span::after { content: counter(loader, loader-pad); }
+
+.loader.is-skipped .loader__count span,
+[data-motion="reduced"] .loader__count span {
+  --loader-n: 100;
+  animation: none;
 }
 
 .loader__skip {

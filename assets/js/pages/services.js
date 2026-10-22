@@ -171,7 +171,18 @@ function initSheets() {
   if (initial) {
     window.scrollTo(0, 0);
     getLenis()?.scrollTo(0, { immediate: true, force: true });
-    open(initial);
+    // Jusqu'ici la fiche visée était dépliée dans la page (repli sans JS, :target) :
+    // les déclencheurs placés plus bas sont recalculés sans elle
+    window.ScrollTrigger?.refresh();
+    // Première visite : la fiche attend que l'écran de chargement se lève
+    if (root.classList.contains('is-loading')) {
+      let done = false;
+      const go = () => { if (!done) { done = true; open(initial); } };
+      document.addEventListener('gjs:loaded', go, { once: true });
+      setTimeout(go, 2500);
+    } else {
+      open(initial);
+    }
   }
 }
 

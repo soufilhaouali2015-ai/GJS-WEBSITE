@@ -28,7 +28,7 @@
   <link rel="icon" href="assets/img/icons/icon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/icons/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <script>(function(h){h.classList.replace('no-js','js');var m=function(q){return matchMedia(q).matches};var p=m('(prefers-reduced-motion: reduce)')?'reduced':(m('(min-width: 1024px) and (hover: hover) and (pointer: fine)')?'desktop':'mobile');h.setAttribute('data-motion',p);h.classList.add('has-motion');try{if(sessionStorage.getItem('gjs-curtain')){sessionStorage.removeItem('gjs-curtain');if(p!=='reduced')h.classList.add('is-curtain-in')}}catch(e){}try{if(!localStorage.getItem('gjs-visited'))h.classList.add('is-loading')}catch(e){}setTimeout(function(){if(!window.__gjsMotion)h.classList.remove('has-motion','is-curtain-in','is-loading')},3000)})(document.documentElement);</script>
+  <script>(function(h){h.classList.replace('no-js','js');var m=function(q){return matchMedia(q).matches};var p=m('(prefers-reduced-motion: reduce)')?'reduced':(m('(min-width: 1024px) and (hover: hover) and (pointer: fine)')?'desktop':'mobile');h.setAttribute('data-motion',p);h.classList.add('has-motion');try{if(sessionStorage.getItem('gjs-curtain')){sessionStorage.removeItem('gjs-curtain');if(p!=='reduced')h.classList.add('is-curtain-in')}}catch(e){}try{if(!localStorage.getItem('gjs-visited'))h.classList.add('is-loading')}catch(e){}setTimeout(function(){if(!window.__gjsMotion){if(h.classList.contains('is-loading'))try{localStorage.setItem('gjs-visited','1')}catch(e){}h.classList.remove('has-motion','is-curtain-in','is-loading')}},3000)})(document.documentElement);</script>
   <link rel="preload" href="assets/fonts/BebasNeue-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Poppins-Medium.woff2" as="font" type="font/woff2" crossorigin>
@@ -52,7 +52,7 @@
       <span class="loader__sticker" data-loader-sticker>GJS</span>
       <span class="loader__stamp" data-loader-stamp>Bienvenue&nbsp;!</span>
     </div>
-    <p class="loader__count" aria-hidden="true"><span data-loader-count>000</span></p>
+    <p class="loader__count" aria-hidden="true"><span data-loader-count></span></p>
     <button class="btn btn--sm loader__skip" type="button" data-loader-skip onclick="try{localStorage.setItem('gjs-visited','1')}catch(e){}this.parentNode.classList.add('is-skipped')">Passer</button>
   </div>
 
@@ -132,7 +132,7 @@
                 <li><a href="#transferts">Transferts hors Union européenne</a></li>
                 <li><a href="#conservation">Durées de conservation</a></li>
                 <li><a href="#droits">Vos droits</a></li>
-                <li><a href="#cookies">Cookies et traceurs</a></li>
+                <li><a href="#traceurs">Cookies et traceurs</a></li>
                 <li><a href="#securite">Sécurité</a></li>
                 <li><a href="#modifications">Modifications</a></li>
               </ol>
@@ -190,7 +190,7 @@
                 <p>Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, de portabilité et d’opposition, ainsi que du droit de retirer votre consentement à tout moment et de définir des directives relatives au sort de vos données après votre décès.</p>
                 <p>Pour les exercer&nbsp;: <a href="mailto:bonjour@gjs-agence.fr" data-config="email">bonjour@gjs-agence.fr</a>, ou le guide <a href="exercer-vos-droits.html">Exercer vos droits</a> qui prépare l’email pour vous. Nous répondons sous un mois. Si vous estimez que vos droits ne sont pas respectés, vous pouvez introduire une réclamation auprès de la <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener">CNIL<span class="sr-only"> (nouvel onglet)</span></a>.</p>
               </section>
-              <section id="cookies" aria-labelledby="h-cookies">
+              <section id="traceurs" aria-labelledby="h-cookies">
                 <h2 id="h-cookies">8. Cookies et traceurs</h2>
                 <p>Aucun cookie de mesure ou de publicité n’est déposé sans votre accord. Refuser est aussi simple qu’accepter, et vous pouvez changer d’avis à tout moment.</p>
                 <div class="table-wrap" tabindex="0" role="region" aria-label="Tableau des traceurs">
@@ -274,8 +274,8 @@
     <p class="cookies__text">Aucun traceur n’est déposé sans votre accord. Seuls les stockages indispensables au site sont actifs&nbsp;: vos choix, l’introduction déjà vue, vos records et le son de l’arcade. <a href="politique-cookies.html">Notre politique cookies</a></p>
     <div class="cookies__actions">
       <button class="btn" type="button" data-consent="reject">Tout refuser</button>
-      <button class="btn" type="button" data-consent="customize" aria-expanded="false" aria-controls="cookies-prefs">Personnaliser</button>
       <button class="btn" type="button" data-consent="accept">Tout accepter</button>
+      <button class="btn" type="button" data-consent="customize" aria-expanded="false" aria-controls="cookies-prefs">Personnaliser</button>
     </div>
     <form class="cookies__prefs" id="cookies-prefs" hidden>
       <fieldset>

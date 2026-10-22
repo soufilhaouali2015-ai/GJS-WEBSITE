@@ -17,6 +17,10 @@
   overflow: clip;
 }
 
+/* Le hero remonte sous le header fixe (son padding le dégage déjà) : il tient
+   ainsi dans l'écran dès l'arrivée, « Découvrir » compris */
+.js .about-hero { margin-top: calc(-1 * var(--header-h)); }
+
 .about-hero__pin {
   position: relative;
   display: grid;
@@ -213,8 +217,9 @@
 }
 
 @media (min-width: 720px) {
-  /* Le hero tient dans l'écran (épinglé pendant que les lettres se rassemblent) */
-  .about-hero__word { --word-max: calc((100svh - 31rem) * 1.1); }
+  /* Le hero tient dans l'écran (épinglé pendant que les lettres se rassemblent).
+     Écran très bas (téléphone en paysage) : le mot garde une taille lisible. */
+  .about-hero__word { --word-max: max(8.5rem, calc((100svh - 31rem) * 1.1)); }
 }
 
 @media (min-width: 1024px) {
@@ -511,6 +516,7 @@
 .value__inner {
   position: relative;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   height: 100%;
   transform-style: preserve-3d;
   transition: transform 0.9s var(--ease-expo);
@@ -627,7 +633,8 @@
   .values__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-@media (min-width: 1024px) {
+/* 4 colonnes dès que le recto tient (numéro, « Retourner » et le mot) */
+@media (min-width: 1280px) {
   .values__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 

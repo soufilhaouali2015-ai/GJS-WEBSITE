@@ -51,10 +51,12 @@ function cylinder(orbit, ring, cards) {
     cards.forEach((card, i) => {
       const deg = Math.abs(((i * step + angle) % 360 + 540) % 360 - 180); // écart à la face, en degrés
       veils[i](clamp(deg / 110, 0, 1) * 0.72);
-      // Une carte qui passe de profil s'efface (lien trop étroit pour être visé), puis se masque
+      // Une carte qui passe de profil s'efface (lien trop étroit pour être visé) et ne
+      // capte plus la souris ; elle reste lisible par les lecteurs d'écran et joignable
+      // au clavier (le focus l'amène au centre)
       fades[i](1 - clamp((deg - 55) / 20, 0, 1));
       const hide = deg >= 75;
-      if (hide !== edge[i]) { edge[i] = hide; card.style.visibility = hide ? 'hidden' : ''; }
+      if (hide !== edge[i]) { edge[i] = hide; card.style.pointerEvents = hide ? 'none' : ''; }
     });
     const c = Math.round(p * (n - 1));
     if (c !== center) {
@@ -99,7 +101,7 @@ function cylinder(orbit, ring, cards) {
     ac.abort();
     st.kill();
     gsap.set(ring, { clearProps: 'transform' });
-    cards.forEach((card) => { card.style.transform = ''; card.style.visibility = ''; card.style.opacity = ''; card.classList.remove('is-center'); });
+    cards.forEach((card) => { card.style.transform = ''; card.style.pointerEvents = ''; card.style.opacity = ''; card.classList.remove('is-center'); });
     orbit.querySelectorAll('.orbit__veil').forEach((v) => v.remove());
   };
 }

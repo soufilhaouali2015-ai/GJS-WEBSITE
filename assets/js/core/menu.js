@@ -5,7 +5,8 @@
    survol ou au focus d'un lien (ordinateur), les coordonnées, réseaux et
    pages légales arrivent en bas. Le bouton « Devis gratuit » reste visible.
    Focus piégé (logo, Devis gratuit, bouton Menu et contenu du menu), Échap
-   pour fermer, aria-expanded synchronisé, page inerte et figée derrière.
+   pour fermer, aria-expanded synchronisé, page (et bandeau cookies) inerte et
+   figée derrière.
    Mouvement réduit : simple fondu. Sans GSAP : ouverture immédiate.
    ========================================================================== */
 
@@ -21,7 +22,8 @@ export function initMenu() {
   const root = document.documentElement;
   const header = $('.header');
   const label = $('[data-menu-label]', toggle);
-  const outside = [$('main'), $('footer')].filter(Boolean);
+  // Le bandeau cookies passerait au-dessus du menu : il s'efface le temps du menu (CSS)
+  const outside = [$('main'), $('footer'), $('#cookies')].filter(Boolean);
   const links = $$('.menu__link', menu);
   const previews = $$('[data-preview-img]', menu);
   let open = false;
@@ -66,6 +68,7 @@ export function initMenu() {
       // Le logo et « Devis gratuit » restent utilisables pendant que le menu est ouvert
       release = trapFocus(menu, { extra: [$('.header .logo'), $('.header__cta'), toggle] });
       if (links[0]) links[0].focus({ preventScroll: true });
+      resting(); // le focus posé par le script ne change pas l'aperçu de la page en cours
       announce('Menu ouvert');
       return;
     }
@@ -85,9 +88,19 @@ export function initMenu() {
     if (e.key === 'Escape' && open) { e.preventDefault(); setOpen(false); }
   });
 
-  // Un lien du menu (même une ancre de la page courante) referme le menu
+  // Un lien du menu (même une ancre de la page courante) referme le menu. Email,
+  // téléphone et réseaux (nouvel onglet) ne quittent pas la page : le focus revient
+  // au bouton Menu.
   menu.addEventListener('click', (e) => {
-    if (e.target.closest('a')) setOpen(false, { restoreFocus: false });
+    const a = e.target.closest('a');
+    if (!a) return;
+    const stays = a.target === '_blank' || /^(mailto|tel):/.test(a.getAttribute('href') || '');
+    setOpen(false, { restoreFocus: stays });
+  });
+  // Le logo et « Devis gratuit » restent cliquables menu ouvert : ils le referment
+  // aussi (sur Contact, « Devis gratuit » est une ancre de la page)
+  header?.addEventListener('click', (e) => {
+    if (open && e.target.closest('a')) setOpen(false, { restoreFocus: false });
   });
 
   links.forEach((link) => {

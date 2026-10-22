@@ -11,6 +11,9 @@
 main {
   display: block;
   padding-top: var(--header-h);
+  /* Un tampon qui s'écrase (agrandi au départ) ne doit jamais élargir la page sur
+     mobile : le body seul ne suffit pas, son overflow passe à la fenêtre */
+  overflow-x: clip;
 }
 
 /* Une seule idée par section, beaucoup d'air. */
@@ -391,6 +394,8 @@ main {
    la navigation en ligne s'efface (les mêmes liens sont dans le menu) */
 html.is-menu-open { overflow: hidden; }
 .is-menu-open .nav { visibility: hidden; }
+/* Le bandeau cookies (au-dessus de tout) s'efface pendant le menu, puis revient */
+.is-menu-open .cookies { visibility: hidden; }
 
 @media (max-width: 379px) {
   .header__inner { gap: 8px; }

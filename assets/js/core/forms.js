@@ -8,6 +8,7 @@
 
 import { CONFIG } from '../config.js';
 import { env, $, $$, announce } from './utils.js';
+import { scrollTo, scrollVelocity } from './scroll.js';
 
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 export const PHONE_RE = /^[0-9+().\s-]{6,20}$/;
@@ -150,7 +151,8 @@ export function showSuccess(form, success, viaMail) {
     import('./motion.js').then(({ stampTimeline }) => stampTimeline(stamp, { rotation: -4, from: 2.2, shake: success }));
   }
   success.focus({ preventScroll: true });
-  success.scrollIntoView({ block: 'center', behavior: env.reducedMotion ? 'auto' : 'smooth' });
+  // Même moteur de défilement que le reste du site (Lenis ou natif)
+  scrollTo(success, { immediate: env.reducedMotion });
   announce(viaMail ? 'Votre messagerie s’ouvre avec la demande pré-remplie.' : 'Demande envoyée. Nous vous répondons sous 24 heures.', 'assertive');
 }
 
@@ -213,7 +215,13 @@ export function refreshOnResize(el) {
     if (el.offsetHeight === last) return;
     last = el.offsetHeight;
     clearTimeout(timer);
-    timer = setTimeout(() => window.ScrollTrigger.refresh(), 150);
+    // Pendant un défilement (vers l'écran de succès, l'étape suivante…), le
+    // recalcul le couperait net : on attend qu'il soit fini
+    const refresh = () => {
+      if (Math.abs(scrollVelocity()) > 0.5) { timer = setTimeout(refresh, 150); return; }
+      window.ScrollTrigger.refresh();
+    };
+    timer = setTimeout(refresh, 150);
   }).observe(el);
 }
 

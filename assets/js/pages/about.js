@@ -46,12 +46,16 @@ function initHero() {
   const measure = () => {
     const fs = parseFloat(getComputedStyle(word).fontSize) || 100;
     const flexGap = parseFloat(getComputedStyle(word).columnGap) || 0;
+    const top = offsetWithin(word, pin);
     m = {
       fs,
       fixed: glyphs.reduce((sum, el) => sum + el.offsetWidth, 0) + flexGap * (glyphs.length + gaps.length - 1),
       stage: stage.clientWidth,
       cap: glyphs[0].offsetHeight || fs * 0.7,
-      center: offsetWithin(word, pin) + word.offsetHeight / 2,
+      center: top + word.offsetHeight / 2,
+      height: word.offsetHeight,
+      // Mobile : place libre entre le header et le haut du mot, page en haut
+      room: offsetWithin(word, document.body) - ($('.header')?.offsetHeight || 0) - 12,
     };
   };
   ScrollTrigger.addEventListener('refreshInit', measure);
@@ -59,8 +63,16 @@ function initHero() {
   new ResizeObserver(() => { measure(); if (applyNow) applyNow(); }).observe(stage);
 
   // Ordinateur et écran assez haut : hero épinglé, le mot glisse au centre de l'écran.
-  // Mobile : l'effet suit simplement la sortie du hero (pas d'épinglage au doigt).
+  // Mobile : l'effet suit simplement la sortie du hero (pas d'épinglage au doigt), sur
+  // une course courte calée pour que le mot reste entier sous le header ; il grandit
+  // vers le haut (sans toucher au titre dessous), dans la place qu'il lui reste.
   const pinned = isDesktop && window.matchMedia('(min-height: 560px)').matches;
+  const course = () => {
+    if (!m) measure();
+    if (pinned) return Math.round(window.innerHeight * 0.9);
+    return Math.round(Math.max(120, Math.min(window.innerHeight * 0.35, m.room * 0.6)));
+  };
+  if (!pinned) gsap.set(word, { transformOrigin: '50% 100%' });
   const state = { k: 0 };
   const setGap = gsap.quickSetter(gaps, 'width', 'em');
   const setScaleX = gsap.quickSetter(word, 'scaleX');
@@ -76,7 +88,9 @@ function initHero() {
     const gap = GAP - (GAP - GAP_END) * k;
     const width = m.fixed + gaps.length * gap * m.fs;
     const endWidth = m.fixed + gaps.length * GAP_END * m.fs;
-    const maxScale = ((pinned ? 0.74 : 0.5) * window.innerHeight) / m.cap;
+    const maxScale = pinned
+      ? (0.74 * window.innerHeight) / m.cap
+      : Math.min((0.5 * window.innerHeight) / m.cap, 1 + Math.max(0, m.room - course()) / m.height);
     const endScale = Math.max(1, Math.min(m.stage / endWidth, maxScale));
     setGap(gap);
     const scale = Math.max(1, Math.min(m.stage / width, 1 + (endScale - 1) * k));
@@ -91,16 +105,18 @@ function initHero() {
     defaults: { ease: 'none' },
     scrollTrigger: {
       trigger: hero,
-      start: 'top top',
-      // Mobile : tout se joue pendant que le mot est encore à l'écran
-      end: () => `+=${Math.round(window.innerHeight * (pinned ? 0.9 : 0.4))}`,
+      // Mobile : dès le premier pixel de défilement
+      start: pinned ? 'top top' : 0,
+      end: () => `+=${course()}`,
       pin: pinned ? pin : false,
       scrub: 0.6,
       anticipatePin: 1,
       invalidateOnRefresh: true,
     },
-  })
-    .to(fades, { opacity: 0, y: -32, duration: 0.3, stagger: 0.03 }, 0);
+  });
+  // Ordinateur : le titre et le chapeau s'effacent, le mot prend la scène.
+  // Mobile : ils défilent normalement avec la page.
+  if (pinned) tl.to(fades, { opacity: 0, y: -32, duration: 0.3, stagger: 0.03 }, 0);
   // Les stickers se décollent l'un après l'autre, chacun de son côté
   photos.forEach((p, i) => {
     tl.to(p, { yPercent: -130, xPercent: i % 2 ? 30 : -30, rotation: `+=${i % 2 ? 26 : -26}`, scale: 0.5, opacity: 0, duration: 0.34, ease: 'power2.in' }, 0.04 + i * 0.07);
@@ -159,7 +175,7 @@ function initValues() {
 
 function initTimeline() {
   const section = $('[data-timeline]');
-  if (!section || isReduced) return;
+  if (!section) return;
   const track = $('[data-timeline-track]', section);
   const rail = $('.timeline__rail', section);
   const fill = $('[data-timeline-fill]', section);
@@ -168,7 +184,6 @@ function initTimeline() {
   const dots = items.map((item) => $('[data-milestone-dot]', item));
   const state = { p: 0 };
   let marks = [];
-  root.classList.add('has-timeline');
 
   const render = () => {
     const { p } = state;
@@ -186,10 +201,14 @@ function initTimeline() {
     rail.style.bottom = 'auto';
     rail.style.height = `${length}px`;
     marks = centers.map((c) => (c - top) / length);
-    render();
+    if (!isReduced) render();
   };
   measure();
   new ResizeObserver(measure).observe(track);
+  // Mouvement réduit : rail plein, toutes les dates allumées (CSS), rien de lié au scroll
+  if (isReduced) return;
+  root.classList.add('has-timeline');
+  render();
   ScrollTrigger.addEventListener('refreshInit', measure);
 
   // La pointe suit la ligne des 60 % de l'écran : chaque date s'allume en la croisant

@@ -77,8 +77,9 @@ function cylinder(orbit, ring, cards) {
 
   // Amener une carte au centre : on fait défiler jusqu'à sa position
   let turning = false;
+  const spot = (i) => st.start + (i / (n - 1)) * (st.end - st.start);
   const goTo = (i) => {
-    const y = st.start + (i / (n - 1)) * (st.end - st.start);
+    const y = spot(i);
     const lenis = getLenis();
     if (lenis) { turning = true; lenis.scrollTo(y, { duration: 1.1, onComplete: () => { turning = false; } }); }
     else window.scrollTo({ top: y, behavior: 'smooth' });
@@ -96,13 +97,16 @@ function cylinder(orbit, ring, cards) {
   }, { signal: ac.signal });
   cards.forEach((card, i) => {
     card.addEventListener('click', (e) => {
-      if (!orbit.classList.contains('is-3d') || card.classList.contains('is-center')) return; // la carte de face : son lien marche normalement
+      // La carte de face, ou un lien activé au clavier (Entrée) : il marche normalement
+      if (!orbit.classList.contains('is-3d') || card.classList.contains('is-center') || e.detail === 0) return;
       e.preventDefault();
       goTo(i);
     }, { signal: ac.signal });
     // Navigation au clavier dans la page seulement (pas le retour sur l'onglet, qui redonne le focus)
     card.addEventListener('focusin', (e) => {
-      if (!orbit.classList.contains('is-3d') || !e.relatedTarget || !e.target.matches(':focus-visible') || card.classList.contains('is-center')) return;
+      // Position réelle de la page (et non la carte marquée de face) : en entrant dans le
+      // tour, le navigateur fait défiler jusqu'au lien et la carte de face change
+      if (!orbit.classList.contains('is-3d') || !e.relatedTarget || !e.target.matches(':focus-visible') || Math.abs(st.scroll() - spot(i)) < 2) return;
       goTo(i);
     }, { signal: ac.signal });
   });

@@ -51,16 +51,33 @@ export function create(api) {
     other.style.top = `${y}px`;
   };
 
-  // Position initiale : à droite de GJS ; sans la place (téléphone), dessous, jamais sur lui
+  // Position initiale : à droite de GJS, sinon dessous, sinon dessus ; sinon la place
+  // libre la plus éloignée de GJS dans la scène (petit écran, paysage). Jamais sur lui.
   const initial = () => {
     const z = zone.getBoundingClientRect();
     const o = other.getBoundingClientRect();
     const g = gjs.getBoundingClientRect();
-    const x = Math.min(z.width - o.width - 8, z.width * 0.66);
-    if (z.left + x > g.right + 16) { place(x, z.height * 0.5 - o.height / 2); return; }
-    const below = g.bottom - z.top + 24;
-    const y = below + o.height <= z.height - 8 ? below : Math.max(8, g.top - z.top - o.height - 24);
-    place((z.width - o.width) / 2, y);
+    const free = (x, y) => x >= 0 && y >= 0 && x + o.width <= z.width && y + o.height <= z.height
+      && (z.left + x > g.right + 12 || z.left + x + o.width < g.left - 12 || z.top + y > g.bottom + 12 || z.top + y + o.height < g.top - 12);
+    const tries = [
+      [Math.min(z.width - o.width - 8, z.width * 0.66), z.height * 0.5 - o.height / 2],
+      [(z.width - o.width) / 2, g.bottom - z.top + 24],
+      [(z.width - o.width) / 2, g.top - z.top - o.height - 24],
+    ];
+    const hit = tries.find(([x, y]) => free(x, y));
+    if (hit) { place(hit[0], hit[1]); return; }
+    let best = null;
+    const gx = g.left + g.width / 2 - z.left;
+    const gy = g.top + g.height / 2 - z.top;
+    for (let y = 8; y + o.height <= z.height - 8; y += 8) {
+      for (let x = 8; x + o.width <= z.width - 8; x += 8) {
+        if (!free(x, y)) continue;
+        const d = Math.hypot(x + o.width / 2 - gx, y + o.height / 2 - gy);
+        if (!best || d > best.d) best = { x, y, d };
+      }
+    }
+    if (best) place(best.x, best.y);
+    else place(8, 8);
   };
 
   /** Replace le bouton loin du pointeur (px, py en coordonnées écran). */

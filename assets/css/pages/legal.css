@@ -319,7 +319,7 @@ code {
 .legal__links { list-style: none; padding-left: 0; }
 
 .legal__links a,
-.legal__facts dd > a:only-child {
+.legal__facts .legal__solo > a {
   display: inline-flex;
   align-items: center;
   min-height: 48px;

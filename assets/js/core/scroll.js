@@ -32,13 +32,16 @@ function headerOffset() {
   return h ? h.offsetHeight + 16 : 0;
 }
 
+// Position calculée une seule fois, pour les deux moteurs : avec un élément, Lenis
+// retirerait en plus le scroll-padding de la page et le scroll-margin de la cible
+// (le header compté deux ou trois fois) ; avec un nombre, il va juste là.
 export function scrollTo(target, { immediate = false } = {}) {
   const el = typeof target === 'string' ? document.querySelector(target) : target;
+  const top = el ? Math.max(0, el.getBoundingClientRect().top + window.scrollY - headerOffset()) : 0;
   if (lenis) {
-    lenis.scrollTo(el ?? 0, { offset: el ? -headerOffset() : 0, immediate, duration: 1.2 });
+    lenis.scrollTo(top, { immediate, duration: 1.2 });
     return;
   }
-  const top = el ? el.getBoundingClientRect().top + window.scrollY - headerOffset() : 0;
   window.scrollTo({ top, behavior: immediate || profile === 'reduced' ? 'auto' : 'smooth' });
 }
 

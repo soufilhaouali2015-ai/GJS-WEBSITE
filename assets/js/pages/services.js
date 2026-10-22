@@ -32,6 +32,7 @@ function initSheets() {
   let skipFocus = false;
   let afterClose = null; // action à lancer une fois la fiche refermée (« Je veux ça »)
   let afterPop = null;
+  let fromUrl = false; // fiche ouverte par l'adresse (services.html#seo) : son lien n'est pas à l'écran
 
   root.classList.add('has-sheets');
 
@@ -43,6 +44,7 @@ function initSheets() {
     current = dialog;
     // Sans lien d'origine (arrivée par l'adresse), le focus reviendra sur la ligne de l'index
     opener = from || $(`.svc-index__link[href="#${CSS.escape(dialog.id)}"]`);
+    fromUrl = !from;
     if (push) {
       history.pushState({ sheet: dialog.id }, '', `#${dialog.id}`);
       pushed = true;
@@ -87,7 +89,8 @@ function initSheets() {
       current = null;
       root.classList.remove('is-sheet-open');
       getLenis()?.start();
-      if (!skipFocus && opener && opener.isConnected) opener.focus({ preventScroll: true });
+      // Arrivée par l'adresse : la page défile jusqu'à la ligne de l'index qui reprend le focus
+      if (!skipFocus && opener && opener.isConnected) opener.focus({ preventScroll: !fromUrl });
       skipFocus = false;
       opener = null;
       const next = afterClose;

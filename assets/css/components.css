@@ -1237,6 +1237,14 @@ textarea.field__input {
 .cookies.is-dodged {
   top: calc(var(--header-h) + 12px);
   bottom: auto;
+  max-height: calc(100svh - var(--header-h) - 24px);
+}
+
+/* Écran bas (téléphone en paysage, zoom) : le bandeau ne prend que la moitié de
+   l'écran et défile dedans, pour que la page garde de la place au focus */
+@media (max-height: 500px) {
+  .cookies,
+  .cookies.is-dodged { max-height: calc(50svh - 18px); }
 }
 
 @media (min-width: 640px) {

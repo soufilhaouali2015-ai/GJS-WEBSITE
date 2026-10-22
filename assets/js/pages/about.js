@@ -70,7 +70,9 @@ function initHero() {
   const course = () => {
     if (!m) measure();
     if (pinned) return Math.round(window.innerHeight * 0.9);
-    return Math.round(Math.max(120, Math.min(window.innerHeight * 0.35, m.room * 0.6)));
+    // Jamais plus que la place libre : sur petit écran, le mot finit de se former
+    // juste sous le header, encore affiché à ce moment-là
+    return Math.round(Math.max(Math.min(120, Math.max(m.room, 40)), Math.min(window.innerHeight * 0.35, m.room * 0.6)));
   };
   if (!pinned) gsap.set(word, { transformOrigin: '50% 100%' });
   const state = { k: 0 };

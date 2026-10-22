@@ -7,7 +7,7 @@
    ========================================================================== */
 
 import { CONFIG } from '../config.js';
-import { store, announce, env } from './utils.js';
+import { store, announce, env, trapFocus } from './utils.js';
 
 const KEY = 'gjs-consent';
 const CATEGORIES = ['analytics', 'marketing'];
@@ -16,6 +16,8 @@ let banner;
 let prefs;
 let consent = null;
 let lastFocus = null;
+let releaseTrap = null; // bandeau ouvert par « Gérer les cookies » ou préférences dépliées : focus gardé dedans
+let managed = false;
 const subscribers = new Map();
 const loaded = new Set();
 
@@ -71,11 +73,19 @@ function syncPrefsForm() {
   });
 }
 
+// Bandeau grand (préférences dépliées) ou ouvert à la demande : il se comporte comme
+// une fenêtre, le focus reste dedans jusqu'au choix (rien ne passe dessous)
+function trap(on) {
+  if (on && !releaseTrap) releaseTrap = trapFocus(banner);
+  if (!on && releaseTrap) { releaseTrap(); releaseTrap = null; }
+}
+
 function togglePrefs(open) {
   if (!prefs) return;
   prefs.hidden = !open;
   const btn = banner.querySelector('[data-consent="customize"]');
   if (btn) btn.setAttribute('aria-expanded', String(open));
+  trap(open || managed);
 }
 
 // Tant que le bandeau est affiché, le défilement au focus clavier garde de la
@@ -93,8 +103,10 @@ function reserveSpace(on) {
 function show({ customize = false, focus = false } = {}) {
   if (!banner) return;
   lastFocus = focus ? document.activeElement : null;
+  managed = focus;
   syncPrefsForm();
   togglePrefs(customize);
+  banner.classList.remove('is-dodged');
   banner.hidden = false;
   reserveSpace(true);
   if (!env.reducedMotion) {
@@ -110,6 +122,9 @@ function show({ customize = false, focus = false } = {}) {
 function hide() {
   if (!banner) return;
   banner.hidden = true;
+  banner.classList.remove('is-dodged');
+  managed = false;
+  trap(false);
   reserveSpace(false);
   if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
   lastFocus = null;
@@ -117,20 +132,22 @@ function hide() {
 
 // Focus clavier sur un élément que le bandeau recouvre encore après le défilement
 // (zone épinglée, bas de page) : le bandeau change de côté
+const away = () => !banner || banner.hidden || banner.inert || document.documentElement.classList.contains('is-menu-open');
 function dodge(e) {
-  if (!banner || banner.hidden || banner.contains(e.target)) return;
+  if (away() || banner.contains(e.target)) return;
   const check = () => {
-    if (banner.hidden || document.activeElement !== e.target) return;
+    if (away() || document.activeElement !== e.target) return;
     const r = e.target.getBoundingClientRect();
     const b = banner.getBoundingClientRect();
     if (!(r.bottom > b.top && r.top < b.bottom && r.right > b.left && r.left < b.right)) return;
     const wide = window.matchMedia('(min-width: 640px)').matches;
-    const away = wide ? r.left + r.width / 2 > window.innerWidth / 2 : r.top + r.height / 2 > window.innerHeight / 2;
-    banner.classList.toggle('is-dodged', away);
+    const flip = wide ? r.left + r.width / 2 > window.innerWidth / 2 : r.top + r.height / 2 > window.innerHeight / 2;
+    banner.classList.toggle('is-dodged', flip);
   };
   // Tout de suite, puis une fois le défilement (et les scènes épinglées) posés
   requestAnimationFrame(check);
-  setTimeout(check, 400);
+  [400, 1000].forEach((ms) => setTimeout(check, ms));
+  window.addEventListener('scrollend', check, { once: true });
 }
 
 export function initCookies({ showBanner = true } = {}) {

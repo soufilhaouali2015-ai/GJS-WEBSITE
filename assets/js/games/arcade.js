@@ -164,7 +164,22 @@ export async function openGame(id, opener) {
   state.module = await def.load();
   showTitle(state);
   state.release = trapFocus(root);
-  requestAnimationFrame(() => { const start = root.querySelector('[data-action="start"]'); if (start) start.focus({ preventScroll: true }); });
+  // L'écran titre défile sur les petits écrans : « Jouer » est ramené en vue (calcul
+  // relatif à l'écran, juste même pendant la montée de la fenêtre)
+  const reveal = () => {
+    const start = root.querySelector('[data-action="start"]');
+    if (!start || document.activeElement !== start) return;
+    const over = start.getBoundingClientRect().bottom - el.screen.getBoundingClientRect().bottom;
+    if (over > 0) el.screen.scrollTop += over + 16;
+  };
+  requestAnimationFrame(() => {
+    const start = root.querySelector('[data-action="start"]');
+    if (!start) return;
+    start.focus({ preventScroll: true });
+    reveal();
+    // La montée de la fenêtre et l'arrivée des lignes remettent le défilement à zéro
+    state.timers.push(setTimeout(reveal, 800));
+  });
   announce(`Jeu ouvert : ${def.title}.`);
 }
 

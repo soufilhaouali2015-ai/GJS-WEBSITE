@@ -188,19 +188,22 @@ export function create(api) {
       ctx.quadraticCurveTo(left, y, left + a, y);
       ctx.closePath();
     };
-    // Roues (noires, elles dépassent un peu de la carrosserie)
-    ctx.fillStyle = C.ink;
-    const ww = w * 0.16;
-    const wh = h * 0.2;
-    [[left - ww * 0.45, y + h * 0.16], [left + w - ww * 0.55, y + h * 0.16], [left - ww * 0.45, y + h * 0.66], [left + w - ww * 0.55, y + h * 0.66]]
-      .forEach(([wx, wy]) => ctx.fillRect(wx, wy, ww, wh));
-    // Ombre dure crème (le sticker se détache du bitume), puis carrosserie citron
+    // Ombre dure crème (le sticker se détache du bitume)
     ctx.save();
     ctx.translate(4, 4);
     body();
     ctx.fillStyle = C.cream;
     ctx.fill();
     ctx.restore();
+    // Roues : noires cerclées de crème (visibles sur le bitume), elles dépassent de la carrosserie
+    const ww = w * 0.17;
+    const wh = h * 0.2;
+    ctx.fillStyle = C.ink;
+    ctx.strokeStyle = C.cream;
+    ctx.lineWidth = 2;
+    [[left - ww * 0.65, y + h * 0.15], [left + w - ww * 0.35, y + h * 0.15], [left - ww * 0.65, y + h * 0.66], [left + w - ww * 0.35, y + h * 0.66]]
+      .forEach(([wx, wy]) => { ctx.fillRect(wx, wy, ww, wh); ctx.strokeRect(wx, wy, ww, wh); });
+    // Carrosserie citron
     body();
     ctx.fillStyle = C.lime;
     ctx.fill();

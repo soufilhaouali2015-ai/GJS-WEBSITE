@@ -1276,8 +1276,9 @@ textarea.field__input {
 /* ---- Écran de chargement (première visite, core/loader.js) --------------- */
 /* Tout le minutage est en CSS (transform et opacity, sur le compositeur) :
    l'écran se lève à 1,8 s au plus après le premier affichage, même si la page
-   travaille encore. Le compteur aussi est en CSS : il part du premier affichage,
-   sans attendre le JS (qui ne fait que « Passer », l'annonce et le rangement). */
+   travaille encore. Le compteur aussi : une colonne 000 à 100 qui défile en
+   transform, dès le premier affichage, sans attendre le JS (qui ne fait que
+   « Passer », l'annonce et le rangement). */
 
 .loader { display: none; }
 
@@ -1300,17 +1301,8 @@ html.is-loading { overflow: hidden; }
   70% { transform: translateX(-2px); }
 }
 
-/* Compteur 000 → 100 : un nombre entier animé, affiché sur 3 chiffres */
-@property --loader-n {
-  syntax: "<integer>";
-  inherits: false;
-  initial-value: 0;
-}
-@counter-style loader-pad {
-  system: extends decimal;
-  pad: 3 "0";
-}
-@keyframes loader-count { to { --loader-n: 100; } }
+/* Compteur 000 → 100 : la colonne des 101 valeurs remonte d'une ligne (0,9em) par pas */
+@keyframes loader-count { to { transform: translateY(-90em); } }
 
 .is-loading .loader {
   position: fixed;
@@ -1378,15 +1370,21 @@ html.is-loading { overflow: hidden; }
 }
 
 .loader__count span {
-  counter-reset: loader var(--loader-n);
-  animation: loader-count 1.4s cubic-bezier(0.33, 1, 0.68, 1) both;
+  display: block;
+  height: 0.9em;
+  overflow: hidden;
 }
 
-.loader__count span::after { content: counter(loader, loader-pad); }
+.loader__count span::after {
+  content: "000\A 001\A 002\A 003\A 004\A 005\A 006\A 007\A 008\A 009\A 010\A 011\A 012\A 013\A 014\A 015\A 016\A 017\A 018\A 019\A 020\A 021\A 022\A 023\A 024\A 025\A 026\A 027\A 028\A 029\A 030\A 031\A 032\A 033\A 034\A 035\A 036\A 037\A 038\A 039\A 040\A 041\A 042\A 043\A 044\A 045\A 046\A 047\A 048\A 049\A 050\A 051\A 052\A 053\A 054\A 055\A 056\A 057\A 058\A 059\A 060\A 061\A 062\A 063\A 064\A 065\A 066\A 067\A 068\A 069\A 070\A 071\A 072\A 073\A 074\A 075\A 076\A 077\A 078\A 079\A 080\A 081\A 082\A 083\A 084\A 085\A 086\A 087\A 088\A 089\A 090\A 091\A 092\A 093\A 094\A 095\A 096\A 097\A 098\A 099\A 100";
+  display: block;
+  white-space: pre;
+  animation: loader-count 1.4s steps(101, jump-none) both;
+}
 
-.loader.is-skipped .loader__count span,
-[data-motion="reduced"] .loader__count span {
-  --loader-n: 100;
+.loader.is-skipped .loader__count span::after,
+[data-motion="reduced"] .loader__count span::after {
+  transform: translateY(-90em);
   animation: none;
 }
 

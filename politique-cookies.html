@@ -57,6 +57,25 @@
   </div>
 
   <a class="skip-link" href="#main">Aller au contenu</a>
+  <section class="cookies" id="cookies" aria-labelledby="cookies-title" hidden data-lenis-prevent>
+    <p class="cookies__label"><span class="sticker sticker--ink">Cookies</span></p>
+    <h2 class="cookies__title" id="cookies-title">Rien sans <span class="hl">votre accord.</span></h2>
+    <p class="cookies__text">Aucun traceur n’est déposé sans votre accord. Seuls les stockages indispensables au site sont actifs&nbsp;: vos choix, l’introduction déjà vue, vos records et le son de l’arcade. <a href="politique-cookies.html">Notre politique cookies</a></p>
+    <div class="cookies__actions">
+      <button class="btn" type="button" data-consent="reject">Tout refuser</button>
+      <button class="btn" type="button" data-consent="accept">Tout accepter</button>
+      <button class="btn" type="button" data-consent="customize" aria-expanded="false" aria-controls="cookies-prefs">Personnaliser</button>
+    </div>
+    <form class="cookies__prefs" id="cookies-prefs" hidden>
+      <fieldset>
+        <legend>Catégories</legend>
+        <label class="toggle"><span class="toggle__name">Indispensables</span><span class="toggle__desc">Vos choix, l’introduction déjà vue, vos records et le son de l’arcade. Toujours actifs.</span><input type="checkbox" checked disabled></label>
+        <label class="toggle"><span class="toggle__name">Mesure d’audience</span><span class="toggle__desc">Statistiques de fréquentation. Aucun outil n’est activé à ce jour.</span><input type="checkbox" name="analytics"></label>
+        <label class="toggle"><span class="toggle__name">Marketing</span><span class="toggle__desc">Pixels publicitaires. Aucun n’est utilisé à ce jour.</span><input type="checkbox" name="marketing"></label>
+      </fieldset>
+      <button class="btn btn--lime" type="submit">Enregistrer mes choix</button>
+    </form>
+  </section>
   <div class="read-progress" aria-hidden="true"><span data-read-progress></span></div>
 
   <header class="header">
@@ -226,7 +245,7 @@
               <section id="navigateur" aria-labelledby="h-navigateur">
                 <h2 id="h-navigateur">8. Réglages de votre navigateur</h2>
                 <p>Votre navigateur permet aussi de bloquer les traceurs ou d’effacer les données d’un site. Effacer les «&nbsp;cookies et données de site&nbsp;» supprime aussi le stockage local&nbsp;: vos records et votre choix de cookies.</p>
-                <ul>
+                <ul class="legal__links">
                   <li><a href="https://support.google.com/chrome/answer/95647?hl=fr" target="_blank" rel="noopener">Chrome<span class="sr-only"> (nouvel onglet)</span></a></li>
                   <li><a href="https://support.mozilla.org/fr/kb/effacer-cookies-donnees-site-firefox" target="_blank" rel="noopener">Firefox<span class="sr-only"> (nouvel onglet)</span></a></li>
                   <li><a href="https://support.apple.com/fr-fr/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Safari sur Mac<span class="sr-only"> (nouvel onglet)</span></a></li>
@@ -293,26 +312,6 @@
       <p class="t-small">© <span data-year>2026</span> GJS.</p>
     </div>
   </footer>
-
-  <section class="cookies" id="cookies" aria-labelledby="cookies-title" hidden data-lenis-prevent>
-    <p class="cookies__label"><span class="sticker sticker--ink">Cookies</span></p>
-    <h2 class="cookies__title" id="cookies-title">Rien sans <span class="hl">votre accord.</span></h2>
-    <p class="cookies__text">Aucun traceur n’est déposé sans votre accord. Seuls les stockages indispensables au site sont actifs&nbsp;: vos choix, l’introduction déjà vue, vos records et le son de l’arcade. <a href="politique-cookies.html">Notre politique cookies</a></p>
-    <div class="cookies__actions">
-      <button class="btn" type="button" data-consent="reject">Tout refuser</button>
-      <button class="btn" type="button" data-consent="accept">Tout accepter</button>
-      <button class="btn" type="button" data-consent="customize" aria-expanded="false" aria-controls="cookies-prefs">Personnaliser</button>
-    </div>
-    <form class="cookies__prefs" id="cookies-prefs" hidden>
-      <fieldset>
-        <legend>Catégories</legend>
-        <label class="toggle"><span class="toggle__name">Indispensables</span><span class="toggle__desc">Vos choix, l’introduction déjà vue, vos records et le son de l’arcade. Toujours actifs.</span><input type="checkbox" checked disabled></label>
-        <label class="toggle"><span class="toggle__name">Mesure d’audience</span><span class="toggle__desc">Statistiques de fréquentation. Aucun outil n’est activé à ce jour.</span><input type="checkbox" name="analytics"></label>
-        <label class="toggle"><span class="toggle__name">Marketing</span><span class="toggle__desc">Pixels publicitaires. Aucun n’est utilisé à ce jour.</span><input type="checkbox" name="marketing"></label>
-      </fieldset>
-      <button class="btn btn--lime" type="submit">Enregistrer mes choix</button>
-    </form>
-  </section>
 
   <div class="curtain" aria-hidden="true"><span class="curtain__logo">GJS</span></div>
 </body>

@@ -78,12 +78,25 @@ function togglePrefs(open) {
   if (btn) btn.setAttribute('aria-expanded', String(open));
 }
 
+// Tant que le bandeau est affiché, le défilement au focus clavier garde de la
+// place en bas de l'écran : un élément ne se cache jamais derrière (WCAG 2.4.11)
+let sizeWatch = null;
+function reserveSpace(on) {
+  const root = document.documentElement;
+  if (sizeWatch) { sizeWatch.disconnect(); sizeWatch = null; }
+  if (!on) { root.style.removeProperty('--cookies-space'); return; }
+  const set = () => root.style.setProperty('--cookies-space', `${Math.ceil(banner.offsetHeight) + 24}px`);
+  set();
+  if ('ResizeObserver' in window) { sizeWatch = new ResizeObserver(set); sizeWatch.observe(banner); }
+}
+
 function show({ customize = false, focus = false } = {}) {
   if (!banner) return;
   lastFocus = focus ? document.activeElement : null;
   syncPrefsForm();
   togglePrefs(customize);
   banner.hidden = false;
+  reserveSpace(true);
   if (!env.reducedMotion) {
     banner.classList.add('is-entering');
     requestAnimationFrame(() => requestAnimationFrame(() => banner.classList.remove('is-entering')));
@@ -97,12 +110,32 @@ function show({ customize = false, focus = false } = {}) {
 function hide() {
   if (!banner) return;
   banner.hidden = true;
+  reserveSpace(false);
   if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
   lastFocus = null;
 }
 
+// Focus clavier sur un élément que le bandeau recouvre encore après le défilement
+// (zone épinglée, bas de page) : le bandeau change de côté
+function dodge(e) {
+  if (!banner || banner.hidden || banner.contains(e.target)) return;
+  const check = () => {
+    if (banner.hidden || document.activeElement !== e.target) return;
+    const r = e.target.getBoundingClientRect();
+    const b = banner.getBoundingClientRect();
+    if (!(r.bottom > b.top && r.top < b.bottom && r.right > b.left && r.left < b.right)) return;
+    const wide = window.matchMedia('(min-width: 640px)').matches;
+    const away = wide ? r.left + r.width / 2 > window.innerWidth / 2 : r.top + r.height / 2 > window.innerHeight / 2;
+    banner.classList.toggle('is-dodged', away);
+  };
+  // Tout de suite, puis une fois le défilement (et les scènes épinglées) posés
+  requestAnimationFrame(check);
+  setTimeout(check, 400);
+}
+
 export function initCookies({ showBanner = true } = {}) {
   banner = document.getElementById('cookies');
+  document.addEventListener('focusin', dodge);
   prefs = document.getElementById('cookies-prefs');
   // Choix existant : on ne le réécrit pas (sa date d'origine fait foi pour l'expiration)
   consent = readConsent();

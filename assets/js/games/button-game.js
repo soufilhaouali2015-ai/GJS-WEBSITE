@@ -51,11 +51,16 @@ export function create(api) {
     other.style.top = `${y}px`;
   };
 
-  // Position initiale : à droite de GJS
+  // Position initiale : à droite de GJS ; sans la place (téléphone), dessous, jamais sur lui
   const initial = () => {
     const z = zone.getBoundingClientRect();
     const o = other.getBoundingClientRect();
-    place(Math.min(z.width - o.width - 8, z.width * 0.66), z.height * 0.5 - o.height / 2);
+    const g = gjs.getBoundingClientRect();
+    const x = Math.min(z.width - o.width - 8, z.width * 0.66);
+    if (z.left + x > g.right + 16) { place(x, z.height * 0.5 - o.height / 2); return; }
+    const below = g.bottom - z.top + 24;
+    const y = below + o.height <= z.height - 8 ? below : Math.max(8, g.top - z.top - o.height - 24);
+    place((z.width - o.width) / 2, y);
   };
 
   /** Replace le bouton loin du pointeur (px, py en coordonnées écran). */

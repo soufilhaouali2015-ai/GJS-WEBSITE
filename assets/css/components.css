@@ -1232,6 +1232,13 @@ textarea.field__input {
   margin-top: 18px;
 }
 
+/* Le focus clavier arrive sur un élément caché par le bandeau et qui ne peut pas
+   défiler (hero épinglé) : le bandeau passe de l'autre côté (core/cookies.js) */
+.cookies.is-dodged {
+  top: calc(var(--header-h) + 12px);
+  bottom: auto;
+}
+
 @media (min-width: 640px) {
   .cookies {
     left: auto;
@@ -1239,6 +1246,13 @@ textarea.field__input {
     bottom: 24px;
     width: 460px;
     padding: 24px;
+  }
+
+  .cookies.is-dodged {
+    top: auto;
+    bottom: 24px;
+    left: 24px;
+    right: auto;
   }
 }
 

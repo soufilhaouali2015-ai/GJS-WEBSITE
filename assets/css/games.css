@@ -110,6 +110,7 @@ html.is-arcade-open { overflow: hidden; }
 .arcade__bar :focus-visible { outline-color: var(--lime); }
 
 .arcade__stage {
+  grid-area: 2 / 1;
   position: relative;
   z-index: 1;
   min-height: 0;
@@ -131,13 +132,16 @@ html.is-arcade-open { overflow: hidden; }
 
 /* ---- Écrans (titre, compte à rebours, pause, fin) ----------------------- */
 
+/* Les écrans couvrent la scène, jamais la barre : « Son » et « Quitter » restent
+   visibles et cliquables sur les écrans titre, pause et fin */
 .arcade__screen {
-  position: absolute;
-  inset: 0;
+  grid-area: 2 / 1;
+  position: relative;
   z-index: 5;
+  min-height: 0;
   display: grid;
   place-items: center;
-  padding: 96px var(--gutter) 40px;
+  padding: 40px var(--gutter);
   background: color-mix(in srgb, var(--cream) 94%, transparent);
   overflow-y: auto;
 }
@@ -248,6 +252,7 @@ html.is-arcade-open { overflow: hidden; }
 
 .game-pad--2 {
   grid-template-columns: repeat(2, 92px);
+  grid-template-areas: "left right";
   gap: 28px;
 }
 
@@ -484,5 +489,5 @@ html.is-arcade-open { overflow: hidden; }
   .arcade__brand { font-size: 1.125rem; }
   .arcade__hud { order: 3; width: 100%; font-size: 0.75rem; gap: 2px 14px; }
   .arcade__tool { padding: 0 10px; font-size: 0.75rem; }
-  .arcade__screen { padding-top: 32px; }
+  .arcade__screen { padding-top: 24px; }
 }

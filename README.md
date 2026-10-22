@@ -96,11 +96,14 @@ Les textes provisoires portent une étiquette visible en pointillés `[À REMPLA
 | `assets/js/config.js` + HTML | **Téléphone** (`PHONE`, `PHONE_HREF`) : actuellement `01 00 00 00 00` |
 | `assets/js/config.js` + HTML | **Numéro WhatsApp** (`WHATSAPP`) : actuellement `33600000000` |
 | `assets/js/config.js` + `contact.html` | **Lien de prise de rendez-vous** (`BOOKING_URL`) : actuellement `https://cal.com/` |
-| `assets/js/config.js` + HTML | Email (`bonjour@gjs-agence.fr`), domaine (`www.gjs-agence.fr`), liens Instagram et LinkedIn |
-| `a-propos.html` | **3 portraits**, **3 prénoms et noms**, **3 rôles** ; histoire à personnaliser |
+| `assets/js/config.js` + HTML | Email (`bonjour@gjs-agence.fr`), domaine (`www.gjs-agence.fr`), liens Instagram, LinkedIn et TikTok (`SOCIALS`, actuellement les pages d'accueil des réseaux) |
+| `a-propos.html` | **3 portraits** (aussi utilisés par l'intro G · J · S et la signature Vision), **3 prénoms et noms**, **3 rôles** ; « Notre histoire » à personnaliser ; Trajectoire : 6 dates et textes d'exemple repris du site de Gabin (« agence parisienne », « 50 projets livrés »…), à remplacer par votre vraie histoire |
 | `assets/img/equipe/` | Photos : `associe-1-480.webp`, `associe-1-960.webp` (idem 2 et 3), format portrait **4:5**, 960×1200 px, ≤ 120 Ko |
 | `mentions-legales.html` | Raison sociale, forme juridique et capital, siège, RCS, SIRET, TVA, directeur de la publication, hébergeur, crédits photo, date de mise à jour |
-| `politique-confidentialite.html` | Coordonnées du responsable, DPO éventuel, hébergeur, outil de formulaire (Formspree ou Make), outil de mesure d'audience, outil de rendez-vous, transferts hors UE, date de mise à jour |
+| `politique-confidentialite.html` | Coordonnées du responsable, DPO éventuel, hébergeur, outil de formulaire (Formspree ou Make), outil de mesure d'audience (et sa ligne dans le tableau des traceurs), outil de rendez-vous, transferts hors UE, date de mise à jour |
+| `politique-cookies.html` | Date de mise à jour, fiche de l'outil de mesure d'audience s'il est activé, outil de rendez-vous (`[Cal.com]`) |
+| `exercer-vos-droits.html` | Date de mise à jour, adresse postale du siège, DPO éventuel |
+| `contact.html` | Bloc Rendez-vous : mention `[À REMPLACER : lien]` à retirer une fois `BOOKING_URL` renseigné |
 | `index.html` (section masquée) | Réalisations : images, noms de clients et textes (voir §7) |
 | `assets/img/services/` | **Facultatif** : 9 visuels des services pour le survol de l'index (page Services). Des affiches street générées sont en place (`poster-site.webp`…), à remplacer par vos photos ou visuels au même nom, format portrait **4:5**, 640×800 px, ≤ 70 Ko. Pour régénérer les affiches : `scripts/posters/README.md` |
 
@@ -178,7 +181,7 @@ ANALYTICS: { src: 'https://plausible.io/js/script.js', attrs: { 'data-domain': '
 
 **Matière street** : bordures noires de 2 à 3 px, ombres dures décalées sans flou, coins de 4 px, stickers inclinés de 2 à 4° (`.sticker`), ruban adhésif (`.taped`), coche citron (`.checklist`).
 
-**Mouvement** : un seul langage (courbe `expo.out`, 0,6 à 1,2 s), hero vidéo en WebGL, cartes 3D, boutons magnétiques, double bandeau, rideau citron entre les pages. Détails et règles dans la section 11.
+**Mouvement** : un seul langage (courbe `expo.out`, 0,6 à 1,2 s), hero vidéo en WebGL, cartes 3D, boutons magnétiques, bandeau défilant, rideau citron entre les pages. Détails et règles dans la section 11.
 
 **Ton** : direct et chaleureux, phrases courtes, vouvoiement, **pas de tiret long (—)**.
 
@@ -190,7 +193,7 @@ ANALYTICS: { src: 'https://plausible.io/js/script.js', attrs: { 'data-domain': '
 |---|---|
 | **Accueil** | Hero · Bandeau défilant · Services (9 cartes, 3 mises en avant) · Comment ça marche (cascade) · Pourquoi GJS (4 points) · Arcade (3 jeux) · FAQ · CTA final (noir) |
 | **Services** | Intro + index typographique · Le tour des 9 services (carrousel 3D) · 9 fiches détaillées (fenêtres ouvertes au clic, adresse `services.html#site`…) · Notre méthode de travail (cascade) · Votre devis gratuit (formulaire court) · CTA (noir) |
-| **À propos** | Intro G · J · S (portraits en stickers, les lettres se rassemblent en GJS au scroll) · Notre histoire · Vision (citation qui se corrige, question mise en avant) · L'équipe (3 associés) · Valeurs (4 cartes qui se retournent : survol, toucher, clavier) · Trajectoire (frise qui se remplit, dates d'exemple à remplacer) · CTA (noir) |
+| **À propos** | Intro G · J · S (portraits en stickers, les lettres se rassemblent en GJS au scroll) · Notre histoire · Vision (citation qui se corrige, question mise en avant, boucle GJS en 4 temps) · L'équipe (3 associés) · Valeurs (4 cartes qui se retournent : survol, toucher, clavier) · Trajectoire (frise qui se remplit, dates d'exemple à remplacer) · CTA (noir) |
 | **Contact** | Formulaire en 3 étapes + WhatsApp, rendez-vous, email et téléphone · Après l'envoi (3 temps : réponse sous 24 h ouvrées, échange en visio sans engagement, plan d'action clair) |
 | **Légal, 404** | Mentions légales, Confidentialité, Cookies (traceurs du site, choix en cours et effacement des données du navigateur), Exercer vos droits (email de demande préparé, droits un par un) · 404 |
 | **Header (toutes les pages)** | Logo · navigation (ordinateur) · Devis gratuit (toujours visible) · bouton « Menu » : menu plein écran avec les liens numérotés en grand (Accueil, Services, À propos, Arcade, Contact), l'aperçu de la page au survol (`assets/img/menu/`, ordinateur), et en bas les coordonnées, les réseaux et les pages légales |
@@ -239,7 +242,7 @@ assets/fonts/ Bebas Neue + Poppins (woff2, OFL)
 
 ## 9. RGPD, cookies et accessibilité
 
-- **Bandeau cookies** (textes, catégories, boutons et fonctionnement du site de Gabin) : « Rien sans votre accord. », « Tout refuser » et « Tout accepter » côte à côte, même style, « Personnaliser » juste en dessous (Indispensables, Mesure d’audience, Marketing), dans cet ordre aussi au clavier. Le bandeau s'efface pendant que le menu plein écran est ouvert, puis revient. Aucun script de mesure avant consentement. Choix conservé 6 mois (182 jours), puis effacé et redemandé ; redemandé aussi si `CONSENT_VERSION` change. Lien « Gérer les cookies » dans le footer et sur les pages Confidentialité et Cookies. Stockages actifs par défaut, tous indispensables et sans donnée personnelle : `gjs-consent` (vos choix, 6 mois), `gjs-visited` (écran de chargement déjà vu), `gjs-curtain` (stockage de session, transition entre les pages), records et son des mini-jeux (`gjs-arcade-*`). Détail sur `politique-cookies.html`.
+- **Bandeau cookies** (textes, catégories, boutons et fonctionnement du site de Gabin) : « Rien sans votre accord. », « Tout refuser » et « Tout accepter » côte à côte, même style, « Personnaliser » juste en dessous (Indispensables, Mesure d’audience, Marketing), dans cet ordre aussi au clavier. Le bandeau s'efface pendant que le menu plein écran est ouvert, puis revient. Il est placé juste après « Aller au contenu » (le clavier l'atteint en deuxième) et, tant qu'il est affiché, la page garde de la place en bas pour que le focus ne passe jamais dessous. Aucun script de mesure avant consentement. Choix conservé 6 mois (182 jours), puis effacé et redemandé ; redemandé aussi si `CONSENT_VERSION` change. Lien « Gérer les cookies » dans le footer et sur les pages Confidentialité et Cookies. Stockages actifs par défaut, tous indispensables et sans donnée personnelle : `gjs-consent` (vos choix, 6 mois), `gjs-visited` (écran de chargement déjà vu), `gjs-curtain` (stockage de session, transition entre les pages), records et son des mini-jeux (`gjs-arcade-*`). Détail sur `politique-cookies.html`.
 - **Écran de chargement** (première visite seulement, `core/loader.js` + `components.css`) : le sticker GJS se colle, le tampon « Bienvenue ! » s'écrase, le compteur monte à 100 ; tout est en CSS, compteur compris (une colonne de chiffres qui défile en transform, sans coût pour la page) : l'écran compte dès le premier affichage et se lève à 1,8 s au plus, même si la page ou le réseau traîne (si le JavaScript arrive après 3 s, la visite est quand même notée). Bouton « Passer » actif dès l'affichage, annonces aux lecteurs d'écran, quasi instantané en mouvement réduit. Le bandeau cookies et une fiche service ouverte par l'adresse (`services.html#seo`) attendent la fin de l'écran. Aux visites suivantes (`gjs-visited`), seul le rideau entre les pages reste. Pour le revoir : effacez les données du site (bouton sur la page Cookies).
 - **Aucun transfert vers des tiers au chargement** : polices, librairies d'animation (`assets/vendor/`) et vidéo sont servies par votre hébergeur. Aucun CDN.
 - **Accessibilité** : lien d'évitement, navigation clavier complète, menu plein écran (bouton « Menu ») avec focus piégé, Échap et `aria-expanded`, régions `aria-live`, erreurs de formulaire annoncées et reliées aux champs, cibles tactiles de 48 px, bouton « Mettre en pause » qui arrête vidéo, bandeaux et effets (WCAG 2.2.2), `prefers-reduced-motion` respecté (voir section 11), site lisible sans JavaScript (le formulaire part alors en `mailto:`).
@@ -303,13 +306,13 @@ Partout : `data-skew` sur un grand titre le fait s'incliner et s'étirer selon l
 
 | Section | Fichier | Ordinateur | Mobile | Mouvement réduit |
 |---|---|---|---|---|
-| Comment ça marche | `sections/steps.js` | scène collante sur ~1,6 écran, trait ondulé qui relie les 4 étapes | trait vertical à gauche | tout affiché, trait posé |
+| Comment ça marche (et la méthode de la page Services) | `sections/steps.js` | 4 marches en escalier, le trait marqueur citron les relie en descendant au fil du scroll, chaque étape arrive à son tour | cascade verticale, décalage léger | tout affiché, trait posé |
 | FAQ | `sections/faq.js` | ouverture en FLIP (transform), « + » qui pivote en croix, une seule question ouverte | idem | ouverture immédiate |
 | Stickers du footer (accueil) | `sections/stickers.js` | physique Matter.js (attraper, lancer), chargée à l'approche du footer | chute avec rebond, un toucher les fait sauter | posés |
 | Index des services | `sections/services-index.js` | l'affiche du service suit le curseur | liste simple | liste simple |
 | Le tour des 9 services | `sections/carousel.js` | cylindre 3D au fil du scroll, clic ou focus pour amener une carte au centre | glissé horizontal | grille |
 | Intro G · J · S (À propos) | `pages/about.js` | hero épinglé : les stickers se décollent, les lettres se rassemblent et GJS grandit | effet lié à la sortie du hero, sans épinglage | composition de départ, immobile |
-| Vision, Valeurs, Trajectoire | `pages/about.js` | citation barrée puis soulignée au scroll ; cartes qui se retournent ; frise qui se remplit | idem (cartes au toucher) | états finaux, faces échangées sur place |
+| Vision, Valeurs, Trajectoire | `pages/about.js` | citation barrée puis soulignée au scroll, boucle GJS en 4 temps ; cartes qui se retournent ; frise qui se remplit | idem (cartes au toucher) | états finaux, faces échangées sur place |
 
 Les stickers du footer sont générés depuis `services.js` (badges et noms courts) par `npm run services`. Pour les ajouter à une autre page, copiez le bloc `<div class="footer__play" data-stickers>` de `index.html`.
 
@@ -326,7 +329,7 @@ Créée entièrement en code, sans aucune image ni vidéo extérieure : les troi
 Pour la régénérer (dossier `scripts/hero-video/`, non déployé ; Node 20+ et ffmpeg avec libx264 et libvpx-vp9) :
 
 ```bash
-cd scripts/hero-video && npm install
+cd scripts/hero-video && npm install && npx playwright install chromium
 node glyphs.mjs                                              # 1. contours de G, J, S (glyphs.json, déjà fourni)
 node render.mjs --format desktop --w 1920 --h 1080 --spp 16  # 2 et 3. scène (scene.js) rendue image par image dans out/desktop
 node render.mjs --format mobile  --w 720  --h 1280 --spp 16  #         version portrait dans out/mobile

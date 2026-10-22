@@ -12,7 +12,8 @@
 #
 # Usage, depuis la racine du site :  bash scripts/hero-video/encode.sh
 #        (ou seulement une version :  bash scripts/hero-video/encode.sh desktop)
-# Prérequis : ffmpeg avec libx264 et libvpx-vp9.
+# Prérequis : ffmpeg avec libx264 et libvpx-vp9, et les 288 images de chaque
+# version (render.mjs) ; sinon le script le dit et s'arrête.
 # ==========================================================================
 set -euo pipefail
 
@@ -20,6 +21,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUT="$HERE/../../assets/video"
 FPS=24
 ONLY="${1:-all}"
+shopt -s nullglob
 mkdir -p "$OUT"
 
 # Noir et blanc : on force une chrominance neutre (aucune dérive de teinte, poids réduit)
@@ -27,7 +29,8 @@ GRAY="format=gray,format=yuv420p"
 
 encode() { # nom dossier crf_h264 crf_vp9
   local name="$1" dir="$HERE/out/$2" crf264="$3" crfvp9="$4"
-  local n; n=$(ls "$dir"/f_*.png 2>/dev/null | wc -l)
+  local frames=("$dir"/f_*.png) # nullglob : liste vide si rien n'est rendu
+  local n=${#frames[@]}
   if [ "$n" -ne 288 ]; then echo "✗ $dir : $n image(s) sur 288. Lancez d'abord render.mjs." >&2; return 1; fi
   ffmpeg -v error -y -framerate $FPS -i "$dir/f_%04d.png" -vf "$GRAY" -an \
     -c:v libx264 -preset veryslow -tune film -crf "$crf264" -profile:v high -level 4.1 -pix_fmt yuv420p \

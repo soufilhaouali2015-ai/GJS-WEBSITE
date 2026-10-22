@@ -171,16 +171,29 @@ export function create(api) {
     ctx.lineTo(left + w * 1.35, y - h * 1.6);
     ctx.lineTo(left + w * 0.82, y + 4);
     ctx.fill();
+    // Voiture vue de dessus, comme celle de la démo de la borne : carrosserie
+    // arrondie (avant plus rond que l'arrière), quatre roues, pare-brise, lunette
+    const radii = [w * 0.34, w * 0.34, w * 0.14, w * 0.14]; // avant gauche, avant droit, arrière droit, arrière gauche
     const body = () => {
+      const [a, b, c, d] = radii;
       ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.bezierCurveTo(left + w * 0.95, y + h * 0.12, left + w, y + h * 0.4, left + w * 0.92, y + h * 0.82);
-      ctx.lineTo(left + w * 1.08, y + h);
-      ctx.lineTo(left - w * 0.08, y + h);
-      ctx.lineTo(left + w * 0.08, y + h * 0.82);
-      ctx.bezierCurveTo(left, y + h * 0.4, left + w * 0.05, y + h * 0.12, x, y);
+      ctx.moveTo(left + a, y);
+      ctx.lineTo(left + w - b, y);
+      ctx.quadraticCurveTo(left + w, y, left + w, y + b);
+      ctx.lineTo(left + w, y + h - c);
+      ctx.quadraticCurveTo(left + w, y + h, left + w - c, y + h);
+      ctx.lineTo(left + d, y + h);
+      ctx.quadraticCurveTo(left, y + h, left, y + h - d);
+      ctx.lineTo(left, y + a);
+      ctx.quadraticCurveTo(left, y, left + a, y);
       ctx.closePath();
     };
+    // Roues (noires, elles dépassent un peu de la carrosserie)
+    ctx.fillStyle = C.ink;
+    const ww = w * 0.16;
+    const wh = h * 0.2;
+    [[left - ww * 0.45, y + h * 0.16], [left + w - ww * 0.55, y + h * 0.16], [left - ww * 0.45, y + h * 0.66], [left + w - ww * 0.55, y + h * 0.66]]
+      .forEach(([wx, wy]) => ctx.fillRect(wx, wy, ww, wh));
     // Ombre dure crème (le sticker se détache du bitume), puis carrosserie citron
     ctx.save();
     ctx.translate(4, 4);
@@ -194,17 +207,22 @@ export function create(api) {
     ctx.strokeStyle = C.ink;
     ctx.lineWidth = 2.5;
     ctx.stroke();
-    // Cockpit
+    // Pare-brise (trapèze) et lunette arrière
     ctx.fillStyle = C.ink;
     ctx.beginPath();
-    ctx.ellipse(x, y + h * 0.3, w * 0.2, h * 0.11, 0, 0, Math.PI * 2);
+    ctx.moveTo(left + w * 0.2, y + h * 0.36);
+    ctx.lineTo(left + w * 0.8, y + h * 0.36);
+    ctx.lineTo(left + w * 0.7, y + h * 0.22);
+    ctx.lineTo(left + w * 0.3, y + h * 0.22);
+    ctx.closePath();
     ctx.fill();
-    // GJS sur le capot
+    ctx.fillRect(left + w * 0.26, y + h * 0.8, w * 0.48, h * 0.06);
+    // GJS sur le toit
     ctx.fillStyle = C.ink;
     ctx.font = `400 ${Math.round(w * 0.36)}px ${FONT_DISPLAY}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('GJS', x, y + h * 0.62);
+    ctx.fillText('GJS', x, y + h * 0.58);
     // Phares et feux
     ctx.fillStyle = C.cream;
     ctx.fillRect(left + w * 0.2, y + h * 0.05, w * 0.15, 4);

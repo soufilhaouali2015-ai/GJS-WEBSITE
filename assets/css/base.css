@@ -20,6 +20,7 @@ html {
   color-scheme: light;
   background: var(--cream);
   scroll-padding-top: calc(var(--header-h) + 24px);
+  scroll-padding-bottom: var(--cookies-space, 0px); /* bandeau cookies affiché (core/cookies.js) */
 }
 
 body {
@@ -33,6 +34,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
+  /* Bandeau cookies affiché : le bas de page peut remonter au-dessus de lui */
+  padding-bottom: var(--cookies-space, 0px);
 }
 
 img,

@@ -129,6 +129,15 @@
   overflow-wrap: anywhere;
 }
 
+/* Email et téléphone, seuls sur leur ligne : cible tactile de 48 px */
+.contact-block p > a:not(.btn) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+}
+
+.contact-block p:has(> a:not(.btn)) + p:has(> a:not(.btn)) { margin-top: 0; }
+
 .page-hero__inner + .contact__layout {
   margin-top: var(--s-block);
 }

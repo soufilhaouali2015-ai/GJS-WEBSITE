@@ -254,12 +254,12 @@
      étiquette mesurée par hero.js ; 400 px sans JS) */
   .hero__stage { min-height: calc(var(--header-h) + 96px + var(--fs-h1) * 2.64 + 40px + var(--label-h, 400px) + 20px); }
   /* Voile calé sur le titre : plein jusqu'à 16 px au-dessus de sa première ligne,
-     puis il s'efface (le logo de la vidéo, en haut de l'image, reste lumineux).
+     puis il s'efface vite (le logo de la vidéo, juste au-dessus, reste lumineux).
      Calculé sur les 288 images, de 320 à 1023 px : contraste du titre crème
      ≥ 4,5:1 sur le pixel le plus clair de toute la boucle (0,62 requis au plus). */
   .hero__veil {
     --veil-top: calc(var(--title-bottom) + var(--fs-h1) * 2.64 + 16px);
-    background: linear-gradient(to top, rgba(20, 20, 20, 0.64) var(--veil-top), rgba(20, 20, 20, 0.3) calc(var(--veil-top) + 70px), rgba(20, 20, 20, 0) calc(var(--veil-top) + 200px));
+    background: linear-gradient(to top, rgba(20, 20, 20, 0.64) var(--veil-top), rgba(20, 20, 20, 0.22) calc(var(--veil-top) + 40px), rgba(20, 20, 20, 0) calc(var(--veil-top) + 110px));
   }
   .hero__label {
     right: auto;
@@ -421,9 +421,14 @@
 
 .borne__scene.is-active { visibility: visible; }
 
+/* Étiquettes sur fond crème : lisibles sur toutes les scènes (la route du jeu 2 est noire) */
 .borne__hud {
   position: absolute;
+  z-index: 2;
   bottom: 3cqi;
+  padding: 0.5cqi 1.2cqi;
+  background: var(--cream);
+  border-radius: 0.8cqi;
   font-size: 2.6cqi;
   font-weight: 600;
   letter-spacing: 0.06em;

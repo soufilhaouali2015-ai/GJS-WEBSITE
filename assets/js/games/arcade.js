@@ -96,10 +96,13 @@ function bestLabel(id) {
   return best ? best.label || String(best.score) : 'aucun, à vous de jouer';
 }
 
+let opening = false; // un seul lancement à la fois (double clic, Entrée maintenue)
+
 export async function openGame(id, opener) {
   const def = GAMES[id];
-  if (!def || session) return;
-  await ensureStyles();
+  if (!def || session || opening) return;
+  opening = true;
+  try { await ensureStyles(); } finally { opening = false; }
 
   const root = document.createElement('div');
   root.className = `arcade arcade--${id}`;

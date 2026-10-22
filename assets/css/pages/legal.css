@@ -315,6 +315,16 @@ code {
 
 .legal__facts dd { margin-top: 4px; }
 
+/* Liens seuls sur leur ligne (aides des navigateurs, CNIL) : cible tactile de 48 px */
+.legal__links { list-style: none; padding-left: 0; }
+
+.legal__links a,
+.legal__facts dd > a:only-child {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+}
+
 /* Accordéon des droits : la FAQ du site, références d'article à droite */
 .legal__accordion .faq__q { gap: 8px 14px; }
 .legal__acc-ref {

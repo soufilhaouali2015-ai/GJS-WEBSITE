@@ -451,6 +451,99 @@
   }
 }
 
+/* La boucle GJS (textes de Gabin) : quatre temps en affichettes, reliés par une
+   flèche citron ; le dernier renvoie au premier (↻) */
+.vision__cycle { margin-top: clamp(64px, 8vw, 120px); }
+
+.vision__cycle-label { margin-bottom: 28px; }
+
+.cycle {
+  display: grid;
+  gap: 48px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cycle__step {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 22px 22px 26px;
+  background: var(--cream-2);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--ink);
+  rotate: -0.8deg;
+}
+
+.cycle__step:nth-child(even) { rotate: 0.8deg; }
+
+.cycle__num {
+  justify-self: start;
+  padding: 0.08em 0.2em 0;
+  background: var(--lime);
+  border: var(--border-thin) solid var(--ink);
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.cycle__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.4rem + 1vw, 2.25rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.cycle__desc { line-height: 1.5; }
+
+/* Flèche vers le temps suivant : vers le bas sur mobile, vers la droite ensuite */
+.cycle__step:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  left: 50%;
+  bottom: -42px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  background: var(--lime);
+  border: var(--border-thin) solid var(--ink);
+  border-radius: 50%;
+  font-weight: 700;
+  line-height: 1;
+  translate: -50% 0;
+  rotate: 90deg;
+}
+
+.cycle__again {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+@media (min-width: 900px) {
+  .cycle {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 44px;
+  }
+
+  .cycle__step:not(:last-child)::after {
+    left: auto;
+    right: -42px;
+    top: 50%;
+    bottom: auto;
+    translate: 0 -50%;
+    rotate: none;
+  }
+}
+
 /* ---- L'équipe ---------------------------------------------------------- */
 
 .team {

@@ -560,7 +560,12 @@ async function setup() {
       curveSegments: 56,
     });
     geo.translate(0, 0, -(DEPTH - 0.036) / 2);
+    // toCreasedNormals regroupe les sommets sur une grille de 0,01 : à notre échelle
+    // (capitale = 1, chanfrein de 0,011) il fusionnait des sommets voisins et le
+    // reflet du chanfrein partait en zigzag. Calcul fait à l'échelle 100.
+    geo.scale(100, 100, 100);
     geo = toCreasedNormals(geo, THREE.MathUtils.degToRad(32));
+    geo.scale(0.01, 0.01, 0.01);
     addBrushTangents(geo);
     geo.computeBoundingBox();
     const mesh = new THREE.Mesh(geo, letterMat);

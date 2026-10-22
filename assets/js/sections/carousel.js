@@ -76,13 +76,24 @@ function cylinder(orbit, ring, cards) {
   render(0);
 
   // Amener une carte au centre : on fait défiler jusqu'à sa position
+  let turning = false;
   const goTo = (i) => {
     const y = st.start + (i / (n - 1)) * (st.end - st.start);
     const lenis = getLenis();
-    if (lenis) lenis.scrollTo(y, { duration: 1.1 });
+    if (lenis) { turning = true; lenis.scrollTo(y, { duration: 1.1, onComplete: () => { turning = false; } }); }
     else window.scrollTo({ top: y, behavior: 'smooth' });
   };
   const ac = new AbortController(); // écouteurs retirés au démontage
+  // Le focus quitte le tour (Tab rapide) pendant que le cylindre tourne encore : on
+  // arrête ce défilement, sinon il ramènerait la page ici et le champ suivant
+  // recevrait le focus hors de l'écran
+  orbit.addEventListener('focusout', (e) => {
+    const lenis = getLenis();
+    if (!turning || !lenis || lenis.isStopped || (e.relatedTarget && orbit.contains(e.relatedTarget))) return;
+    turning = false;
+    lenis.stop();
+    lenis.start();
+  }, { signal: ac.signal });
   cards.forEach((card, i) => {
     card.addEventListener('click', (e) => {
       if (!orbit.classList.contains('is-3d') || card.classList.contains('is-center')) return; // la carte de face : son lien marche normalement

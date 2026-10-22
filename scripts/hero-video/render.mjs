@@ -10,7 +10,8 @@
      node render.mjs --format mobile  --w 720  --h 1280 --spp 16
    Options : --from 0 --to 287 (bornes incluses), --frames 0,72,144 (liste),
              --steps 40 (pas de la fumée), --out out
-   Playwright : variable PLAYWRIGHT_MODULE ou paquet « playwright » installé.
+   Playwright : paquet « playwright » (npm install, puis npx playwright install
+   chromium), ou chemin d'une copie existante dans PLAYWRIGHT_MODULE.
    ========================================================================== */
 
 import { createServer } from 'node:http';
